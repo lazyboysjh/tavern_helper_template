@@ -2886,9 +2886,31 @@
 
       .mnx-portrait,
 
-      .mnx-portrait-zoom{
+      .mnx-portrait-zoom,
+
+      .mnx-cover .mnx-bg-img::after,
+
+      .mnx-cover .mnx-bg-img::before{
 
         animation:none!important;
+
+      }
+
+      .mnx-track,
+
+      .mnx-opening,
+
+      .mnx-persona,
+
+      .mnx-nav,
+
+      .mnx-theme,
+
+      .mnx-dot,
+
+      .mnx-portrait,
+
+      .mnx-portrait-zoom{
 
         transition:none!important;
 
@@ -3584,6 +3606,26 @@
       }
     }
     /* ===== /mobile cover compact no-blank v1 ===== */
+
+    .mnx-tab:focus-visible,
+    .mnx-nav:focus-visible,
+    .mnx-dot:focus-visible,
+    .mnx-portrait-flip:focus-visible,
+    .mnx-theme:focus-visible,
+    .mnx-opening:focus-visible{
+      outline:2px solid var(--accent);
+      outline-offset:2px;
+    }
+    .mnx-portrait-flip:focus{outline:none;}
+    .mnx-portrait-flip{-webkit-touch-callout:none;touch-action:manipulation;}
+    @media (hover:none),(pointer:coarse){
+      .mnx-dot{
+        min-width:28px;
+        min-height:28px;
+        padding:10px;
+        box-sizing:content-box;
+      }
+    }
 </style>
 
 </head>
@@ -3634,12 +3676,12 @@
 
 
     <section class="mnx-section mnx-main-tabs">
-      <div class="mnx-tabbar">
-        <button type="button" class="mnx-tab is-active" data-tab="persona">群芳图鉴</button>
-        <button type="button" class="mnx-tab" data-tab="opening">卷宗启阅</button>
+      <div class="mnx-tabbar" role="tablist" aria-label="封面分区">
+        <button type="button" class="mnx-tab is-active" data-tab="persona" role="tab" aria-selected="true" aria-controls="mnx-panel-persona" id="mnx-tab-persona">群芳图鉴</button>
+        <button type="button" class="mnx-tab" data-tab="opening" role="tab" aria-selected="false" aria-controls="mnx-panel-opening" id="mnx-tab-opening">卷宗启阅</button>
       </div>
       <div class="mnx-tab-panels">
-        <div class="mnx-tab-panel is-active" data-panel="persona">
+        <div class="mnx-tab-panel is-active" data-panel="persona" id="mnx-panel-persona" role="tabpanel" aria-labelledby="mnx-tab-persona">
           <div class="mnx-tab-note">点击立绘翻转查看</div>
           <div class="mnx-carousel" id="personaCarousel">
             <div class="mnx-viewport">
@@ -3654,7 +3696,7 @@
             </div>
           </div>
         </div>
-        <div class="mnx-tab-panel" data-panel="opening">
+        <div class="mnx-tab-panel" data-panel="opening" id="mnx-panel-opening" role="tabpanel" aria-labelledby="mnx-tab-opening" hidden>
           <div class="mnx-tab-note">点击即可步入局中</div>
           <div class="mnx-opening-scroll" id="openingScroll"></div>
         </div>
@@ -3880,7 +3922,7 @@ const OPENINGS = [
 
         slide.innerHTML = `
           <article class="mnx-persona">
-            <div class="mnx-portrait-flip" data-persona-idx="${i}" title="点击翻转立绘">
+            <div class="mnx-portrait-flip" data-persona-idx="${i}" role="button" tabindex="0" aria-pressed="false" aria-label="${item.name}立绘，点击或按空格翻转查看另一面" title="点击翻转立绘">
               <span class="mnx-flip-hint">点击翻转</span>
               <div class="mnx-portrait-inner">
                 <div class="mnx-portrait-face front" data-bg-url="${img0}"></div>
@@ -3901,6 +3943,7 @@ const OPENINGS = [
         dot.type = "button";
         dot.className = "mnx-dot";
         dot.dataset.index = i;
+        dot.setAttribute("aria-label", "查看" + item.name);
         dots.appendChild(dot);
       });
     }
@@ -3956,6 +3999,9 @@ const OPENINGS = [
         const card = document.createElement("article");
         card.className = "mnx-opening";
         card.dataset.openingIndex = String(i);
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("aria-label", "进入开场：" + item.title);
         card.innerHTML = `
             <div class="mnx-opening-top">
               <span>第 ${item.no} 卷</span>
@@ -3974,8 +4020,15 @@ const OPENINGS = [
       if (!face || face.dataset.bgLoaded === "1") return;
       const url = face.dataset.bgUrl;
       if (!url) return;
-      face.style.backgroundImage = `url('${url}')`;
-      face.dataset.bgLoaded = "1";
+      const img = new Image();
+      img.onload = function() {
+        face.style.backgroundImage = "url('" + url.replace(/'/g, "%27") + "')";
+        face.dataset.bgLoaded = "1";
+      };
+      img.onerror = function() {
+        face.dataset.bgLoaded = "error";
+      };
+      img.src = url;
     }
 
     function activatePersonaImages(centerIndex = 0) {
@@ -4000,6 +4053,14 @@ const OPENINGS = [
 
       let timer = null;
 
+      function resetPersonaFlips() {
+        if (name !== "persona") return;
+        document.querySelectorAll("#personaTrack .mnx-portrait-flip.is-flipped").forEach(function(flip) {
+          flip.classList.remove("is-flipped");
+          flip.setAttribute("aria-pressed", "false");
+        });
+      }
+
       function update() {
 
         track.style.transform = `translateX(-${current * 100}%)`;
@@ -4007,6 +4068,7 @@ const OPENINGS = [
         [...dots.children].forEach((dot, i) => {
 
           dot.classList.toggle("active", i === current);
+          dot.setAttribute("aria-current", i === current ? "true" : "false");
 
         });
 
@@ -4019,6 +4081,8 @@ const OPENINGS = [
       function go(next) {
 
         current = (next + total) % total;
+
+        resetPersonaFlips();
 
         update();
 
@@ -4096,6 +4160,8 @@ const OPENINGS = [
 
       root.addEventListener("touchstart", (e) => {
 
+        if (name === "persona" && e.target.closest(".mnx-portrait-flip")) return;
+
         const touch = e.changedTouches && e.changedTouches[0];
 
         if (!touch) return;
@@ -4158,17 +4224,31 @@ const OPENINGS = [
 
         const targetSwipe = Number(item.swipe) || (idx + 1);
 
-        const messages = getChatMessages(0, { include_swipes: true });
+        const getMessages = getCoverApi("getChatMessages");
+
+        const setMessages = getCoverApi("setChatMessages");
+
+        if (!getMessages || !setMessages) throw new Error("酒馆消息 API 不可用");
+
+        const messages = getMessages(0, { include_swipes: true });
 
         if (!messages || !messages[0]) throw new Error("未找到首楼消息");
 
-        await setChatMessages(
+        await setMessages(
 
           [{ message_id: 0, swipe_id: targetSwipe }],
 
           { refresh: "all" }
 
         );
+
+        const updated = getMessages(0, { include_swipes: true });
+
+        if (updated && updated[0] && updated[0].mes) {
+
+          await applyOpeningVariables(updated[0].mes);
+
+        }
 
       } catch (err) {
 
@@ -4186,13 +4266,41 @@ const OPENINGS = [
     function setupMainTabs() {
       const tabs = document.querySelectorAll(".mnx-tab");
       const panels = document.querySelectorAll(".mnx-tab-panel");
-      tabs.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const name = btn.dataset.tab;
-          tabs.forEach((t) => t.classList.toggle("is-active", t === btn));
-          panels.forEach((p) => p.classList.toggle("is-active", p.dataset.panel === name));
+      function activateTab(btn) {
+        const name = btn.dataset.tab;
+        tabs.forEach((t) => {
+          const active = t === btn;
+          t.classList.toggle("is-active", active);
+          t.setAttribute("aria-selected", active ? "true" : "false");
         });
+        panels.forEach((p) => {
+          const active = p.dataset.panel === name;
+          p.classList.toggle("is-active", active);
+          if (active) p.removeAttribute("hidden");
+          else p.setAttribute("hidden", "");
+        });
+      }
+      tabs.forEach((btn) => {
+        btn.addEventListener("click", () => activateTab(btn));
       });
+    }
+
+    function togglePersonaFlip(flip) {
+      if (!flip) return;
+      const back = flip.querySelector(".mnx-portrait-face.back");
+      ensurePersonaFaceLoaded(back);
+      const flipped = flip.classList.toggle("is-flipped");
+      flip.setAttribute("aria-pressed", flipped ? "true" : "false");
+    }
+
+    function initBgImg() {
+      const bg = document.querySelector(".mnx-bg-img");
+      if (!bg) return;
+      const url = "https://raw.githubusercontent.com/lazyboysjh/image/main/20260605013117819.jpg";
+      const img = new Image();
+      img.onload = function() { bg.classList.add("is-loaded"); };
+      img.onerror = function() { bg.classList.add("is-loaded"); };
+      img.src = url;
     }
 
     function initTheme() {
@@ -4235,16 +4343,23 @@ const OPENINGS = [
       const flip = e.target.closest(".mnx-portrait-flip");
       if (!flip) return;
       e.stopPropagation();
-      const back = flip.querySelector(".mnx-portrait-face.back");
-      ensurePersonaFaceLoaded(back);
-      flip.classList.toggle("is-flipped");
+      togglePersonaFlip(flip);
     });
 
+    document.getElementById("personaTrack").addEventListener("keydown", (e) => {
+      const flip = e.target.closest(".mnx-portrait-flip");
+      if (!flip || (e.key !== "Enter" && e.key !== " ")) return;
+      e.preventDefault();
+      togglePersonaFlip(flip);
+    });
 
+    function activateOpeningCard(card) {
+      if (!card) return;
+      const idx = Number(card.dataset.openingIndex);
+      if (!Number.isNaN(idx)) switchOpening(idx);
+    }
 
-
-
-
+    initBgImg();
     renderPersonas();
     renderOpenings();
     setupCarousel("persona", PERSONAS.length, 5000);
@@ -4253,8 +4368,13 @@ const OPENINGS = [
     document.getElementById("openingScroll").addEventListener("click", (e) => {
       const card = e.target.closest(".mnx-opening");
       if (!card) return;
-      const idx = Number(card.dataset.openingIndex);
-      switchOpening(idx);
+      activateOpeningCard(card);
+    });
+    document.getElementById("openingScroll").addEventListener("keydown", (e) => {
+      const card = e.target.closest(".mnx-opening");
+      if (!card || (e.key !== "Enter" && e.key !== " ")) return;
+      e.preventDefault();
+      activateOpeningCard(card);
     });
 
 
