@@ -189,3 +189,32 @@
   .mnx-mode-btn,.mnx-opts-wrap .opt{transition:none!important;}
   .mnx-mode-btn:hover,.mnx-opts-wrap .opt:hover{transform:none!important;}
 }
+
+/* ===== premium polish v20 ===== */
+@keyframes mnxOptIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.mnx-opts-wrap .opt{animation:mnxOptIn .42s cubic-bezier(.22,1,.36,1) both;}
+.mnx-opts-wrap .opt:nth-of-type(1){animation-delay:.03s}
+.mnx-opts-wrap .opt:nth-of-type(2){animation-delay:.08s}
+.mnx-opts-wrap .opt:nth-of-type(3){animation-delay:.13s}
+.mnx-opts-wrap .opt:nth-of-type(4){animation-delay:.18s}
+/* hover: refined left accent edge via inset shadow (no pseudo-element conflict) */
+.mnx-opts-wrap .opt:hover{
+  box-shadow:
+    inset 3px 0 0 0 color-mix(in srgb,var(--opt-accent,#b89465) 72%,transparent),
+    0 12px 26px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.06)!important;
+}
+/* send feedback pulse */
+@keyframes mnxSentPulse{
+  0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--opt-accent,#b89465) 42%,transparent),0 8px 22px rgba(0,0,0,.16)}
+  100%{box-shadow:0 0 0 14px transparent,0 8px 22px rgba(0,0,0,.16)}
+}
+.mnx-opts-wrap .opt.mnx-sent{
+  animation:mnxSentPulse .9s ease-out;
+  border-color:color-mix(in srgb,var(--opt-accent,#b89465) 50%,rgba(255,255,255,.12))!important;
+}
+@media (prefers-reduced-motion:reduce){
+  .mnx-opts-wrap .opt{animation:none!important;}
+  .mnx-opts-wrap .opt.mnx-sent{animation:none!important;}
+}
+/* ===== /premium polish v20 ===== */
