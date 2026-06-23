@@ -3554,6 +3554,13 @@
     }
     .mnx-portrait-flip{background:var(--bg-2)!important;}
     .mnx-persona{padding:0 0 10px!important;}
+    /* Desktop: show the FULL portrait (contain) framed by the card bg, no bottom crop. */
+    @media (min-width:769px){
+      .mnx-portrait-face{
+        background-size:contain!important;
+        background-position:center!important;
+      }
+    }
     /* ===== /portrait edge-fill fix v2 ===== */
 
 

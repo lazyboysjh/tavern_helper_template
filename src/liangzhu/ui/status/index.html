@@ -2084,18 +2084,20 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
 
 
         /* ===== portrait edge-fill fix v2 ===== */
+        /* Desktop/tablet (>=761px): show the FULL portrait (contain), framed by the card bg.
+           Mobile keeps cover (see mobile block below) to fill small screens. */
         .scene-stage .av-portrait-img,
         .scene-stage .av-flip-front,
         .scene-stage .lz-char-portrait{
-            object-fit:cover!important;
-            object-position:center top!important;
-            background-size:cover!important;
-            background-position:center top!important;
+            object-fit:contain!important;
+            object-position:center!important;
+            background-size:contain!important;
+            background-position:center!important;
             background-repeat:no-repeat!important;
         }
         .scene-stage .support-figure img{
-            object-fit:cover!important;
-            object-position:center top!important;
+            object-fit:contain!important;
+            object-position:center!important;
             padding:0!important;
         }
         @media (min-width:761px){
