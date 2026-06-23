@@ -174,9 +174,15 @@
         .av-favor-num{justify-self:end;font-size:.74rem;font-weight:800;color:rgba(255,250,244,.92);font-variant-numeric:tabular-nums;text-shadow:0 1px 3px rgba(0,0,0,.42)}
         .av-favor-track{grid-column:1/3;height:4px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden;box-shadow:inset 0 1px 3px rgba(0,0,0,.36)}
         .av-favor-fill{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,color-mix(in srgb,var(--card-accent,var(--c)) 72%,#8f2f42),#f1d2b5);box-shadow:0 0 12px color-mix(in srgb,var(--card-accent,var(--c)) 45%,transparent)}
-        .av-thought-bubble{position:absolute;top:14px;right:14px;left:auto;max-width:min(52%,240px);padding:8px 12px;background:rgba(10,8,12,.88);backdrop-filter:blur(10px) saturate(1.1);-webkit-backdrop-filter:blur(10px) saturate(1.1);border:1px solid color-mix(in srgb,var(--card-accent,var(--c)) 28%,rgba(255,255,255,.12));border-radius:12px 12px 2px 12px;font-size:.72rem;line-height:1.45;color:rgba(241,232,220,.92);opacity:0;transform:scale(.92) translateY(4px);transform-origin:top right;transition:opacity .28s ease,transform .28s ease;pointer-events:none;z-index:7;white-space:pre-wrap;word-break:break-word;box-shadow:0 12px 28px rgba(0,0,0,.28)}
-        .av-portrait-shell.show-thought .av-thought-bubble{opacity:1;transform:scale(1) translateY(0)}
-        .av-flip-wrap:hover .av-thought-bubble{opacity:1;transform:scale(1) translateY(0)}
+        .av-thought-bubble{position:absolute;top:14px;right:14px;left:auto;max-width:min(56%,260px);padding:10px 12px 11px;background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.028)),rgba(8,6,10,.82);backdrop-filter:blur(14px) saturate(1.18);-webkit-backdrop-filter:blur(14px) saturate(1.18);border:1px solid color-mix(in srgb,var(--card-accent,var(--c)) 34%,rgba(255,255,255,.14));border-radius:14px 14px 4px 14px;font-size:.72rem;line-height:1.5;color:rgba(241,232,220,.94);opacity:0;transform:scale(.9) translateY(6px);transform-origin:top right;transition:opacity .3s cubic-bezier(.22,1,.36,1),transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s ease;pointer-events:none;z-index:7;white-space:normal;word-break:break-word;box-shadow:0 14px 36px rgba(0,0,0,.34),0 0 22px color-mix(in srgb,var(--card-accent,var(--c)) 12%,transparent),inset 0 1px 0 rgba(255,255,255,.1)}
+        .av-thought-label{display:block;margin-bottom:5px;font-size:.54rem;font-weight:700;letter-spacing:.22em;color:color-mix(in srgb,var(--card-accent,var(--c)) 70%,#f0d4a8);opacity:.92}
+        .av-thought-body{display:block;font-size:.72rem;line-height:1.52;color:rgba(255,248,238,.94);letter-spacing:.02em}
+        .av-thought-body::before{content:"「";opacity:.55;margin-right:1px}
+        .av-thought-body::after{content:"」";opacity:.55;margin-left:1px}
+        .av-portrait-shell.show-thought .av-thought-bubble,.lz-char-portrait.show-thought .av-thought-bubble,.lz-char-portrait.thought-pinned .av-thought-bubble{opacity:1;transform:scale(1) translateY(0);animation:avThoughtIn .34s cubic-bezier(.22,1,.36,1) both}
+        .lz-char-portrait.thought-holding .av-thought-bubble{box-shadow:0 16px 40px rgba(0,0,0,.4),0 0 28px color-mix(in srgb,var(--card-accent,var(--c)) 22%,transparent),inset 0 1px 0 rgba(255,255,255,.14)}
+        @keyframes avThoughtIn{from{opacity:0;transform:scale(.9) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+        .av-flip-wrap:hover .av-thought-bubble,.lz-char-flip-container:hover .av-thought-bubble{opacity:1;transform:scale(1) translateY(0)}
         .av-front-info{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:68px 20px 18px;background:linear-gradient(180deg,transparent,rgba(7,7,10,.7) 43%,rgba(7,7,10,.94) 100%);pointer-events:none}
         .av-front-name{font:800 1.18rem "Microsoft YaHei","PingFang SC","Hiragino Sans GB","SimSun",serif;color:#fff;letter-spacing:.14em;text-shadow:0 3px 12px rgba(0,0,0,.7)}
         .av-front-title{margin-top:4px;font-size:.73rem;color:rgba(255,255,255,.72);letter-spacing:.06em}
@@ -1819,7 +1825,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
 
 
         /* liangzhu-flip-v1: 梁祝翻转卡命名空间 */
-        .lz-char-flip-container{perspective:1000px;width:100%;height:100%;min-height:600px;cursor:pointer;animation:up .4s cubic-bezier(.19,1,.22,1) both}
+        .lz-char-flip-container{perspective:1000px;width:100%;height:100%;min-height:600px;cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none;animation:up .4s cubic-bezier(.19,1,.22,1) both}
         .lz-char-flip-inner{position:relative;width:100%;height:100%;transition:transform .7s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
         .lz-char-flip-container.flipped .lz-char-flip-inner{transform:rotateY(180deg)}
         .lz-char-front,.lz-char-back{position:absolute;top:0;left:0;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;overflow:hidden;border:1px solid color-mix(in srgb,var(--card-accent,var(--c)) 22%,rgba(255,255,255,.07));box-shadow:0 26px 70px rgba(0,0,0,.4),0 2px 0 rgba(255,255,255,.04) inset}
@@ -1835,7 +1841,12 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         .lz-char-favor{display:flex;align-items:center;gap:8px;padding:12px 14px;border-radius:13px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.055);margin-bottom:12px}
         .lz-char-favor-label{font-size:.68rem;color:var(--dim);white-space:nowrap}.lz-char-favor-track{flex:1;height:6px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}.lz-char-favor-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--favor-accent-deep,#9b2335),var(--favor-accent-bright,#ff8f9a))}.lz-char-favor-value{font-size:.68rem;color:var(--txt);font-weight:700;white-space:nowrap}
         @media(max-width:760px){.lz-char-flip-container{min-height:0;height:100%}.lz-char-back{padding:20px 17px;-webkit-overflow-scrolling:touch}.lz-char-prop{padding:8px 1px;font-size:.76rem}}
-        @media(hover:none),(pointer:coarse){.lz-char-flip-container .av-thought-bubble{opacity:0;transform:scale(.94) translateY(4px);max-width:min(62%,220px)}}
+        @media(hover:none),(pointer:coarse){
+            .lz-char-flip-container .av-thought-bubble{opacity:0;transform:scale(.94) translateY(4px);max-width:min(64%,240px)}
+            .lz-char-portrait.show-thought .av-thought-bubble,
+            .lz-char-portrait.thought-pinned .av-thought-bubble,
+            .av-portrait-shell.show-thought .av-thought-bubble{opacity:1;transform:scale(1) translateY(0)}
+        }
         @media(prefers-reduced-motion:reduce){.lz-char-flip-inner{transition:none!important}}
         .av-flip-face{position:absolute;top:0;left:0;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:8px;overflow:hidden}
         .av-flip-back{transform:rotateY(180deg);background:var(--card-bg);border:1px solid var(--card-border);box-shadow:var(--card-shadow);padding:12px 11px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
@@ -1846,9 +1857,15 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         .av-favor-num{justify-self:end;font-size:.74rem;font-weight:800;color:rgba(255,250,244,.92);font-variant-numeric:tabular-nums;text-shadow:0 1px 3px rgba(0,0,0,.42)}
         .av-favor-track{grid-column:1/3;height:4px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden;box-shadow:inset 0 1px 3px rgba(0,0,0,.36)}
         .av-favor-fill{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,color-mix(in srgb,var(--card-accent,var(--c)) 72%,#8f2f42),#f1d2b5);box-shadow:0 0 12px color-mix(in srgb,var(--card-accent,var(--c)) 45%,transparent)}
-        .av-thought-bubble{position:absolute;top:14px;right:14px;left:auto;max-width:min(52%,240px);padding:8px 12px;background:rgba(10,8,12,.88);backdrop-filter:blur(10px) saturate(1.1);-webkit-backdrop-filter:blur(10px) saturate(1.1);border:1px solid color-mix(in srgb,var(--card-accent,var(--c)) 28%,rgba(255,255,255,.12));border-radius:12px 12px 2px 12px;font-size:.72rem;line-height:1.45;color:rgba(241,232,220,.92);opacity:0;transform:scale(.92) translateY(4px);transform-origin:top right;transition:opacity .28s ease,transform .28s ease;pointer-events:none;z-index:7;white-space:pre-wrap;word-break:break-word;box-shadow:0 12px 28px rgba(0,0,0,.28)}
-        .av-portrait-shell.show-thought .av-thought-bubble{opacity:1;transform:scale(1) translateY(0)}
-        .av-flip-wrap:hover .av-thought-bubble{opacity:1;transform:scale(1) translateY(0)}
+        .av-thought-bubble{position:absolute;top:14px;right:14px;left:auto;max-width:min(56%,260px);padding:10px 12px 11px;background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.028)),rgba(8,6,10,.82);backdrop-filter:blur(14px) saturate(1.18);-webkit-backdrop-filter:blur(14px) saturate(1.18);border:1px solid color-mix(in srgb,var(--card-accent,var(--c)) 34%,rgba(255,255,255,.14));border-radius:14px 14px 4px 14px;font-size:.72rem;line-height:1.5;color:rgba(241,232,220,.94);opacity:0;transform:scale(.9) translateY(6px);transform-origin:top right;transition:opacity .3s cubic-bezier(.22,1,.36,1),transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s ease;pointer-events:none;z-index:7;white-space:normal;word-break:break-word;box-shadow:0 14px 36px rgba(0,0,0,.34),0 0 22px color-mix(in srgb,var(--card-accent,var(--c)) 12%,transparent),inset 0 1px 0 rgba(255,255,255,.1)}
+        .av-thought-label{display:block;margin-bottom:5px;font-size:.54rem;font-weight:700;letter-spacing:.22em;color:color-mix(in srgb,var(--card-accent,var(--c)) 70%,#f0d4a8);opacity:.92}
+        .av-thought-body{display:block;font-size:.72rem;line-height:1.52;color:rgba(255,248,238,.94);letter-spacing:.02em}
+        .av-thought-body::before{content:"「";opacity:.55;margin-right:1px}
+        .av-thought-body::after{content:"」";opacity:.55;margin-left:1px}
+        .av-portrait-shell.show-thought .av-thought-bubble,.lz-char-portrait.show-thought .av-thought-bubble,.lz-char-portrait.thought-pinned .av-thought-bubble{opacity:1;transform:scale(1) translateY(0);animation:avThoughtIn .34s cubic-bezier(.22,1,.36,1) both}
+        .lz-char-portrait.thought-holding .av-thought-bubble{box-shadow:0 16px 40px rgba(0,0,0,.4),0 0 28px color-mix(in srgb,var(--card-accent,var(--c)) 22%,transparent),inset 0 1px 0 rgba(255,255,255,.14)}
+        @keyframes avThoughtIn{from{opacity:0;transform:scale(.9) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+        .av-flip-wrap:hover .av-thought-bubble,.lz-char-flip-container:hover .av-thought-bubble{opacity:1;transform:scale(1) translateY(0)}
         .av-front-info{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:68px 20px 18px;background:linear-gradient(180deg,transparent,rgba(7,7,10,.7) 43%,rgba(7,7,10,.94) 100%);pointer-events:none}
         .av-front-name{font:800 1.18rem "Microsoft YaHei","PingFang SC","Hiragino Sans GB","SimSun",serif;color:#fff;letter-spacing:.14em;text-shadow:0 3px 12px rgba(0,0,0,.7)}
         .av-front-title{margin-top:4px;font-size:.73rem;color:rgba(255,255,255,.72);letter-spacing:.06em}
@@ -2030,7 +2047,9 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
     min-height:0!important;
   }
   .scene-stage .av-front-info{padding:58px 15px 15px}
-  .scene-stage .av-thought-bubble{top:12px;right:12px;max-width:min(58%,210px);font-size:.68rem;padding:7px 10px}
+  .scene-stage .av-thought-bubble{top:12px;right:12px;max-width:min(64%,240px);padding:9px 11px 10px}
+  .scene-stage .av-thought-label{font-size:.52rem;letter-spacing:.18em;margin-bottom:4px}
+  .scene-stage .av-thought-body{font-size:.68rem;line-height:1.48}
   .scene-stage .av-favor-meter{left:12px;right:12px;bottom:92px;padding:8px 10px;border-radius:11px}
   .scene-collapse-favor{
     grid-template-columns:auto minmax(28px,44px) auto!important;
@@ -2298,19 +2317,24 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             .scene-stage .av-thought-bubble{
                 opacity:0!important;
                 transform:scale(.94) translateY(4px)!important;
-                max-width:min(68%,230px)!important;
+                max-width:min(68%,250px)!important;
                 pointer-events:none!important;
             }
+            .scene-stage .lz-char-portrait.show-thought .av-thought-bubble,
+            .scene-stage .lz-char-portrait.thought-pinned .av-thought-bubble,
             .scene-stage .av-portrait-shell.show-thought .av-thought-bubble{
                 opacity:1!important;
                 transform:scale(1) translateY(0)!important;
             }
         }
         @media (hover:none),(pointer:coarse){
-            .scene-stage .av-flip-wrap:hover .av-thought-bubble{
+            .scene-stage .av-flip-wrap:hover .av-thought-bubble,
+            .scene-stage .lz-char-flip-container:hover .av-thought-bubble{
                 opacity:0!important;
                 transform:scale(.94) translateY(4px)!important;
             }
+            .scene-stage .lz-char-portrait.show-thought .av-thought-bubble,
+            .scene-stage .lz-char-portrait.thought-pinned .av-thought-bubble,
             .scene-stage .av-portrait-shell.show-thought .av-thought-bubble{
                 opacity:1!important;
                 transform:scale(1) translateY(0)!important;
@@ -2327,9 +2351,11 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             pointer-events:none!important;
         }
         .scene-stage .lz-char-portrait.show-thought .av-thought-bubble,
+        .scene-stage .lz-char-portrait.thought-pinned .av-thought-bubble,
         .scene-stage .av-portrait-shell.show-thought .av-thought-bubble{
             opacity:1!important;
             transform:scale(1) translateY(0)!important;
+            animation:avThoughtIn .34s cubic-bezier(.22,1,.36,1) both!important;
         }
         @media (hover:hover) and (pointer:fine){
             .scene-stage .lz-char-flip-container:hover .av-thought-bubble,
@@ -2343,6 +2369,12 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             .scene-stage .av-flip-wrap:hover .av-thought-bubble{
                 opacity:0!important;
                 transform:scale(.94) translateY(4px)!important;
+            }
+            .scene-stage .lz-char-portrait.show-thought .av-thought-bubble,
+            .scene-stage .lz-char-portrait.thought-pinned .av-thought-bubble,
+            .scene-stage .av-portrait-shell.show-thought .av-thought-bubble{
+                opacity:1!important;
+                transform:scale(1) translateY(0)!important;
             }
         }
         .scene-collapse-bar{
@@ -2482,6 +2514,143 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             }
         }
         /* ===== /dual-end portrait premium layout v2 ===== */
+
+        /* ===== liangzhu micro-ui premium v3: collapse / favor chip / shared tokens ===== */
+        .scene-collapse-toggle{
+            position:relative;overflow:hidden;letter-spacing:.14em;
+            background:
+                linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.02)),
+                rgba(12,10,14,.58)!important;
+            border:1px solid color-mix(in srgb,var(--c) 24%,rgba(255,255,255,.1))!important;
+            box-shadow:0 10px 24px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.1)!important;
+            transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease,background .22s ease;
+        }
+        .scene-collapse-toggle::after{
+            content:"";position:absolute;inset:0;pointer-events:none;
+            background:linear-gradient(118deg,transparent 36%,rgba(255,255,255,.09) 50%,transparent 64%);
+            opacity:0;transition:opacity .24s ease;
+        }
+        .scene-collapse-toggle:hover::after,
+        .scene-collapse-toggle:focus-visible::after{opacity:1;}
+        .scene-collapse-toggle:active{transform:scale(.98);}
+        .scene-collapse-toggle i{
+            display:inline-flex!important;align-items:center;justify-content:center;
+            width:18px;height:18px;border-radius:50%;
+            font-size:.56rem!important;line-height:1!important;
+            background:color-mix(in srgb,var(--c) 22%,rgba(255,255,255,.05));
+            border:1px solid color-mix(in srgb,var(--c) 34%,rgba(255,255,255,.08));
+            box-shadow:0 0 10px color-mix(in srgb,var(--c) 18%,transparent);
+        }
+        .scene-collapsed .scene-collapse-bar{
+            width:min(300px,calc(100% - 20px))!important;
+            min-height:0!important;
+            margin:5px auto 7px!important;
+            padding:5px 8px!important;
+            border-radius:999px!important;
+            justify-content:center!important;
+            background:
+                linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.018)),
+                rgba(8,7,10,.48)!important;
+            border:1px solid rgba(255,255,255,.08)!important;
+            box-shadow:0 12px 30px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.07)!important;
+            backdrop-filter:blur(12px) saturate(1.08)!important;
+            -webkit-backdrop-filter:blur(12px) saturate(1.08)!important;
+        }
+        .scene-collapsed .scene-collapse-toggle{
+            flex:0 1 auto!important;
+            width:auto!important;
+            min-width:108px!important;
+            max-width:176px!important;
+            margin:0 auto!important;
+            min-height:32px!important;
+            padding:7px 15px!important;
+            font-size:.7rem!important;
+            font-weight:800!important;
+            color:rgba(255,248,240,.94)!important;
+        }
+        .scene-stage .av-favor-meter::before{display:none!important;}
+        .scene-stage .av-favor-glyph{
+            display:inline-flex;align-items:center;justify-content:center;
+            width:22px;height:22px;flex:0 0 auto;border-radius:50%;
+            font-size:.58rem;font-weight:800;letter-spacing:0;line-height:1;
+            color:rgba(255,244,232,.96);
+            background:
+                radial-gradient(circle at 28% 24%,color-mix(in srgb,var(--card-accent,var(--c)) 62%,#fff4e8),color-mix(in srgb,var(--card-accent,var(--c)) 30%,#1a1014));
+            border:1px solid color-mix(in srgb,var(--card-accent,var(--c)) 42%,rgba(255,255,255,.18));
+            box-shadow:0 0 14px color-mix(in srgb,var(--card-accent,var(--c)) 28%,transparent),inset 0 1px 0 rgba(255,255,255,.18);
+            text-shadow:0 1px 4px rgba(0,0,0,.35);
+        }
+        .scene-stage .av-favor-num{
+            display:inline-flex!important;align-items:baseline!important;gap:2px!important;
+            font-variant-numeric:tabular-nums!important;
+        }
+        .scene-stage .av-favor-cur{
+            font-size:.76rem!important;font-weight:900!important;
+            color:rgba(255,252,246,.98)!important;
+            letter-spacing:.03em!important;
+        }
+        .scene-stage .av-favor-sep{
+            font-size:.56rem!important;font-weight:700!important;
+            color:rgba(255,255,255,.38)!important;
+            transform:translateY(-.5px);
+        }
+        .scene-stage .av-favor-max{
+            font-size:.62rem!important;font-weight:800!important;
+            color:rgba(255,244,232,.68)!important;
+        }
+        .scene-stage .av-favor-meter .av-favor-track--micro{
+            display:block!important;
+            grid-column:1/-1!important;
+            height:3px!important;
+            margin-top:1px!important;
+            border-radius:999px!important;
+            background:rgba(255,255,255,.1)!important;
+            box-shadow:inset 0 1px 2px rgba(0,0,0,.32)!important;
+            overflow:hidden!important;
+        }
+        .scene-stage .av-favor-meter{
+            grid-template-columns:auto auto!important;
+            grid-template-rows:auto auto!important;
+            gap:5px 8px!important;
+            padding:7px 11px 8px!important;
+            border-radius:999px!important;
+            background:
+                linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.028)),
+                radial-gradient(circle at 14% 18%,color-mix(in srgb,var(--card-accent,var(--c)) 26%,transparent),transparent 62%),
+                rgba(8,7,10,.62)!important;
+            border:1px solid color-mix(in srgb,var(--card-accent,var(--c)) 34%,rgba(255,255,255,.12))!important;
+            box-shadow:
+                0 12px 28px rgba(0,0,0,.32),
+                0 0 20px color-mix(in srgb,var(--card-accent,var(--c)) 12%,transparent),
+                inset 0 1px 0 rgba(255,255,255,.12)!important;
+        }
+        @media (max-width:860px){
+            .scene-collapsed .scene-collapse-bar{
+                width:calc(100% - 14px)!important;
+                max-width:none!important;
+                padding:4px 6px!important;
+            }
+            .scene-collapsed .scene-collapse-toggle{
+                min-width:96px!important;
+                min-height:30px!important;
+                padding:6px 13px!important;
+            }
+            .scene-stage .av-favor-glyph{width:20px;height:20px;font-size:.54rem;}
+            .scene-stage .av-favor-cur{font-size:.72rem!important;}
+        }
+        @media (min-width:861px){
+            .scene-collapse-toggle{min-width:92px!important;padding:8px 14px!important;}
+            .scene-stage .av-favor-meter{
+                min-width:108px!important;
+                max-width:min(52%,188px)!important;
+                padding:8px 12px 9px!important;
+            }
+        }
+        @media (prefers-reduced-motion:reduce){
+            .scene-collapse-toggle,.scene-collapse-toggle::after,.scene-collapse-toggle i{transition:none!important;}
+            .av-thought-bubble,.av-portrait-shell.show-thought .av-thought-bubble,.lz-char-portrait.show-thought .av-thought-bubble{animation:none!important;transition:none!important;}
+        }
+        /* ===== /liangzhu micro-ui premium v3 ===== */
 </style>
 
     <script type="module">
@@ -3617,14 +3786,21 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 $('<span>').addClass('fb-sub').text('立绘待录').appendTo($fallback);
                 $portrait.append($fallback);
             }
-            var $meter = $('<div>').addClass('av-favor-meter');
+            var $meter = $('<div>').addClass('av-favor-meter').css('--favor-pct', pct + '%');
+            $('<span>').addClass('av-favor-glyph').attr('aria-hidden', 'true').text('缘').appendTo($meter);
             $('<span>').addClass('av-favor-label').text('好感').appendTo($meter);
-            $('<span>').addClass('av-favor-num').text(favor + ' / ' + Math.max(favorMax, favor, 100)).appendTo($meter);
-            var $meterTrack = $('<span>').addClass('av-favor-track').appendTo($meter);
+            var $num = $('<span>').addClass('av-favor-num').appendTo($meter);
+            $('<span>').addClass('av-favor-cur').text(String(favor)).appendTo($num);
+            $('<span>').addClass('av-favor-sep').text('/').appendTo($num);
+            $('<span>').addClass('av-favor-max').text(String(Math.max(favorMax, favor, 100))).appendTo($num);
+            var $meterTrack = $('<span>').addClass('av-favor-track av-favor-track--micro').appendTo($meter);
             $('<span>').addClass('av-favor-fill').css('width', pct + '%').appendTo($meterTrack);
             $portrait.append($meter);
             if (thought) {
-                $('<div>').addClass('av-thought-bubble').text(thought).appendTo($portrait);
+                var $bubble = $('<div>').addClass('av-thought-bubble').attr('role', 'note');
+                $('<span>').addClass('av-thought-label').text('心里想法').appendTo($bubble);
+                $('<span>').addClass('av-thought-body').text(thought).appendTo($bubble);
+                $portrait.append($bubble);
             }
             var $frontInfo = $('<div>').addClass('av-front-info');
             $('<div>').addClass('av-front-name').text(item.name).appendTo($frontInfo);
@@ -3661,7 +3837,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             $flip.append($front).append($back);
             $flipWrap.append($flip);
             $flipWrap.on('click', function() {
-                if ($(this).data('lp-active')) { return; }
+                if ($(this).data('lp-active') || $(this).data('suppress-click') || $(this).data('thought-pinned')) { return; }
                 this.classList.toggle('flipped');
                 lzStatusLog('flip', { name: item.name, back: this.classList.contains('flipped') });
             });
@@ -4339,33 +4515,129 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             });
 
             $('#scene-stage').on('click', '.av-flip-wrap', function(e) {
-                if ($(this).data('lp-active')) { e.preventDefault(); return; }
+                if ($(this).data('lp-active') || $(this).data('suppress-click') || $(this).data('thought-pinned')) { e.preventDefault(); return; }
                 var $flip = $(this).find('.av-flip').first();
                 $flip.toggleClass('flipped');
                 lzStatusLog('flip', { name: $(this).attr('data-name') || '', back: $flip.hasClass('flipped') });
             });
 
-            var __mnxThoughtHoldTimer = null;
-            $('#scene-stage')
-                .on('touchstart pointerdown', '.av-flip-wrap, .lz-char-flip-container', function(e) {
-                    var isTouchLike = e.type === 'touchstart' || (e.originalEvent && (e.originalEvent.pointerType === 'touch' || e.originalEvent.pointerType === 'pen'));
-                    if (!isTouchLike) return;
-                    var $wrap = $(this);
-                    clearTimeout(__mnxThoughtHoldTimer);
-                    __mnxThoughtHoldTimer = setTimeout(function(){
-                        $wrap.data('lp-active', true);
-                        $wrap.find('.av-portrait-shell, .lz-char-portrait').first().addClass('show-thought');
-                    }, 420);
-                })
-                .on('touchend touchcancel pointerup pointercancel pointerleave', '.av-flip-wrap, .lz-char-flip-container', function() {
-                    var $wrap = $(this);
-                    clearTimeout(__mnxThoughtHoldTimer);
-                    __mnxThoughtHoldTimer = null;
-                    $wrap.find('.av-portrait-shell, .lz-char-portrait').removeClass('show-thought');
-                    if ($wrap.data('lp-active')) {
-                        setTimeout(function(){ $wrap.removeData('lp-active'); }, 260);
+            (function initThoughtTouch() {
+                var hold = { timer: null, startX: 0, startY: 0, moved: false, fired: false, $wrap: null };
+                var HOLD_MS = 460;
+                var MOVE_CANCEL_PX = 14;
+
+                function thoughtPortrait($wrap) {
+                    return $wrap.find('.lz-char-portrait, .av-portrait-shell').first();
+                }
+                function hasThought($wrap) {
+                    return thoughtPortrait($wrap).find('.av-thought-bubble').length > 0;
+                }
+                function clearPinned($wrap) {
+                    if (!$wrap || !$wrap.length) return;
+                    thoughtPortrait($wrap).removeClass('show-thought thought-pinned thought-holding');
+                    $wrap.removeData('lp-active thought-pinned suppress-click tap-dismiss');
+                }
+                function clearAllPinned() {
+                    $('#scene-stage .lz-char-flip-container, #scene-stage .av-flip-wrap').each(function() {
+                        if ($(this).data('thought-pinned')) clearPinned($(this));
+                    });
+                }
+                function resetHold() {
+                    clearTimeout(hold.timer);
+                    hold.timer = null;
+                    hold.moved = false;
+                    hold.fired = false;
+                    hold.$wrap = null;
+                }
+                function revealThought($wrap) {
+                    var $portrait = thoughtPortrait($wrap);
+                    $portrait.addClass('show-thought thought-holding');
+                    $wrap.data('lp-active', true);
+                    hold.fired = true;
+                    if (navigator.vibrate) {
+                        try { navigator.vibrate(10); } catch (err) {}
                     }
+                }
+                function pinThought($wrap) {
+                    var $portrait = thoughtPortrait($wrap);
+                    $portrait.removeClass('thought-holding').addClass('show-thought thought-pinned');
+                    $wrap.data('thought-pinned', true);
+                    $wrap.data('suppress-click', true);
+                    setTimeout(function() {
+                        $wrap.removeData('lp-active suppress-click');
+                    }, 420);
+                }
+
+                $('#scene-stage')
+                    .on('touchstart', '.lz-char-flip-container, .av-flip-wrap', function(e) {
+                        var touch = e.originalEvent && e.originalEvent.touches && e.originalEvent.touches[0];
+                        if (!touch) return;
+                        var $wrap = $(this);
+                        if (!hasThought($wrap)) return;
+
+                        if ($wrap.data('thought-pinned')) {
+                            $wrap.data('tap-dismiss', true);
+                            return;
+                        }
+
+                        clearAllPinned();
+                        resetHold();
+                        hold.$wrap = $wrap;
+                        hold.startX = touch.clientX;
+                        hold.startY = touch.clientY;
+                        hold.timer = setTimeout(function() {
+                            if (hold.moved || hold.$wrap !== $wrap) return;
+                            revealThought($wrap);
+                        }, HOLD_MS);
+                    })
+                    .on('touchmove', '.lz-char-flip-container, .av-flip-wrap', function(e) {
+                        if (!hold.timer && !hold.fired) return;
+                        var touch = e.originalEvent && e.originalEvent.touches && e.originalEvent.touches[0];
+                        if (!touch) return;
+                        if (Math.abs(touch.clientX - hold.startX) > MOVE_CANCEL_PX || Math.abs(touch.clientY - hold.startY) > MOVE_CANCEL_PX) {
+                            hold.moved = true;
+                            clearTimeout(hold.timer);
+                            hold.timer = null;
+                            if (hold.fired && hold.$wrap) {
+                                thoughtPortrait(hold.$wrap).removeClass('show-thought thought-holding');
+                                hold.$wrap.removeData('lp-active');
+                                hold.fired = false;
+                            }
+                        }
+                    })
+                    .on('touchend touchcancel', '.lz-char-flip-container, .av-flip-wrap', function() {
+                        var $wrap = $(this);
+                        clearTimeout(hold.timer);
+                        hold.timer = null;
+
+                        if ($wrap.data('tap-dismiss')) {
+                            $wrap.removeData('tap-dismiss');
+                            clearPinned($wrap);
+                            $wrap.data('suppress-click', true);
+                            setTimeout(function() { $wrap.removeData('suppress-click'); }, 420);
+                            resetHold();
+                            return;
+                        }
+
+                        if (hold.fired && hold.$wrap === $wrap) {
+                            pinThought($wrap);
+                            resetHold();
+                            return;
+                        }
+
+                        if (hold.$wrap === $wrap) {
+                            thoughtPortrait($wrap).removeClass('thought-holding show-thought');
+                            $wrap.removeData('lp-active');
+                        }
+                        resetHold();
+                    });
+
+                $(document).on('touchstart', function(e) {
+                    if ($(e.target).closest('.lz-char-flip-container, .av-flip-wrap').length) return;
+                    clearAllPinned();
+                    resetHold();
                 });
+            })();
 
             $('#pv').on('click', function(e) { if (e.target === this) setShown('pv', false); });
             $('#pvb').on('click', function() { setShown('pv', false); });
