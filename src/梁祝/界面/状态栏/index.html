@@ -2074,6 +2074,15 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
 
 
 
+        /* ===== UI dedupe v1 ===== */
+        .scene-shell:not(.scene-collapsed) .scene-collapse-favor{display:none!important;}
+        .scene-collapse-sub{display:none!important;}
+        .scene-collapsed .scene-collapse-sub{display:inline!important;}
+        .scene-collapse-favor>i{display:none!important;}
+        .scene-stage .av-favor-label{display:none!important;}
+        /* ===== /UI dedupe v1 ===== */
+
+
         /* ===== portrait edge-fill fix v2 ===== */
         .scene-stage .av-portrait-img,
         .scene-stage .av-flip-front,
@@ -3797,7 +3806,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             }
             var $meter = $('<div>').addClass('av-favor-meter').css('--favor-pct', pct + '%');
             $('<span>').addClass('av-favor-glyph').attr('aria-hidden', 'true').text('缘').appendTo($meter);
-            $('<span>').addClass('av-favor-label').text('好感').appendTo($meter);
+            $('<span>').addClass('av-favor-label').attr('aria-hidden', 'true').text('好感').appendTo($meter);
             var $num = $('<span>').addClass('av-favor-num').appendTo($meter);
             $('<span>').addClass('av-favor-cur').text(String(favor)).appendTo($num);
             $('<span>').addClass('av-favor-sep').text('/').appendTo($num);
@@ -4746,7 +4755,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 <button type="button" class="scene-tab-nav next" id="scene-tab-next" aria-label="下一位角色"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
             <div class="scene-collapse-bar" id="scene-collapse-bar">
-                <div class="scene-collapse-main"><i class="fa-solid fa-layer-group"></i><span class="scene-collapse-name">当前人物</span><span class="scene-collapse-sub">人物状态</span><span class="scene-collapse-favor"><i class="fa-solid fa-heart"></i><span class="scene-collapse-favor-text">好感 0 / 100</span><span class="scene-collapse-favor-bar"><span class="scene-collapse-favor-fill"></span></span></span></div>
+                <div class="scene-collapse-main"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span class="scene-collapse-name">—</span><span class="scene-collapse-sub"></span><span class="scene-collapse-favor" aria-label="好感度"><span class="scene-collapse-favor-text">0/100</span><span class="scene-collapse-favor-bar"><span class="scene-collapse-favor-fill"></span></span></span></div>
                 <button type="button" class="scene-collapse-toggle" aria-expanded="true" aria-controls="scene-stage" aria-label="收起人物卡片"><span>收起</span><i class="fa-solid fa-chevron-down"></i></button>
             </div>
             <div class="scene-stage" id="scene-stage">
