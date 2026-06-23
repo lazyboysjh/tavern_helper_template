@@ -179,7 +179,7 @@
         .av-thought-body{display:block;font-size:.72rem;line-height:1.52;color:rgba(255,248,238,.94);letter-spacing:.02em}
         .av-thought-body::before{content:"「";opacity:.55;margin-right:1px}
         .av-thought-body::after{content:"」";opacity:.55;margin-left:1px}
-        .av-portrait-shell.show-thought .av-thought-bubble,.lz-char-portrait.show-thought .av-thought-bubble,.lz-char-portrait.thought-pinned .av-thought-bubble{opacity:1;transform:scale(1) translateY(0);animation:avThoughtIn .34s cubic-bezier(.22,1,.36,1) both}
+        .av-portrait-shell.show-thought .av-thought-bubble,.lz-char-portrait.show-thought .av-thought-bubble,.lz-char-portrait.thought-pinned .av-thought-bubble,.lz-char-portrait:focus-within .av-thought-bubble,.av-portrait-shell:focus-within .av-thought-bubble{opacity:1;transform:scale(1) translateY(0);animation:avThoughtIn .34s cubic-bezier(.22,1,.36,1) both}
         .lz-char-portrait.thought-holding .av-thought-bubble{box-shadow:0 16px 40px rgba(0,0,0,.4),0 0 28px color-mix(in srgb,var(--card-accent,var(--c)) 22%,transparent),inset 0 1px 0 rgba(255,255,255,.14)}
         @keyframes avThoughtIn{from{opacity:0;transform:scale(.9) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
         .av-flip-wrap:hover .av-thought-bubble,.lz-char-flip-container:hover .av-thought-bubble{opacity:1;transform:scale(1) translateY(0)}
@@ -1830,7 +1830,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         .lz-char-flip-container.flipped .lz-char-flip-inner{transform:rotateY(180deg)}
         .lz-char-front,.lz-char-back{position:absolute;top:0;left:0;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;overflow:hidden;border:1px solid color-mix(in srgb,var(--card-accent,var(--c)) 22%,rgba(255,255,255,.07));box-shadow:0 26px 70px rgba(0,0,0,.4),0 2px 0 rgba(255,255,255,.04) inset}
         .lz-char-front{background:var(--card-bg);display:flex;flex-direction:column}
-        .lz-char-portrait{position:relative;flex:1;background-size:cover;background-position:center top;background-repeat:no-repeat;overflow:hidden}
+        .lz-char-portrait{position:relative;flex:1;background-size:cover;background-position:center top;background-repeat:no-repeat;overflow:hidden;-webkit-touch-callout:none;touch-action:manipulation}
         .lz-char-flip-container:hover .av-thought-bubble{opacity:1;transform:scale(1) translateY(0)}
         .lz-char-back{transform:rotateY(180deg);padding:28px 26px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;display:flex;flex-direction:column;gap:8px;background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.025) 42%,rgba(0,0,0,.1)),radial-gradient(circle at 20% 0,color-mix(in srgb,var(--card-accent,var(--c)) 22%,transparent),transparent 42%),rgba(16,14,18,.96)}
         .lz-char-back::-webkit-scrollbar{width:4px}.lz-char-back::-webkit-scrollbar-track{background:transparent}.lz-char-back::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--card-accent,var(--c)) 30%,transparent);border-radius:4px}
@@ -1862,7 +1862,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         .av-thought-body{display:block;font-size:.72rem;line-height:1.52;color:rgba(255,248,238,.94);letter-spacing:.02em}
         .av-thought-body::before{content:"「";opacity:.55;margin-right:1px}
         .av-thought-body::after{content:"」";opacity:.55;margin-left:1px}
-        .av-portrait-shell.show-thought .av-thought-bubble,.lz-char-portrait.show-thought .av-thought-bubble,.lz-char-portrait.thought-pinned .av-thought-bubble{opacity:1;transform:scale(1) translateY(0);animation:avThoughtIn .34s cubic-bezier(.22,1,.36,1) both}
+        .av-portrait-shell.show-thought .av-thought-bubble,.lz-char-portrait.show-thought .av-thought-bubble,.lz-char-portrait.thought-pinned .av-thought-bubble,.lz-char-portrait:focus-within .av-thought-bubble,.av-portrait-shell:focus-within .av-thought-bubble{opacity:1;transform:scale(1) translateY(0);animation:avThoughtIn .34s cubic-bezier(.22,1,.36,1) both}
         .lz-char-portrait.thought-holding .av-thought-bubble{box-shadow:0 16px 40px rgba(0,0,0,.4),0 0 28px color-mix(in srgb,var(--card-accent,var(--c)) 22%,transparent),inset 0 1px 0 rgba(255,255,255,.14)}
         @keyframes avThoughtIn{from{opacity:0;transform:scale(.9) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
         .av-flip-wrap:hover .av-thought-bubble,.lz-char-flip-container:hover .av-thought-bubble{opacity:1;transform:scale(1) translateY(0)}
@@ -2352,7 +2352,9 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         }
         .scene-stage .lz-char-portrait.show-thought .av-thought-bubble,
         .scene-stage .lz-char-portrait.thought-pinned .av-thought-bubble,
-        .scene-stage .av-portrait-shell.show-thought .av-thought-bubble{
+        .scene-stage .lz-char-portrait:focus-within .av-thought-bubble,
+        .scene-stage .av-portrait-shell.show-thought .av-thought-bubble,
+        .scene-stage .av-portrait-shell:focus-within .av-thought-bubble{
             opacity:1!important;
             transform:scale(1) translateY(0)!important;
             animation:avThoughtIn .34s cubic-bezier(.22,1,.36,1) both!important;
@@ -2825,6 +2827,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         var __mnxLastStatSig = '';
         var __mnxIsLiveBar = true;
         var __mnxPollTimer = null;
+        var __mnxThoughtTeardown = null;
         var __mnxEventStops = [];
         var __mnxArchivedCleaned = false;
         var STATUS_POLL_INTERVAL = 7000;
@@ -2921,6 +2924,9 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                     window.visualViewport.removeEventListener('resize', scheduleSyncPreviewViewport);
                     window.visualViewport.removeEventListener('scroll', scheduleSyncPreviewViewport);
                 }
+            } catch(e) {}
+            try {
+                if (typeof __mnxThoughtTeardown === 'function') __mnxThoughtTeardown();
             } catch(e) {}
         }
 
@@ -3801,6 +3807,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 $('<span>').addClass('av-thought-label').text('心里想法').appendTo($bubble);
                 $('<span>').addClass('av-thought-body').text(thought).appendTo($bubble);
                 $portrait.append($bubble);
+                $portrait.attr({ tabindex: '0', role: 'group', 'aria-label': item.name + '立绘，回车查看心里想法' });
             }
             var $frontInfo = $('<div>').addClass('av-front-info');
             $('<div>').addClass('av-front-name').text(item.name).appendTo($frontInfo);
@@ -4007,7 +4014,10 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             $bar.find('.scene-collapse-favor-text').text(favor + '/' + favorMax);
             $bar.find('.scene-collapse-favor-fill').css('--favor-pct', pct + '%');
             $bar.find('.scene-collapse-toggle span').text(openText);
-            $bar.find('.scene-collapse-toggle').attr('aria-expanded', sceneCardsOpen ? 'true' : 'false');
+            $bar.find('.scene-collapse-toggle').attr({
+                'aria-expanded': sceneCardsOpen ? 'true' : 'false',
+                'aria-label': (sceneCardsOpen ? '收起' : '展开') + '人物卡片'
+            });
         }
 
         function ensureTopGalleryCeremonyStyle(doc) {
@@ -4514,14 +4524,8 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 renderSceneStage();
             });
 
-            $('#scene-stage').on('click', '.av-flip-wrap', function(e) {
-                if ($(this).data('lp-active') || $(this).data('suppress-click') || $(this).data('thought-pinned')) { e.preventDefault(); return; }
-                var $flip = $(this).find('.av-flip').first();
-                $flip.toggleClass('flipped');
-                lzStatusLog('flip', { name: $(this).attr('data-name') || '', back: $flip.hasClass('flipped') });
-            });
-
             (function initThoughtTouch() {
+                var SUPPRESS_MS = 520;
                 var hold = { timer: null, startX: 0, startY: 0, moved: false, fired: false, $wrap: null };
                 var HOLD_MS = 460;
                 var MOVE_CANCEL_PX = 14;
@@ -4565,11 +4569,11 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                     $wrap.data('suppress-click', true);
                     setTimeout(function() {
                         $wrap.removeData('lp-active suppress-click');
-                    }, 420);
+                    }, SUPPRESS_MS);
                 }
 
                 $('#scene-stage')
-                    .on('touchstart', '.lz-char-flip-container, .av-flip-wrap', function(e) {
+                    .on('touchstart.mnxThought', '.lz-char-flip-container, .av-flip-wrap', function(e) {
                         var touch = e.originalEvent && e.originalEvent.touches && e.originalEvent.touches[0];
                         if (!touch) return;
                         var $wrap = $(this);
@@ -4577,6 +4581,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
 
                         if ($wrap.data('thought-pinned')) {
                             $wrap.data('tap-dismiss', true);
+                            if (e.originalEvent && e.originalEvent.cancelable) e.preventDefault();
                             return;
                         }
 
@@ -4590,7 +4595,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                             revealThought($wrap);
                         }, HOLD_MS);
                     })
-                    .on('touchmove', '.lz-char-flip-container, .av-flip-wrap', function(e) {
+                    .on('touchmove.mnxThought', '.lz-char-flip-container, .av-flip-wrap', function(e) {
                         if (!hold.timer && !hold.fired) return;
                         var touch = e.originalEvent && e.originalEvent.touches && e.originalEvent.touches[0];
                         if (!touch) return;
@@ -4605,7 +4610,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                             }
                         }
                     })
-                    .on('touchend touchcancel', '.lz-char-flip-container, .av-flip-wrap', function() {
+                    .on('touchend.mnxThought touchcancel.mnxThought', '.lz-char-flip-container, .av-flip-wrap', function() {
                         var $wrap = $(this);
                         clearTimeout(hold.timer);
                         hold.timer = null;
@@ -4614,7 +4619,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                             $wrap.removeData('tap-dismiss');
                             clearPinned($wrap);
                             $wrap.data('suppress-click', true);
-                            setTimeout(function() { $wrap.removeData('suppress-click'); }, 420);
+                            setTimeout(function() { $wrap.removeData('suppress-click'); }, SUPPRESS_MS);
                             resetHold();
                             return;
                         }
@@ -4632,11 +4637,18 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                         resetHold();
                     });
 
-                $(document).on('touchstart', function(e) {
+                $(document).on('touchstart.mnxThoughtOutside', function(e) {
                     if ($(e.target).closest('.lz-char-flip-container, .av-flip-wrap').length) return;
                     clearAllPinned();
                     resetHold();
                 });
+
+                __mnxThoughtTeardown = function() {
+                    $('#scene-stage').off('.mnxThought');
+                    $(document).off('.mnxThoughtOutside');
+                    clearAllPinned();
+                    resetHold();
+                };
             })();
 
             $('#pv').on('click', function(e) { if (e.target === this) setShown('pv', false); });
@@ -4732,7 +4744,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             </div>
             <div class="scene-collapse-bar" id="scene-collapse-bar">
                 <div class="scene-collapse-main"><i class="fa-solid fa-layer-group"></i><span class="scene-collapse-name">当前人物</span><span class="scene-collapse-sub">人物状态</span><span class="scene-collapse-favor"><i class="fa-solid fa-heart"></i><span class="scene-collapse-favor-text">好感 0 / 100</span><span class="scene-collapse-favor-bar"><span class="scene-collapse-favor-fill"></span></span></span></div>
-                <button type="button" class="scene-collapse-toggle" aria-expanded="true"><span>收起</span><i class="fa-solid fa-chevron-down"></i></button>
+                <button type="button" class="scene-collapse-toggle" aria-expanded="true" aria-controls="scene-stage" aria-label="收起人物卡片"><span>收起</span><i class="fa-solid fa-chevron-down"></i></button>
             </div>
             <div class="scene-stage" id="scene-stage">
                 <div class="scene-toast-layer" id="scene-toast-layer"></div>
