@@ -21,6 +21,11 @@
   function cleanText(s) {
     return String(s || '').replace(/<\/?q>/gi, '').replace(/&lt;\/?q&gt;/gi, '').trim();
   }
+  function getOptText(item) {
+    var source = item.querySelector('.opt-send-source') || item.querySelector('.opt-display-source');
+    var text = cleanText(source ? source.textContent : item.getAttribute('data-display') || item.textContent);
+    return text.replace(/^\d+\.\s*/, '').replace(/^\[[^\]]+\]\s*/, '').trim();
+  }
 
   function getHostingMessageId() {
     try {
@@ -58,7 +63,6 @@
     }
     return true;
   }
-  window.mnxEnsureLatestOptions = mnxEnsureLatestOptions;
 
   var modeBtn = wrap.querySelector('.mnx-mode-btn');
   var MODES = ['send','setinput','append'];
@@ -66,6 +70,7 @@
   var MODE_KEY = 'liangzhu-opts-mode-v4';
   var currentMode = 'send';
   try { var saved = localStorage.getItem(MODE_KEY); if (MODES.indexOf(saved) >= 0) currentMode = saved; } catch(e) {}
+
   function applyMode(mode) {
     if (MODES.indexOf(mode) === -1) mode = 'send';
     currentMode = mode;
@@ -89,28 +94,9 @@
     try { if (window.top && window.top.$) return window.top.$('#send_textarea').val() || ''; } catch(e) {}
     return '';
   }
-  applyMode(currentMode);
-  log('info', 'controller ready', {
-    mode: currentMode,
-    triggerSlash: !!getTrigger(),
-    eventOn: !!(getApi('eventOn') || getApi('event_on'))
-  });
-  if (modeBtn) {
-    modeBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      e.preventDefault();
-      applyMode(MODES[(MODES.indexOf(currentMode) + 1) % MODES.length]);
-    });
-  }
-  wrap.addEventListener('click', async function(e) {
-    if (e.target.closest('.mnx-mode-btn')) return;
-    var item = e.target.closest('.opt');
-    if (!item) return;
-    e.preventDefault();
-    e.stopPropagation();
-    var source = item.querySelector('.opt-send-source') || item.querySelector('.opt-display-source');
-    var text = cleanText(source ? source.textContent : item.textContent);
-    text = text.replace(/^\d+\.\s*/, '').replace(/^\[[^\]]+\]\s*/, '').trim();
+
+  async function dispatchOpt(item) {
+    var text = getOptText(item);
     if (!text || item.getAttribute('data-mnx-sending') === '1') return;
     var trig = getTrigger();
     if (!trig) { log('error', 'triggerSlash unavailable'); return; }
@@ -137,6 +123,51 @@
       log('error', 'dispatch failed', err);
     } finally {
       item.removeAttribute('data-mnx-sending');
+    }
+  }
+
+  function enhanceOptAccessibility() {
+    wrap.querySelectorAll('.opt').forEach(function(item) {
+      if (item.getAttribute('data-mnx-a11y') === '1') return;
+      item.setAttribute('data-mnx-a11y', '1');
+      item.setAttribute('role', 'button');
+      item.setAttribute('tabindex', '0');
+      var label = getOptText(item);
+      if (label) item.setAttribute('aria-label', '行动选项：' + label);
+    });
+  }
+
+  applyMode(currentMode);
+  enhanceOptAccessibility();
+  log('info', 'controller ready', {
+    mode: currentMode,
+    triggerSlash: !!getTrigger(),
+    eventOn: !!(getApi('eventOn') || getApi('event_on'))
+  });
+
+  if (modeBtn) {
+    modeBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      applyMode(MODES[(MODES.indexOf(currentMode) + 1) % MODES.length]);
+    });
+  }
+
+  wrap.addEventListener('click', function(e) {
+    if (e.target.closest('.mnx-mode-btn')) return;
+    var item = e.target.closest('.opt');
+    if (!item) return;
+    e.preventDefault();
+    e.stopPropagation();
+    dispatchOpt(item);
+  }, false);
+
+  wrap.addEventListener('keydown', function(e) {
+    var item = e.target.closest('.opt');
+    if (!item) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      dispatchOpt(item);
     }
   }, false);
 
