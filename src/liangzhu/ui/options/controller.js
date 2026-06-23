@@ -1,5 +1,6 @@
 (function(){
-  var wrap = document.currentScript && document.currentScript.closest('.mnx-opts-wrap');
+  var wrap = (document.currentScript && document.currentScript.closest('.mnx-opts-wrap'))
+           || document.querySelector('.mnx-opts-wrap:not([data-mnx-controller-ready])');
   if (!wrap) return;
   if (wrap.getAttribute('data-mnx-controller-ready') === '1') return;
   wrap.setAttribute('data-mnx-controller-ready','1');
@@ -66,7 +67,7 @@
 
   var modeBtn = wrap.querySelector('.mnx-mode-btn');
   var MODES = ['send','setinput','append'];
-  var MODE_LABELS = { send:'模式：发送', setinput:'模式：填入', append:'模式：追加' };
+  var MODE_LABELS = { send:'发送', setinput:'填入', append:'追加' };
   var MODE_KEY = 'liangzhu-opts-mode-v4';
   var currentMode = 'send';
   try { var saved = localStorage.getItem(MODE_KEY); if (MODES.indexOf(saved) >= 0) currentMode = saved; } catch(e) {}
