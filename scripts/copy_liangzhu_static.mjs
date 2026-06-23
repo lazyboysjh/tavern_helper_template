@@ -6,8 +6,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 /** src 中需原样复制到 dist 的静态资源（webpack 不会自动产出） */
 const copies = [
-  ['src/梁祝/界面/行动选项/styles.css', 'dist/梁祝/界面/行动选项/styles.css'],
-  ['src/梁祝/界面/行动选项/controller.js', 'dist/梁祝/界面/行动选项/controller.js'],
+  ['src/liangzhu/ui/options/styles.css', 'dist/liangzhu/ui/options/styles.css'],
+  ['src/liangzhu/ui/options/controller.js', 'dist/liangzhu/ui/options/controller.js'],
 ];
 
 for (const [fromRel, toRel] of copies) {
