@@ -2707,29 +2707,9 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         .scene-shell:not(.scene-collapsed) .scene-collapse-sub{
             display:none!important;
         }
+        /* Expanded: favor is redundant (portrait card below already shows it) → hide */
         .scene-shell:not(.scene-collapsed) .scene-collapse-favor{
-            display:flex!important;align-items:center!important;
-            gap:0!important;padding:0!important;margin:0!important;
-            border:none!important;background:none!important;box-shadow:none!important;
-            min-width:60px!important;max-width:140px!important;flex:1 1 auto!important;
-        }
-        .scene-shell:not(.scene-collapsed) .scene-collapse-favor::before{display:none!important}
-        .scene-shell:not(.scene-collapsed) .scene-collapse-favor-text{
             display:none!important;
-        }
-        .scene-shell:not(.scene-collapsed) .scene-collapse-favor-bar{
-            display:block!important;
-            width:100%!important;min-width:0!important;
-            height:3px!important;
-            border-radius:999px!important;
-            background:rgba(255,255,255,.1)!important;
-            overflow:hidden!important;
-            box-shadow:none!important;
-        }
-        .scene-shell:not(.scene-collapsed) .scene-collapse-favor-fill{
-            height:100%!important;border-radius:inherit!important;
-            background:linear-gradient(90deg,var(--card-accent,var(--c)),#d97a86,#ffe0a3)!important;
-            box-shadow:0 0 8px color-mix(in srgb,var(--card-accent,var(--c)) 36%,transparent)!important;
         }
         .scene-shell:not(.scene-collapsed) .scene-collapse-toggle{
             flex:0 0 auto!important;
