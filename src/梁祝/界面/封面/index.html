@@ -3545,14 +3545,16 @@
 
   
 
-    /* ===== portrait complete display fix v1 ===== */
+    /* ===== portrait edge-fill fix v2 ===== */
     .mnx-portrait-face{
-      background-size:contain!important;
-      background-position:center center!important;
+      background-size:cover!important;
+      background-position:center top!important;
       background-repeat:no-repeat!important;
-      background-color:color-mix(in srgb,var(--bg-1) 88%,#000 12%)!important;
+      background-color:transparent!important;
     }
-    /* ===== /portrait complete display fix v1 ===== */
+    .mnx-portrait-flip{background:var(--bg-2)!important;}
+    .mnx-persona{padding:0 0 10px!important;}
+    /* ===== /portrait edge-fill fix v2 ===== */
 
 
     /* ===== mobile cover compact no-blank v1 ===== */
