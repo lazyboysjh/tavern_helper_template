@@ -2872,10 +2872,11 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
 
         /* ===== av-favor-meter rework v1 ===== */
 
+        /* Top-left to avoid overlapping the bottom name band (.av-front-info) */
         .scene-stage .av-favor-meter{
             position:absolute!important;
-            left:14px!important;right:auto!important;bottom:14px!important;
-            top:auto!important;
+            left:14px!important;right:auto!important;top:14px!important;
+            bottom:auto!important;
             z-index:6!important;
             display:grid!important;
             grid-template-columns:auto!important;
@@ -2937,7 +2938,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         @media(max-width:860px){
             .scene-stage .av-favor-meter{
                 width:120px!important;
-                left:10px!important;bottom:10px!important;
+                left:10px!important;top:10px!important;bottom:auto!important;
                 padding:6px 10px!important;
             }
             .scene-stage .av-favor-cur{font-size:.66rem!important}
@@ -2947,7 +2948,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         @media(max-width:390px){
             .scene-stage .av-favor-meter{
                 width:100px!important;
-                left:8px!important;bottom:8px!important;
+                left:8px!important;top:8px!important;bottom:auto!important;
                 padding:5px 8px!important;
                 border-radius:6px!important;
             }
