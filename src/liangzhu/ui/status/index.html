@@ -3905,6 +3905,108 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             }
         }
         /* ===== /scene-collapse stable layout v11 ===== */
+
+        /* ===== collapse favor pill v12: no stray track at 0, bar under text (dual-end) ===== */
+        .scene-collapse-favor::before,
+        #scene-shell.scene-collapsed .scene-collapse-favor::before{
+            display:none!important;content:none!important;
+        }
+        #scene-shell.scene-collapsed .scene-collapse-favor{
+            display:flex!important;
+            flex-direction:column!important;
+            align-items:stretch!important;
+            justify-content:center!important;
+            gap:3px!important;
+            min-width:72px!important;
+            max-width:min(42vw,148px)!important;
+            padding:4px 10px 5px!important;
+            border-radius:999px!important;
+            border:1px solid rgba(255,255,255,.07)!important;
+            background:rgba(255,255,255,.04)!important;
+            box-shadow:none!important;
+        }
+        #scene-shell.scene-collapsed .scene-collapse-favor-text{
+            display:block!important;
+            text-align:center!important;
+            width:100%!important;
+            line-height:1.1!important;
+            font-size:.62rem!important;
+            font-weight:800!important;
+            font-variant-numeric:tabular-nums!important;
+            white-space:nowrap!important;
+            color:rgba(255,250,244,.86)!important;
+        }
+        #scene-shell.scene-collapsed .scene-collapse-favor-bar{
+            position:relative!important;
+            display:block!important;
+            width:100%!important;
+            min-width:0!important;
+            max-width:none!important;
+            height:3px!important;
+            flex:0 0 3px!important;
+            align-self:stretch!important;
+            margin:0!important;
+            border-radius:999px!important;
+            background:rgba(255,255,255,.1)!important;
+            box-shadow:inset 0 1px 2px rgba(0,0,0,.22)!important;
+            overflow:hidden!important;
+        }
+        #scene-shell.scene-collapsed .scene-collapse-favor-fill{
+            position:absolute!important;
+            inset:0 auto 0 0!important;
+            display:block!important;
+            height:100%!important;
+            width:var(--favor-pct,0%)!important;
+            border-radius:inherit!important;
+        }
+        #scene-shell.scene-collapsed .scene-collapse-favor.favor-is-zero .scene-collapse-favor-bar{
+            display:none!important;
+        }
+        #scene-shell.scene-collapsed .scene-collapse-favor.favor-is-zero{
+            gap:0!important;
+            padding-block:5px!important;
+        }
+        @media (min-width:761px){
+            #scene-shell.scene-collapsed .scene-collapse-favor{
+                min-width:88px!important;
+                max-width:min(28vw,168px)!important;
+                padding:5px 14px 6px!important;
+                gap:4px!important;
+            }
+            #scene-shell.scene-collapsed .scene-collapse-favor-text{
+                font-size:.64rem!important;
+            }
+            #scene-shell.scene-collapsed .scene-collapse-favor-bar{
+                height:3px!important;
+                flex-basis:3px!important;
+            }
+        }
+        @media (max-width:760px){
+            #scene-shell.scene-collapsed .scene-collapse-favor{
+                min-width:64px!important;
+                max-width:min(46vw,132px)!important;
+                padding:3px 8px 4px!important;
+                gap:2px!important;
+            }
+            #scene-shell.scene-collapsed .scene-collapse-favor-text{
+                font-size:.58rem!important;
+            }
+            #scene-shell.scene-collapsed .scene-collapse-favor-bar{
+                height:2px!important;
+                flex-basis:2px!important;
+            }
+        }
+        @media (max-width:480px){
+            #scene-shell.scene-collapsed .scene-collapse-favor{
+                min-width:58px!important;
+                max-width:min(52vw,118px)!important;
+                padding:3px 7px 4px!important;
+            }
+            #scene-shell.scene-collapsed .scene-collapse-favor-text{
+                font-size:.56rem!important;
+            }
+        }
+        /* ===== /collapse favor pill v12 ===== */
 </style>
 
 </head>
@@ -5506,6 +5608,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             $bar.attr('aria-label', (item.name || '当前人物') + '，与主角关系：' + relationText);
             $bar.find('.scene-collapse-favor-text').text(favor + '/' + favorMax);
             $bar.find('.scene-collapse-favor-fill').css('--favor-pct', pct + '%');
+            $bar.find('.scene-collapse-favor').toggleClass('favor-is-zero', favor <= 0);
             $bar.find('.scene-collapse-toggle').attr({
                 'aria-expanded': sceneCardsOpen ? 'true' : 'false',
                 'aria-label': (sceneCardsOpen ? '收起' : '展开') + '人物卡片'
