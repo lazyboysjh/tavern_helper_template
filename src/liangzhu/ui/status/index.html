@@ -908,15 +908,7 @@
         .scene-stage {
             transition: max-height .32s cubic-bezier(.22,1,.36,1), opacity .24s ease, margin .24s ease;
         }
-        .scene-collapsed .scene-stage {
-            max-height: 0 !important;
-            min-height: 0 !important;
-            margin-top: -6px;
-            overflow: hidden;
-            opacity: 0;
-            pointer-events: none;
-        }
-        .scene-collapsed .scene-toast-layer { display: none; }
+        /* collapse motion: see v8 #scene-shell.scene-collapsed #scene-stage */
 
         .img-loading {
             position: relative;
