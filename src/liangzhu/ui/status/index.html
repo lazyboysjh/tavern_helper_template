@@ -3,7 +3,7 @@
 <head><script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script><script src="https://code.jquery.com/jquery-3.7.1.min.js"></script><script>window.errorCatched=function(fn){return fn;};</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>梁祝状态栏</title>
+    <title>群芳谱</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         ::-webkit-scrollbar{width:4px;height:4px}
@@ -972,6 +972,51 @@
                 linear-gradient(145deg, rgba(32,20,22,.72), rgba(8,8,10,.86));
         }
         @keyframes mnxImgSpin { to { transform: rotate(360deg); } }
+
+        /* ===== main portrait premium loading v1 ===== */
+        .lz-char-portrait.is-portrait-loading::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            border-radius: inherit;
+            pointer-events: none;
+            background:
+                linear-gradient(110deg, transparent 38%, rgba(255,255,255,.1) 50%, transparent 62%),
+                radial-gradient(circle at 50% 24%, color-mix(in srgb, var(--card-accent, var(--c)) 24%, transparent), transparent 40%),
+                linear-gradient(145deg, rgba(255,255,255,.05), rgba(0,0,0,.3));
+            background-size: 220% 100%, 100% 100%, 100% 100%;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.045);
+            animation: lzPortraitSheen 1.5s ease-in-out infinite;
+        }
+        .lz-char-portrait.is-portrait-loading::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 2;
+            width: 38px;
+            height: 38px;
+            margin: -19px 0 0 -19px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,.16);
+            border-top-color: color-mix(in srgb, var(--card-accent, var(--c)) 80%, white 12%);
+            filter: drop-shadow(0 0 12px color-mix(in srgb, var(--card-accent, var(--c)) 45%, transparent));
+            animation: mnxImgSpin .82s linear infinite, lzPortraitPulse 1.8s ease-in-out infinite;
+            pointer-events: none;
+        }
+        .lz-char-portrait.is-portrait-loaded::before,
+        .lz-char-portrait.is-portrait-loaded::after {
+            opacity: 0;
+            animation: none;
+            transition: opacity .26s ease;
+        }
+        @keyframes lzPortraitSheen { 0% { background-position: 120% 0, 0 0, 0 0; } 100% { background-position: -120% 0, 0 0, 0 0; } }
+        @keyframes lzPortraitPulse { 0%, 100% { filter: drop-shadow(0 0 6px color-mix(in srgb, var(--card-accent, var(--c)) 30%, transparent)); } 50% { filter: drop-shadow(0 0 18px color-mix(in srgb, var(--card-accent, var(--c)) 60%, transparent)); } }
+        @media (prefers-reduced-motion: reduce) {
+            .lz-char-portrait.is-portrait-loading::before { animation: none; }
+            .lz-char-portrait.is-portrait-loading::after { animation: none; }
+        }
 
         .opt-toggle-row {
             display: flex;
@@ -2955,6 +3000,392 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         }
 
         /* ===== /scene-collapse & av-favor-meter rework v1 ===== */
+
+        /* ===== scene-collapse rework v2: header cohesion + premium toggle ===== */
+        /* Expanded: the collapse bar becomes a matched header of the card below
+           (same material / accent stripe / width), sitting close so the two read
+           as one cohesive unit instead of a floating pill. */
+        .scene-shell:not(.scene-collapsed) .scene-collapse-bar{
+            width:100%!important;max-width:none!important;margin-inline:0!important;
+            height:auto!important;min-height:44px!important;
+            padding:9px 13px 9px 17px!important;
+            border-radius:13px!important;
+            background:var(--card-bg)!important;
+            border:1px solid var(--card-border)!important;
+            box-shadow:var(--card-shadow)!important;
+            backdrop-filter:blur(4px)!important;-webkit-backdrop-filter:blur(4px)!important;
+            overflow:hidden!important;
+        }
+        .scene-shell:not(.scene-collapsed) .scene-collapse-bar::before{
+            content:""!important;position:absolute!important;top:0!important;left:0!important;
+            width:4px!important;height:100%!important;
+            background:linear-gradient(180deg,var(--card-accent,var(--c)),transparent)!important;
+            border-radius:13px 0 0 13px!important;
+            pointer-events:none!important;
+        }
+        /* Pull the card upward so header + card sit as a tight, related pair */
+        .scene-shell:not(.scene-collapsed) .scene-stage{margin-top:-6px!important;}
+        .scene-shell:not(.scene-collapsed) .scene-collapse-main{gap:9px!important;}
+        .scene-shell:not(.scene-collapsed) .scene-collapse-main>i{
+            font-size:.82rem!important;
+            color:var(--card-accent,var(--c))!important;
+            filter:drop-shadow(0 0 7px color-mix(in srgb,var(--card-accent,var(--c)) 45%,transparent))!important;
+        }
+        .scene-shell:not(.scene-collapsed) .scene-collapse-name{
+            max-width:none!important;
+            font-size:.84rem!important;font-weight:800!important;letter-spacing:.03em!important;
+            color:rgba(255,250,244,.95)!important;
+        }
+
+        /* Premium toggle button — consistent, accent-tinted, in both states */
+        .scene-shell:not(.scene-collapsed) .scene-collapse-toggle,
+        .scene-collapsed .scene-collapse-toggle{
+            flex:0 0 auto!important;
+            display:inline-flex!important;align-items:center!important;justify-content:center!important;
+            gap:6px!important;
+            height:30px!important;min-height:30px!important;
+            padding:0 13px!important;
+            border-radius:999px!important;
+            border:1px solid color-mix(in srgb,var(--card-accent,var(--c)) 34%,rgba(255,255,255,.12))!important;
+            background:linear-gradient(180deg,color-mix(in srgb,var(--card-accent,var(--c)) 17%,rgba(255,255,255,.04)),color-mix(in srgb,var(--card-accent,var(--c)) 7%,rgba(0,0,0,.2)))!important;
+            color:rgba(255,250,244,.92)!important;
+            font-size:.72rem!important;font-weight:800!important;letter-spacing:.05em!important;
+            cursor:pointer!important;
+            box-shadow:0 2px 9px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.08)!important;
+            transition:background .22s ease,border-color .22s ease,box-shadow .22s ease,transform .15s ease!important;
+        }
+        .scene-shell:not(.scene-collapsed) .scene-collapse-toggle:hover,
+        .scene-collapsed .scene-collapse-toggle:hover{
+            background:linear-gradient(180deg,color-mix(in srgb,var(--card-accent,var(--c)) 28%,rgba(255,255,255,.06)),color-mix(in srgb,var(--card-accent,var(--c)) 13%,rgba(0,0,0,.16)))!important;
+            border-color:color-mix(in srgb,var(--card-accent,var(--c)) 55%,white 8%)!important;
+            box-shadow:0 5px 16px color-mix(in srgb,var(--card-accent,var(--c)) 24%,rgba(0,0,0,.22)),inset 0 1px 0 rgba(255,255,255,.12)!important;
+        }
+        .scene-collapse-toggle:active{transform:scale(.96)!important;}
+        .scene-collapse-toggle:focus-visible{
+            outline:2px solid color-mix(in srgb,var(--card-accent,var(--c)) 62%,white)!important;outline-offset:2px!important;
+        }
+        .scene-shell:not(.scene-collapsed) .scene-collapse-toggle i,
+        .scene-collapsed .scene-collapse-toggle i{
+            font-size:.64rem!important;
+            color:var(--card-accent,var(--c))!important;
+            filter:drop-shadow(0 0 5px color-mix(in srgb,var(--card-accent,var(--c)) 40%,transparent))!important;
+            transition:transform .28s cubic-bezier(.22,1,.36,1)!important;
+        }
+        .scene-shell:not(.scene-collapsed) .scene-collapse-toggle i{transform:rotate(0deg)!important;}
+        .scene-collapsed .scene-collapse-toggle i{transform:rotate(-90deg)!important;}
+
+        @media(max-width:390px){
+            .scene-shell:not(.scene-collapsed) .scene-collapse-bar{
+                padding:8px 10px 8px 13px!important;min-height:40px!important;
+            }
+            .scene-shell:not(.scene-collapsed) .scene-collapse-name{font-size:.8rem!important;}
+            .scene-shell:not(.scene-collapsed) .scene-collapse-toggle,
+            .scene-collapsed .scene-collapse-toggle{padding:0 11px!important;font-size:.68rem!important;}
+        }
+        @media(hover:none),(pointer:coarse){
+            .scene-shell:not(.scene-collapsed) .scene-collapse-toggle,
+            .scene-collapsed .scene-collapse-toggle{min-height:44px!important;height:auto!important;padding-block:9px!important;}
+        }
+        /* ===== /scene-collapse rework v2 ===== */
+
+        /* ===== scene-collapse rework v3: mobile slim bar (wins cascade) ===== */
+        .scene-collapse-toggle::after{display:none!important;content:none!important;}
+
+        .scene-shell:not(.scene-collapsed) .scene-collapse-favor,
+        .scene-shell:not(.scene-collapsed) .scene-collapse-sub{display:none!important;}
+
+        .scene-collapse-bar{
+            display:flex!important;align-items:center!important;
+            gap:8px!important;box-sizing:border-box!important;
+        }
+        .scene-collapse-main{
+            flex:1 1 auto!important;min-width:0!important;
+            display:flex!important;align-items:center!important;gap:6px!important;
+        }
+        .scene-collapse-name{
+            flex:0 1 auto!important;min-width:0!important;
+            max-width:none!important;
+            overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;
+        }
+        .scene-collapse-favor{
+            flex:0 0 auto!important;min-width:0!important;margin:0!important;
+        }
+        .scene-shell:not(.scene-collapsed) .scene-collapse-favor{display:none!important;}
+
+        .scene-shell:not(.scene-collapsed) .scene-collapse-toggle,
+        .scene-collapsed .scene-collapse-toggle{
+            flex:0 0 auto!important;
+            width:auto!important;min-width:0!important;max-width:none!important;
+            height:32px!important;min-height:32px!important;
+            margin:0!important;padding:0 10px!important;gap:5px!important;
+            font-size:.68rem!important;font-weight:700!important;letter-spacing:.04em!important;
+            overflow:visible!important;
+            box-shadow:0 1px 8px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.06)!important;
+        }
+        .scene-collapse-toggle i{
+            width:15px!important;height:15px!important;
+            font-size:.5rem!important;line-height:1!important;
+            background:color-mix(in srgb,var(--card-accent,var(--c)) 16%,transparent)!important;
+            border:1px solid color-mix(in srgb,var(--card-accent,var(--c)) 28%,rgba(255,255,255,.1))!important;
+            box-shadow:none!important;
+        }
+
+        .scene-collapsed .scene-collapse-bar{
+            width:calc(100% - 12px)!important;max-width:none!important;
+            min-height:36px!important;height:auto!important;
+            padding:5px 8px!important;margin-inline:auto!important;
+            border-radius:12px!important;
+        }
+        .scene-collapsed .scene-collapse-name{
+            max-width:5.5em!important;font-size:.76rem!important;
+        }
+        .scene-collapsed .scene-collapse-favor{
+            display:inline-flex!important;align-items:center!important;
+            gap:5px!important;padding:2px 7px!important;
+            border-radius:999px!important;
+            background:rgba(255,255,255,.05)!important;
+        }
+        .scene-collapsed .scene-collapse-favor-text{font-size:.6rem!important;line-height:1!important;}
+        .scene-collapsed .scene-collapse-favor-bar{
+            width:26px!important;height:3px!important;flex:0 0 26px!important;
+        }
+
+        .scene-shell:not(.scene-collapsed) .scene-collapse-bar{
+            min-height:40px!important;padding:7px 10px 7px 14px!important;
+        }
+        .scene-shell:not(.scene-collapsed) .scene-collapse-name{
+            font-size:.8rem!important;max-width:none!important;
+        }
+
+        @media(max-width:480px){
+            .scene-collapsed .scene-collapse-bar{
+                width:calc(100% - 8px)!important;
+                padding:5px 6px!important;gap:6px!important;
+            }
+            .scene-collapsed .scene-collapse-name{max-width:4.8em!important;}
+            .scene-collapsed .scene-collapse-favor{padding:2px 5px!important;gap:4px!important;}
+            .scene-collapsed .scene-collapse-favor-bar{width:22px!important;flex-basis:22px!important;}
+            .scene-shell:not(.scene-collapsed) .scene-collapse-toggle,
+            .scene-collapsed .scene-collapse-toggle{
+                height:30px!important;min-height:30px!important;
+                padding:0 8px!important;font-size:.64rem!important;
+            }
+            .scene-collapse-toggle span{display:inline!important;}
+        }
+
+        @media(hover:none),(pointer:coarse){
+            .scene-shell:not(.scene-collapsed) .scene-collapse-toggle,
+            .scene-collapsed .scene-collapse-toggle{
+                min-height:36px!important;height:36px!important;
+                padding-block:0!important;
+            }
+        }
+        /* ===== /scene-collapse rework v3 ===== */
+
+        /* ===== scene-collapse rework v4: icon-only premium arrow ===== */
+        .scene-collapse-toggle span{display:none!important;}
+        .scene-shell:not(.scene-collapsed) .scene-collapse-toggle,
+        .scene-collapsed .scene-collapse-toggle{
+            width:34px!important;height:34px!important;
+            min-width:34px!important;max-width:34px!important;
+            min-height:34px!important;padding:0!important;
+            border-radius:10px!important;gap:0!important;
+            justify-content:center!important;
+            background:
+                linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.025)),
+                color-mix(in srgb,var(--card-accent,var(--c)) 14%,rgba(6,5,8,.62))!important;
+            border:1px solid color-mix(in srgb,var(--card-accent,var(--c)) 38%,rgba(255,255,255,.1))!important;
+            box-shadow:
+                0 2px 10px rgba(0,0,0,.22),
+                inset 0 1px 0 rgba(255,255,255,.1)!important;
+        }
+        .scene-shell:not(.scene-collapsed) .scene-collapse-toggle:hover,
+        .scene-collapsed .scene-collapse-toggle:hover{
+            background:
+                linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.04)),
+                color-mix(in srgb,var(--card-accent,var(--c)) 22%,rgba(6,5,8,.5))!important;
+            border-color:color-mix(in srgb,var(--card-accent,var(--c)) 55%,rgba(255,255,255,.14))!important;
+        }
+        .scene-collapse-toggle i{
+            display:inline-flex!important;align-items:center!important;justify-content:center!important;
+            width:auto!important;height:auto!important;
+            font-size:.76rem!important;line-height:1!important;
+            background:none!important;border:none!important;box-shadow:none!important;
+            color:color-mix(in srgb,var(--card-accent,var(--c)) 88%,#fff)!important;
+            filter:drop-shadow(0 0 7px color-mix(in srgb,var(--card-accent,var(--c)) 42%,transparent))!important;
+            transition:transform .3s cubic-bezier(.22,1,.36,1)!important;
+        }
+        .scene-shell:not(.scene-collapsed) .scene-collapse-toggle i{transform:rotate(0deg)!important;}
+        .scene-collapsed .scene-collapse-toggle i{transform:rotate(-90deg)!important;}
+        @media(hover:none),(pointer:coarse){
+            .scene-shell:not(.scene-collapsed) .scene-collapse-toggle,
+            .scene-collapsed .scene-collapse-toggle{
+                width:36px!important;height:36px!important;
+                min-width:36px!important;max-width:36px!important;
+                min-height:36px!important;
+            }
+        }
+        /* ===== /scene-collapse rework v4 ===== */
+
+        /* ===== scene-collapse rework v5: neutral chrome + center favor + circle arrow ===== */
+        .scene-collapse-bar,
+        .scene-shell:not(.scene-collapsed) .scene-collapse-bar,
+        .scene-collapsed .scene-collapse-bar{
+            --card-accent:#b89465!important;
+            display:grid!important;
+            grid-template-columns:auto minmax(0,1fr) auto!important;
+            align-items:center!important;
+            gap:10px!important;
+            width:100%!important;max-width:none!important;margin-inline:0!important;
+            min-height:40px!important;height:auto!important;
+            padding:7px 10px!important;
+            border-radius:12px!important;
+            background:linear-gradient(135deg,rgba(24,22,26,.9),rgba(12,11,14,.94))!important;
+            border:1px solid rgba(255,255,255,.09)!important;
+            box-shadow:0 8px 22px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.05)!important;
+            backdrop-filter:blur(12px) saturate(1.05)!important;
+            -webkit-backdrop-filter:blur(12px) saturate(1.05)!important;
+        }
+        .scene-collapse-bar::before,
+        .scene-shell:not(.scene-collapsed) .scene-collapse-bar::before{display:none!important;content:none!important;}
+        .scene-collapse-main{
+            grid-column:1!important;flex:none!important;min-width:0!important;
+            display:flex!important;align-items:center!important;gap:7px!important;
+        }
+        .scene-collapse-main>i{
+            color:#b89465!important;filter:none!important;font-size:.76rem!important;
+        }
+        .scene-collapse-name{
+            color:rgba(248,244,236,.94)!important;font-weight:700!important;
+            max-width:5.4em!important;font-size:.78rem!important;
+        }
+        .scene-collapse-favor{
+            grid-column:2!important;
+            display:flex!important;align-items:center!important;justify-content:center!important;
+            gap:8px!important;width:100%!important;min-width:0!important;max-width:none!important;
+            margin:0!important;padding:5px 12px!important;
+            border-radius:999px!important;
+            background:rgba(255,255,255,.04)!important;
+            border:1px solid rgba(255,255,255,.07)!important;
+            box-shadow:none!important;
+        }
+        .scene-collapse-favor::before{display:none!important;}
+        .scene-collapse-favor-text{
+            flex:0 0 auto!important;
+            font-size:.62rem!important;font-weight:700!important;
+            color:rgba(236,228,214,.84)!important;
+            font-variant-numeric:tabular-nums!important;white-space:nowrap!important;
+        }
+        .scene-collapse-favor-bar{
+            flex:1 1 auto!important;width:auto!important;min-width:56px!important;max-width:min(38vw,168px)!important;
+            height:4px!important;border-radius:999px!important;
+            background:rgba(255,255,255,.1)!important;
+        }
+        .scene-collapse-favor-fill{
+            background:linear-gradient(90deg,#8f6848,#c9a882)!important;
+            box-shadow:none!important;
+        }
+        .scene-shell:not(.scene-collapsed) .scene-collapse-favor{display:none!important;}
+        .scene-collapsed .scene-collapse-favor{display:flex!important;}
+        .scene-shell:not(.scene-collapsed) .scene-collapse-bar{
+            grid-template-columns:minmax(0,1fr) auto!important;
+        }
+        .scene-shell:not(.scene-collapsed) .scene-collapse-main{grid-column:1!important;}
+        .scene-shell:not(.scene-collapsed) .scene-collapse-toggle{grid-column:2!important;}
+        .scene-collapse-toggle{
+            grid-column:3!important;
+            width:30px!important;height:30px!important;
+            min-width:30px!important;max-width:30px!important;min-height:30px!important;
+            padding:0!important;margin:0!important;
+            border-radius:50%!important;
+            display:inline-flex!important;align-items:center!important;justify-content:center!important;
+            background:rgba(255,255,255,.06)!important;
+            border:1px solid rgba(255,255,255,.14)!important;
+            box-shadow:0 2px 8px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.08)!important;
+            color:rgba(244,236,220,.92)!important;
+        }
+        .scene-shell:not(.scene-collapsed) .scene-collapse-toggle:hover,
+        .scene-collapsed .scene-collapse-toggle:hover{
+            background:rgba(255,255,255,.11)!important;
+            border-color:rgba(184,148,101,.38)!important;
+            box-shadow:0 4px 12px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.1)!important;
+        }
+        .scene-collapse-toggle i{
+            font-size:.62rem!important;line-height:1!important;
+            color:rgba(244,236,220,.9)!important;
+            background:none!important;border:none!important;box-shadow:none!important;filter:none!important;
+            transition:transform .28s cubic-bezier(.22,1,.36,1)!important;
+        }
+        .scene-shell:not(.scene-collapsed) .scene-collapse-toggle i{transform:rotate(0deg)!important;}
+        .scene-collapsed .scene-collapse-toggle i{transform:rotate(-90deg)!important;}
+        @media(max-width:480px){
+            .scene-collapse-bar,.scene-collapsed .scene-collapse-bar{padding:6px 8px!important;gap:8px!important;}
+            .scene-collapse-favor{padding:4px 10px!important;gap:7px!important;}
+            .scene-collapse-favor-bar{min-width:48px!important;max-width:min(44vw,132px)!important;}
+            .scene-collapse-toggle{width:32px!important;height:32px!important;min-width:32px!important;max-width:32px!important;min-height:32px!important;}
+        }
+        @media(hover:none),(pointer:coarse){
+            .scene-collapse-toggle{min-height:32px!important;height:32px!important;width:32px!important;min-width:32px!important;max-width:32px!important;}
+        }
+        /* ===== /scene-collapse rework v5 ===== */
+
+        /* ===== favor pink + mood chip + flip hint v6 ===== */
+        :root{
+            --lz-favor-pink:#e85d6a;
+            --lz-favor-pink-deep:#b83a55;
+            --lz-favor-pink-soft:#ffc9cf;
+            --lz-favor-pink-glow:rgba(232,93,106,.42);
+            --lz-favor-pink-track:rgba(255,182,193,.14);
+        }
+        .av-favor-fill,.lz-char-favor-fill,.scene-collapse-favor-fill{
+            background:linear-gradient(90deg,var(--lz-favor-pink-deep),var(--lz-favor-pink),var(--lz-favor-pink-soft))!important;
+            box-shadow:0 0 12px var(--lz-favor-pink-glow),inset 0 1px 0 rgba(255,255,255,.22)!important;
+        }
+        .av-favor-track,.lz-char-favor-track,.scene-collapse-favor-bar{
+            background:var(--lz-favor-pink-track)!important;
+        }
+        .av-favor-meter{
+            border-color:rgba(255,182,193,.22)!important;
+            box-shadow:0 16px 40px rgba(0,0,0,.26),inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px rgba(232,93,106,.08)!important;
+        }
+        .av-mood-chip{
+            position:absolute;left:50%;transform:translateX(-50%);bottom:74px;z-index:7;
+            display:inline-flex;align-items:center;justify-content:center;gap:4px;
+            min-width:44px;max-width:88px;padding:3px 11px;border-radius:999px;
+            font-size:.6rem;font-weight:700;letter-spacing:.14em;white-space:nowrap;
+            color:rgba(255,240,245,.94);
+            background:linear-gradient(135deg,rgba(32,14,22,.52),rgba(18,10,16,.38));
+            border:1px solid rgba(255,182,193,.24);
+            box-shadow:0 8px 22px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.08);
+            backdrop-filter:blur(12px) saturate(1.1);-webkit-backdrop-filter:blur(12px) saturate(1.1);
+            pointer-events:none;
+        }
+        .av-mood-chip::before{
+            content:'';width:5px;height:5px;border-radius:50%;
+            background:radial-gradient(circle at 35% 35%,#ffb8c8,var(--lz-favor-pink));
+            box-shadow:0 0 8px var(--lz-favor-pink-glow);
+        }
+        .av-flip-hint,.lz-char-front .av-flip-hint{
+            opacity:.78!important;visibility:visible!important;
+            right:10px!important;bottom:10px!important;
+            font-size:.56rem!important;font-weight:600;letter-spacing:.16em;
+            padding:3px 7px;border-radius:6px;line-height:1.2;
+            color:rgba(255,244,248,.88)!important;
+            background:linear-gradient(135deg,rgba(10,8,12,.55),rgba(24,12,18,.42))!important;
+            border:1px solid rgba(255,182,193,.16)!important;
+            text-shadow:0 1px 3px rgba(0,0,0,.45)!important;
+            pointer-events:none;
+        }
+        .scene-collapse-main>i{color:rgba(255,182,193,.72)!important;}
+        .scene-collapse-name{
+            max-width:4.8em!important;font-size:.76rem!important;font-weight:700!important;
+            letter-spacing:.06em!important;color:rgba(255,240,245,.92)!important;
+        }
+        @media(max-width:480px){
+            .av-mood-chip{bottom:68px;font-size:.56rem;padding:2px 9px;}
+            .av-flip-hint{font-size:.52rem!important;letter-spacing:.12em!important;}
+        }
+        /* ===== /favor pink + mood chip + flip hint v6 ===== */
 </style>
 
     <script type="module">
@@ -3138,6 +3569,28 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
 
         function getHostingMessageId() {
             try {
+                /* KB 15_工具函数: getMessageId(getIframeName()) */
+                var getMessageIdApi = getApi('getMessageId');
+                var getIframeNameApi = getApi('getIframeName');
+                if (typeof getMessageIdApi === 'function' && typeof getIframeNameApi === 'function') {
+                    try {
+                        var iframeName = getIframeNameApi();
+                        if (iframeName) {
+                            var fromName = getMessageIdApi(iframeName);
+                            if (fromName != null && fromName !== '' && !isNaN(fromName)) return Number(fromName);
+                        }
+                    } catch (e) {}
+                }
+                /* KB 12_脚本与按钮 / 16_MVU: getCurrentMessageId() = 本前端界面所在楼层 */
+                var getCurrentMessageIdApi = getApi('getCurrentMessageId');
+                if (typeof getCurrentMessageIdApi === 'function') {
+                    var cid = getCurrentMessageIdApi();
+                    if (cid != null && cid !== '' && !isNaN(cid)) return Number(cid);
+                }
+                if (typeof getCurrentMessageId === 'function') {
+                    var directId = getCurrentMessageId();
+                    if (directId != null && directId !== '' && !isNaN(directId)) return Number(directId);
+                }
                 var iframe = window.frameElement;
                 if (iframe) {
                     var mes = iframe.closest ? iframe.closest('.mes') : null;
@@ -3160,10 +3613,20 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                     if (fid != null && fid !== '') return Number(fid);
                     if (iframe.dataset && iframe.dataset.messageId) return Number(iframe.dataset.messageId);
                 }
-                var cur = getApi('getCurrentMessageId');
-                if (typeof cur === 'function') {
-                    var cid = cur();
-                    if (cid != null && cid !== '' && !isNaN(cid)) return Number(cid);
+                var uiRoot = document.getElementById('ui');
+                if (uiRoot && uiRoot.closest) {
+                    var hostMes = uiRoot.closest('.mes');
+                    if (hostMes) {
+                        var mesKeys = ['mesid', 'data-mesid', 'data-message-id', 'message_id'];
+                        for (var mj = 0; mj < mesKeys.length; mj++) {
+                            var mesRaw = hostMes.getAttribute(mesKeys[mj]);
+                            if (mesRaw != null && mesRaw !== '') return Number(mesRaw);
+                        }
+                        if (hostMes.dataset) {
+                            if (hostMes.dataset.mesid != null && hostMes.dataset.mesid !== '') return Number(hostMes.dataset.mesid);
+                            if (hostMes.dataset.messageId != null && hostMes.dataset.messageId !== '') return Number(hostMes.dataset.messageId);
+                        }
+                    }
                 }
                 return null;
             } catch (e) { return null; }
@@ -3279,7 +3742,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                     loc: _.get(stat, '世界与剧情.当前地点', ''),
                     core: CHAR_ORDER.map(function(n){
                         var c = stat[n] || {};
-                        return [n, c['是否登场'], c['好感度'], c['好感度上限'], c['当前位置'], c['服饰'], c['外貌'], c['当前状态'], c['心里想法']];
+                        return [n, c['是否登场'], c['好感度'], c['好感度上限'], c['当前位置'], c['服饰'], c['外貌'], c['当前状态'], c['心里想法'], c['心情'], c['与user关系']];
                     })
                 });
             } catch (e) { return String(Date.now()); }
@@ -3895,7 +4358,11 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         function getStatData() {
             let stat_data = {};
             try {
-                const message_variables = Mvu.getMvuData({type:'message', message_id:getCurrentMessageId()}) || {};
+                var mvuMessageId = getHostingMessageId();
+                if (mvuMessageId == null && typeof getCurrentMessageId === 'function') {
+                    mvuMessageId = getCurrentMessageId();
+                }
+                const message_variables = Mvu.getMvuData({type:'message', message_id: mvuMessageId}) || {};
                 const message_stat_data = _.get(message_variables, 'stat_data', {});
                 if (message_stat_data && typeof message_stat_data === 'object'
                     && (message_stat_data['祝英台'] || message_stat_data['世界与剧情'])) {
@@ -3940,13 +4407,15 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                         type: 'core',
                         name: name,
                         title: CHAR_IDENTITY[name] || name,
-                        clothes: cData['服饰'] || '未描述',
-                        appearance: cData['外貌'] || '未描述',
+                        clothes: cData['服饰'] || '',
+                        appearance: cData['外貌'] || '',
                         state: cData['当前状态'] || '平静',
                         pos: cData['当前位置'] || '未知',
                         favor: cData['好感度'] || 0,
                         favorMax: cData['好感度上限'] || 0,
                         thought: cData['心里想法'] || '',
+                        mood: cData['心情'] || '平静',
+                        userRelation: cData['与user关系'] || '陌路',
                         color: getCharColor(name)
                     });
                 }
@@ -3995,6 +4464,8 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                     favor: parsed[i].favor,
                     favorMax: parsed[i].favorMax,
                     thought: parsed[i].thought || '',
+                    mood: parsed[i].mood || '平静',
+                    userRelation: parsed[i].userRelation || '陌路',
                     color: parsed[i].color,
                     image: image
                 });
@@ -4087,7 +4558,19 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             var $front = $('<div>').addClass('lz-char-front');
             var $portrait = $('<div>').addClass('lz-char-portrait');
             if (item.image) {
-                $portrait.css('background-image', 'url("' + String(item.image).replace(/"/g, '%22') + '")');
+                var portraitUrl = String(item.image);
+                $portrait.addClass('is-portrait-loading');
+                var portraitPreload = new Image();
+                portraitPreload.referrerPolicy = 'no-referrer';
+                portraitPreload.onload = function() {
+                    $portrait.css('background-image', 'url("' + portraitUrl.replace(/"/g, '%22') + '")')
+                        .removeClass('is-portrait-loading')
+                        .addClass('is-portrait-loaded');
+                };
+                portraitPreload.onerror = function() {
+                    $portrait.removeClass('is-portrait-loading').addClass('is-portrait-loaded');
+                };
+                portraitPreload.src = portraitUrl;
             } else {
                 var $fallback = $('<div>').addClass('av-css-fallback').css('--card-accent', c);
                 $('<span>').addClass('fb-name').text(item.name).appendTo($fallback);
@@ -4103,6 +4586,8 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             $('<span>').addClass('av-favor-max').text(String(Math.max(favorMax, favor, 100))).appendTo($num);
             var $meterTrack = $('<span>').addClass('av-favor-track av-favor-track--micro').appendTo($meter);
             $('<span>').addClass('av-favor-fill').css('width', pct + '%').appendTo($meterTrack);
+            var moodText = String(item.mood || '平静').trim() || '平静';
+            $('<span>').addClass('av-mood-chip').attr('aria-label', '心情').text(moodText).appendTo($portrait);
             $portrait.append($meter);
             if (thought) {
                 var $bubble = $('<div>').addClass('av-thought-bubble').attr('role', 'note');
@@ -4134,6 +4619,8 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 $back.append($p);
             }
             addProp('身份', item.title);
+            addProp('心情', item.mood);
+            addProp('与user关系', item.userRelation);
             addProp('当前状态', item.state);
             addProp('所在位置', item.pos);
             addProp('服饰', item.clothes);
@@ -4182,7 +4669,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             $inf.append(renderBlock(item.name, '当前状态', item.state, c, delayBase + 0.13));
             $inf.append(renderBlock(item.name, '所在位置', item.pos, c, delayBase + 0.17));
             $inf.append(renderBlock(item.name, '外貌', item.appearance, c, delayBase + 0.21));
-            $inf.append(renderBlock(item.name, '服饰', item.clothes || '未描述', c, delayBase + 0.25));
+            $inf.append(renderBlock(item.name, '服饰', item.clothes || '—', c, delayBase + 0.25));
             $('<div>').addClass('gallery-hint-slot').appendTo($inf);
             $grid.append($inf);
 
@@ -4305,17 +4792,15 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         function renderSceneCollapseBar(item) {
             var $bar = $('#scene-collapse-bar');
             if (!$bar.length) return;
-            var openText = sceneCardsOpen ? '收起' : '展开';
             var favorMax = item.type === 'core' ? 100 : 40;
             var favor = clamp(item.favor || 0, 0, favorMax);
             var pct = favorMax ? Math.round((favor / favorMax) * 100) : 0;
-            var accent = item.color || DEFAULT_ACCENT;
-            $bar.css('--card-accent', accent);
-            $bar.find('.scene-collapse-name').text(item.name || '当前人物');
-            $bar.find('.scene-collapse-sub').text(item.type === 'core' ? ((item.pos || '未知位置') + ' · ' + (item.state || '平静')) : (item.title || '角色图鉴'));
+            var relationText = String(item.userRelation || '陌路').trim() || '陌路';
+            $bar.find('.scene-collapse-name').text(relationText);
+            $bar.find('.scene-collapse-sub').text('');
+            $bar.attr('aria-label', (item.name || '当前人物') + '，与主角关系：' + relationText);
             $bar.find('.scene-collapse-favor-text').text(favor + '/' + favorMax);
             $bar.find('.scene-collapse-favor-fill').css('--favor-pct', pct + '%');
-            $bar.find('.scene-collapse-toggle span').text(openText);
             $bar.find('.scene-collapse-toggle').attr({
                 'aria-expanded': sceneCardsOpen ? 'true' : 'false',
                 'aria-label': (sceneCardsOpen ? '收起' : '展开') + '人物卡片'
@@ -5029,7 +5514,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 </div>
             </div>
 
-            <div class="tit-main">梁祝 · 群芳谱</div>
+            <div class="tit-main">群芳谱</div>
 
             <div class="tb-btn-wrap">
                 <button type="button" class="tg" id="lk" aria-label="立绘管理"><i class="fa-solid fa-images"></i></button>
@@ -5045,8 +5530,9 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 <button type="button" class="scene-tab-nav next" id="scene-tab-next" aria-label="下一位角色"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
             <div class="scene-collapse-bar" id="scene-collapse-bar">
-                <div class="scene-collapse-main"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span class="scene-collapse-name">—</span><span class="scene-collapse-sub"></span><span class="scene-collapse-favor" aria-label="好感度"><span class="scene-collapse-favor-text">0/100</span><span class="scene-collapse-favor-bar"><span class="scene-collapse-favor-fill"></span></span></span></div>
-                <button type="button" class="scene-collapse-toggle" aria-expanded="true" aria-controls="scene-stage" aria-label="收起人物卡片"><span>收起</span><i class="fa-solid fa-chevron-down"></i></button>
+                <div class="scene-collapse-main"><i class="fa-solid fa-heart" aria-hidden="true"></i><span class="scene-collapse-name">—</span><span class="scene-collapse-sub"></span></div>
+                <span class="scene-collapse-favor" aria-label="好感度"><span class="scene-collapse-favor-text">0/100</span><span class="scene-collapse-favor-bar"><span class="scene-collapse-favor-fill"></span></span></span>
+                <button type="button" class="scene-collapse-toggle" aria-expanded="true" aria-controls="scene-stage" aria-label="收起人物卡片"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
             </div>
             <div class="scene-stage" id="scene-stage">
                 <div class="scene-toast-layer" id="scene-toast-layer"></div>
