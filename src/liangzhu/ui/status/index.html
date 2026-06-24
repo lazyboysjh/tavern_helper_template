@@ -3625,6 +3625,110 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             }
         }
         /* ===== /scene expand/collapse motion v8 ===== */
+
+        /* ===== collapse arrow + hide stage + compact favor v9 ===== */
+        #scene-shell.scene-collapsed .scene-collapse-toggle i,
+        #scene-shell:not(.scene-collapsed) .scene-collapse-toggle i{
+            transform:none!important;
+        }
+        #scene-shell.scene-collapsed{
+            gap:6px!important;padding-bottom:4px!important;
+        }
+        #scene-shell.scene-collapsed #scene-stage.scene-stage-is-hidden{
+            display:none!important;
+        }
+        #scene-shell.scene-collapsed #scene-stage{
+            height:0!important;max-height:0!important;min-height:0!important;
+            padding:0!important;margin:0!important;
+            border:none!important;box-shadow:none!important;
+            background:transparent!important;
+            overflow:hidden!important;
+        }
+        #scene-shell.scene-collapsed #scene-stage > .det-r,
+        #scene-shell.scene-collapsed #scene-stage > .det-r.scene-panel,
+        #scene-shell.scene-collapsed #scene-stage > .det-r > .av-flip-wrap,
+        #scene-shell.scene-collapsed #scene-stage > .det-r > .av-flip-wrap > .av-flip,
+        #scene-shell.scene-collapsed #scene-stage .lz-char-flip-container,
+        #scene-shell.scene-collapsed #scene-stage .lz-char-flip-inner,
+        #scene-shell.scene-collapsed #scene-stage .lz-char-portrait,
+        #scene-shell.scene-collapsed #scene-stage .av-flip-wrap,
+        #scene-shell.scene-collapsed #scene-stage .av-flip,
+        #scene-shell.scene-collapsed #scene-stage .support-figure,
+        #scene-shell.scene-collapsed #scene-stage .support-placeholder{
+            min-height:0!important;height:0!important;max-height:0!important;
+            padding:0!important;margin:0!important;
+            border:none!important;background:transparent!important;
+            box-shadow:none!important;
+            visibility:hidden!important;
+        }
+        #scene-shell.scene-collapsed .scene-collapse-bar{
+            width:min(78vw,208px)!important;
+            max-width:calc(100% - 16px)!important;
+            padding:5px 8px!important;min-height:32px!important;
+            margin:2px auto 4px!important;
+            border-radius:999px!important;
+            background:linear-gradient(135deg,rgba(255,255,255,.11),rgba(255,255,255,.03)),rgba(18,14,22,.38)!important;
+            backdrop-filter:blur(16px) saturate(1.15)!important;
+            -webkit-backdrop-filter:blur(16px) saturate(1.15)!important;
+            box-shadow:0 6px 18px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.1)!important;
+        }
+        .scene-stage .av-favor-meter{
+            width:auto!important;max-width:96px!important;
+            left:8px!important;top:8px!important;right:auto!important;bottom:auto!important;
+            padding:4px 8px!important;border-radius:10px!important;
+            gap:3px!important;
+            border:1px solid rgba(255,255,255,.12)!important;
+            box-shadow:0 4px 14px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.08)!important;
+        }
+        .scene-stage .av-favor-meter .av-favor-cur{font-size:.64rem!important}
+        .scene-stage .av-favor-meter .av-favor-max{font-size:.54rem!important}
+        .scene-stage .av-favor-meter .av-favor-sep{font-size:.48rem!important}
+        .scene-stage .av-favor-meter .av-favor-track,
+        .scene-stage .av-favor-meter .av-favor-track--micro{height:2px!important}
+        .scene-stage .av-favor-meter .av-mood-chip{
+            padding:1px 6px!important;font-size:.48rem!important;letter-spacing:.1em!important;
+            margin-top:0!important;border-radius:999px!important;
+        }
+        .scene-stage .av-favor-meter .av-mood-chip::before{width:3px!important;height:3px!important}
+        .scene-stage .lz-char-portrait.show-thought .av-favor-meter,
+        .scene-stage .lz-char-portrait.thought-pinned .av-favor-meter,
+        .scene-stage .lz-char-portrait.thought-holding .av-favor-meter{
+            opacity:.38!important;transform:scale(.94)!important;
+            pointer-events:none!important;
+        }
+        .scene-stage .av-thought-bubble,
+        .scene-stage .lz-char-portrait .av-thought-bubble,
+        .scene-stage .lz-char-flip-container .av-thought-bubble,
+        .scene-stage .av-flip-wrap .av-thought-bubble{
+            top:10px!important;bottom:auto!important;right:10px!important;left:auto!important;
+            max-width:min(52%,200px)!important;
+            border-radius:12px 12px 4px 12px!important;
+            z-index:8!important;
+        }
+        @media(max-width:480px){
+            #scene-shell.scene-collapsed .scene-collapse-bar{
+                width:min(76vw,196px)!important;min-height:30px!important;padding:4px 7px!important;
+            }
+            .scene-stage .av-favor-meter{
+                max-width:84px!important;left:6px!important;top:6px!important;
+                padding:3px 6px!important;border-radius:9px!important;
+            }
+            .scene-stage .av-favor-meter .av-favor-cur{font-size:.6rem!important}
+            .scene-stage .av-favor-meter .av-mood-chip{font-size:.46rem!important;padding:1px 5px!important}
+            .scene-stage .av-thought-bubble,
+            .scene-stage .lz-char-portrait .av-thought-bubble,
+            .scene-stage .lz-char-flip-container .av-thought-bubble,
+            .scene-stage .av-flip-wrap .av-thought-bubble{
+                top:8px!important;right:8px!important;left:auto!important;
+                max-width:min(48%,168px)!important;
+                font-size:.64rem!important;padding:7px 9px!important;
+            }
+            .scene-stage .lz-char-portrait.show-thought .av-favor-meter,
+            .scene-stage .lz-char-portrait.thought-pinned .av-favor-meter{
+                opacity:.32!important;
+            }
+        }
+        /* ===== /collapse arrow + hide stage + compact favor v9 ===== */
 </style>
 
     <script type="module">
@@ -5012,18 +5116,30 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
 
         function applySceneCollapsedState(animate) {
             var $shell = $('#scene-shell');
+            var $stage = $('#scene-stage');
             if (!$shell.length) return;
             if (animate) {
                 window.clearTimeout(applySceneCollapsedState._timer);
+                window.clearTimeout(applySceneCollapsedState._hideTimer);
                 $shell.addClass('scene-transitioning');
+                if (sceneCardsOpen) {
+                    $stage.removeClass('scene-stage-is-hidden');
+                }
             }
             $shell.toggleClass('scene-collapsed', !sceneCardsOpen);
             var item = getCurrentSceneItem();
             if (item) renderSceneCollapseBar(item);
             if (animate) {
+                if (!sceneCardsOpen) {
+                    applySceneCollapsedState._hideTimer = window.setTimeout(function() {
+                        $stage.addClass('scene-stage-is-hidden');
+                    }, 560);
+                }
                 applySceneCollapsedState._timer = window.setTimeout(function() {
                     $shell.removeClass('scene-transitioning');
                 }, 580);
+            } else {
+                $stage.toggleClass('scene-stage-is-hidden', !sceneCardsOpen);
             }
         }
 
@@ -5060,6 +5176,9 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 'aria-expanded': sceneCardsOpen ? 'true' : 'false',
                 'aria-label': (sceneCardsOpen ? '收起' : '展开') + '人物卡片'
             });
+            var $toggleIcon = $bar.find('.scene-collapse-toggle i');
+            $toggleIcon.removeClass('fa-chevron-down fa-chevron-right');
+            $toggleIcon.addClass(sceneCardsOpen ? 'fa-chevron-down' : 'fa-chevron-right');
         }
 
         function ensureTopGalleryCeremonyStyle(doc) {
