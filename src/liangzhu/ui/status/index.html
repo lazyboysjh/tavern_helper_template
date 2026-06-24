@@ -3386,6 +3386,110 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             .av-flip-hint{font-size:.52rem!important;letter-spacing:.12em!important;}
         }
         /* ===== /favor pink + mood chip + flip hint v6 ===== */
+
+        /* ===== scene-collapse + favor meter polish v7 ===== */
+        .scene-collapse-bar,
+        .scene-shell:not(.scene-collapsed) .scene-collapse-bar,
+        .scene-collapsed .scene-collapse-bar{
+            background:
+                linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.03)),
+                rgba(22,18,24,.34)!important;
+            border:1px solid rgba(255,255,255,.12)!important;
+            box-shadow:0 10px 28px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.1)!important;
+            backdrop-filter:blur(16px) saturate(1.18)!important;
+            -webkit-backdrop-filter:blur(16px) saturate(1.18)!important;
+        }
+        .scene-shell:not(.scene-collapsed) .scene-collapse-bar{
+            background:
+                linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.02)),
+                var(--card-bg,rgba(22,18,24,.42))!important;
+            border:1px solid var(--card-border,rgba(255,255,255,.1))!important;
+        }
+        .scene-collapsed .scene-shell{
+            display:flex!important;flex-direction:column!important;align-items:center!important;
+        }
+        .scene-collapsed .scene-collapse-bar{
+            width:min(82vw,224px)!important;max-width:calc(100% - 12px)!important;
+            margin:4px auto 6px!important;padding:6px 9px!important;
+            border-radius:12px!important;min-height:36px!important;
+            justify-content:stretch!important;
+        }
+        .scene-collapse-main>i{
+            color:rgba(184,148,101,.88)!important;
+        }
+        .scene-collapse-toggle,
+        .scene-shell:not(.scene-collapsed) .scene-collapse-toggle,
+        .scene-collapsed .scene-collapse-toggle{
+            all:unset!important;
+            box-sizing:border-box!important;
+            grid-column:3!important;
+            display:inline-flex!important;align-items:center!important;justify-content:center!important;
+            width:26px!important;height:26px!important;
+            min-width:26px!important;max-width:26px!important;
+            min-height:26px!important;max-height:26px!important;
+            padding:0!important;margin:0!important;
+            border-radius:50%!important;
+            cursor:pointer!important;
+            flex:0 0 26px!important;
+            background:
+                linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.04)),
+                rgba(255,255,255,.06)!important;
+            border:1px solid rgba(255,255,255,.16)!important;
+            box-shadow:0 2px 10px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.12)!important;
+            color:rgba(248,242,234,.92)!important;
+            overflow:visible!important;letter-spacing:0!important;
+            position:relative!important;
+        }
+        .scene-collapse-toggle::after{display:none!important;content:none!important;}
+        .scene-collapse-toggle span{display:none!important;}
+        .scene-collapse-toggle i{
+            display:inline-flex!important;align-items:center!important;justify-content:center!important;
+            width:auto!important;height:auto!important;min-width:0!important;min-height:0!important;
+            padding:0!important;margin:0!important;
+            font-size:.56rem!important;line-height:1!important;
+            background:none!important;border:none!important;box-shadow:none!important;
+            border-radius:0!important;color:inherit!important;
+            transition:transform .26s cubic-bezier(.22,1,.36,1)!important;
+        }
+        .scene-shell:not(.scene-collapsed) .scene-collapse-toggle:hover,
+        .scene-collapsed .scene-collapse-toggle:hover{
+            background:
+                linear-gradient(145deg,rgba(255,255,255,.18),rgba(255,255,255,.06)),
+                rgba(255,255,255,.1)!important;
+            border-color:rgba(184,148,101,.32)!important;
+        }
+        .scene-stage .av-favor-meter{
+            background:
+                linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.02)),
+                rgba(14,10,16,.42)!important;
+            backdrop-filter:blur(14px) saturate(1.15)!important;
+            -webkit-backdrop-filter:blur(14px) saturate(1.15)!important;
+            border:1px solid rgba(255,255,255,.1)!important;
+            grid-template-rows:auto auto auto!important;
+            gap:5px!important;
+        }
+        .scene-stage .av-favor-meter .av-mood-chip,
+        .av-favor-meter .av-mood-chip{
+            position:static!important;left:auto!important;bottom:auto!important;
+            transform:none!important;grid-column:1/-1!important;justify-self:center!important;
+            margin:1px 0 0!important;min-width:40px!important;max-width:100%!important;
+            padding:2px 9px!important;font-size:.54rem!important;letter-spacing:.12em!important;
+            background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02)),rgba(12,8,14,.28)!important;
+            border:1px solid rgba(255,182,193,.18)!important;
+            box-shadow:none!important;
+        }
+        .scene-stage .av-favor-meter .av-mood-chip::before,
+        .av-favor-meter .av-mood-chip::before{
+            width:4px!important;height:4px!important;
+        }
+        @media(max-width:480px){
+            .scene-collapsed .scene-collapse-bar{width:min(82vw,224px)!important;}
+            .scene-collapse-toggle{width:28px!important;height:28px!important;min-width:28px!important;max-width:28px!important;min-height:28px!important;max-height:28px!important;flex-basis:28px!important;}
+        }
+        @media(hover:none),(pointer:coarse){
+            .scene-collapse-toggle{min-width:28px!important;min-height:28px!important;width:28px!important;height:28px!important;}
+        }
+        /* ===== /scene-collapse + favor meter polish v7 ===== */
 </style>
 
     <script type="module">
@@ -4587,7 +4691,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             var $meterTrack = $('<span>').addClass('av-favor-track av-favor-track--micro').appendTo($meter);
             $('<span>').addClass('av-favor-fill').css('width', pct + '%').appendTo($meterTrack);
             var moodText = String(item.mood || '平静').trim() || '平静';
-            $('<span>').addClass('av-mood-chip').attr('aria-label', '心情').text(moodText).appendTo($portrait);
+            $('<span>').addClass('av-mood-chip').attr('aria-label', '心情').text(moodText).appendTo($meter);
             $portrait.append($meter);
             if (thought) {
                 var $bubble = $('<div>').addClass('av-thought-bubble').attr('role', 'note');
@@ -4619,8 +4723,6 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 $back.append($p);
             }
             addProp('身份', item.title);
-            addProp('心情', item.mood);
-            addProp('与user关系', item.userRelation);
             addProp('当前状态', item.state);
             addProp('所在位置', item.pos);
             addProp('服饰', item.clothes);
@@ -5530,7 +5632,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 <button type="button" class="scene-tab-nav next" id="scene-tab-next" aria-label="下一位角色"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
             <div class="scene-collapse-bar" id="scene-collapse-bar">
-                <div class="scene-collapse-main"><i class="fa-solid fa-heart" aria-hidden="true"></i><span class="scene-collapse-name">—</span><span class="scene-collapse-sub"></span></div>
+                <div class="scene-collapse-main"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span class="scene-collapse-name">—</span><span class="scene-collapse-sub"></span></div>
                 <span class="scene-collapse-favor" aria-label="好感度"><span class="scene-collapse-favor-text">0/100</span><span class="scene-collapse-favor-bar"><span class="scene-collapse-favor-fill"></span></span></span>
                 <button type="button" class="scene-collapse-toggle" aria-expanded="true" aria-controls="scene-stage" aria-label="收起人物卡片"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
             </div>
