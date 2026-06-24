@@ -4326,6 +4326,127 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             transition:transform var(--lz-collapse-dur) var(--lz-collapse-ease)!important;
         }
         /* ===== /scene-collapse motion v15 ===== */
+
+        /* ===== scene-collapse motion v16: clip wrapper + WAAPI (final authority) ===== */
+        @property --clip-bottom{
+            syntax:'<percentage>';
+            inherits:false;
+            initial-value:0%;
+        }
+        @property --clip-opacity{
+            syntax:'<number>';
+            inherits:false;
+            initial-value:1;
+        }
+        :root{
+            --lz-collapse-dur:.34s;
+            --lz-collapse-ease:cubic-bezier(.32,.72,0,1);
+        }
+        @media (max-width:760px){
+            :root{--lz-collapse-dur:.3s;}
+        }
+        @media (prefers-reduced-motion:reduce){
+            :root{--lz-collapse-dur:.01s;}
+        }
+        #scene-shell #scene-stage,
+        #scene-shell:not(.scene-collapsed) #scene-stage,
+        #scene-shell.scene-collapsed #scene-stage,
+        #scene-shell.scene-collapsed #scene-stage.scene-stage-is-hidden{
+            display:block!important;
+            grid-template-rows:none!important;
+            grid-template-columns:none!important;
+            height:auto!important;
+            max-height:none!important;
+            min-height:0!important;
+            margin:0!important;
+            padding:0!important;
+            opacity:1!important;
+            overflow:visible!important;
+            transition:none!important;
+            pointer-events:auto!important;
+            contain:none!important;
+        }
+        #scene-shell:not(.scene-collapsed) #scene-stage{margin-top:0!important;}
+        #scene-shell.scene-collapsed #scene-stage > .det-r,
+        #scene-shell.scene-collapsed #scene-stage > .det-r.scene-panel,
+        #scene-shell.scene-collapsed #scene-stage > .det-r > .av-flip-wrap,
+        #scene-shell.scene-collapsed #scene-stage > .det-r > .av-flip-wrap > .av-flip,
+        #scene-shell.scene-collapsed #scene-stage .lz-char-flip-container,
+        #scene-shell.scene-collapsed #scene-stage .lz-char-flip-inner,
+        #scene-shell.scene-collapsed #scene-stage .lz-char-portrait,
+        #scene-shell.scene-collapsed #scene-stage .av-flip-wrap,
+        #scene-shell.scene-collapsed #scene-stage .av-flip,
+        #scene-shell.scene-collapsed #scene-stage .support-figure,
+        #scene-shell.scene-collapsed #scene-stage .support-placeholder,
+        #scene-shell.scene-collapsed #scene-stage-clip .det-r,
+        #scene-shell.scene-collapsed #scene-stage-clip .scene-empty{
+            height:auto!important;
+            max-height:none!important;
+            min-height:0!important;
+            visibility:visible!important;
+            transform:none!important;
+            filter:none!important;
+            opacity:1!important;
+            padding:unset!important;
+            margin:unset!important;
+            border:unset!important;
+            background:unset!important;
+            box-shadow:unset!important;
+        }
+        #scene-stage-clip,
+        .scene-stage-clip{
+            --clip-bottom:0%;
+            --clip-opacity:1;
+            display:block!important;
+            overflow:hidden!important;
+            transform-origin:top center!important;
+            clip-path:inset(0 0 var(--clip-bottom) 0 round 0)!important;
+            opacity:var(--clip-opacity)!important;
+            pointer-events:auto!important;
+            transition:--clip-bottom var(--lz-collapse-dur) var(--lz-collapse-ease),--clip-opacity calc(var(--lz-collapse-dur) * .88) var(--lz-collapse-ease)!important;
+            will-change:clip-path,opacity;
+        }
+        #scene-shell.scene-collapsed:not(.scene-collapse-waapi) #scene-stage-clip{
+            --clip-bottom:100%;
+            --clip-opacity:0;
+            pointer-events:none!important;
+        }
+        #scene-shell.scene-collapse-waapi #scene-stage-clip{
+            transition:none!important;
+        }
+        #scene-shell.scene-transitioning .scene-collapse-bar,
+        #scene-shell.scene-transitioning #scene-stage,
+        #scene-shell.scene-transitioning #scene-stage-clip,
+        #scene-shell.scene-transitioning .scene-collapse-favor,
+        #scene-shell.scene-transitioning .scene-collapse-toggle i{
+            will-change:auto!important;
+        }
+        .scene-collapse-favor,
+        #scene-shell .scene-collapse-favor,
+        #scene-shell:not(.scene-collapsed) .scene-collapse-favor,
+        #scene-shell.scene-collapsed .scene-collapse-favor{
+            transition:opacity calc(var(--lz-collapse-dur) * .75) var(--lz-collapse-ease),visibility 0s linear!important;
+            transform:none!important;
+        }
+        #scene-shell.scene-transitioning .scene-collapse-favor{max-width:none!important;}
+        #scene-shell:not(.scene-collapsed) .scene-collapse-favor{
+            opacity:0!important;visibility:hidden!important;
+        }
+        #scene-shell.scene-collapsed .scene-collapse-favor{
+            opacity:1!important;visibility:visible!important;
+        }
+        .scene-collapse-bar,
+        #scene-shell .scene-collapse-bar{
+            transition:background var(--lz-collapse-dur) ease,box-shadow var(--lz-collapse-dur) ease!important;
+            animation:none!important;transform:none!important;
+        }
+        .scene-collapse-toggle i,
+        #scene-shell .scene-collapse-toggle i{
+            transition:transform var(--lz-collapse-dur) var(--lz-collapse-ease)!important;
+        }
+        #scene-shell:not(.scene-collapsed) .scene-collapse-toggle i{transform:rotate(0deg)!important;}
+        #scene-shell.scene-collapsed .scene-collapse-toggle i{transform:rotate(-90deg)!important;}
+        /* ===== /scene-collapse motion v16 ===== */
 </style>
 
 </head>
@@ -4404,7 +4525,9 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             </div>
             <div class="scene-stage" id="scene-stage">
                 <div class="scene-toast-layer" id="scene-toast-layer"></div>
-                <div class="scene-empty">当前尚无登场人物，请继续剧情或切换开场。</div>
+                <div class="scene-stage-clip" id="scene-stage-clip">
+                    <div class="scene-empty">当前尚无登场人物，请继续剧情或切换开场。</div>
+                </div>
             </div>
         </div>
 
@@ -5867,88 +5990,154 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             updateSceneTabNavState();
         }
 
-        function getSceneCollapseAnimMs() {
-            return window.matchMedia('(max-width:760px)').matches ? 240 : 280;
+        function ensureSceneStageClip() {
+            var $stage = $('#scene-stage');
+            var $clip = $('#scene-stage-clip');
+            if (!$stage.length) return $clip;
+            if (!$clip.length) {
+                $clip = $('<div>').attr('id', 'scene-stage-clip').addClass('scene-stage-clip');
+                $stage.children(':not(#scene-toast-layer)').appendTo($clip);
+                $stage.append($clip);
+            }
+            return $clip;
         }
 
-        function clearSceneCollapseTransition($shell, $stage) {
-            var stageEl = $stage && $stage.length ? $stage.get(0) : null;
-            if (applySceneCollapsedState._onTransitionEnd && stageEl) {
-                stageEl.removeEventListener('transitionend', applySceneCollapsedState._onTransitionEnd);
+        function getSceneCollapseDuration() {
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 1;
+            return window.matchMedia('(max-width:760px)').matches ? 300 : 340;
+        }
+
+        function cancelSceneCollapseAnim() {
+            if (applySceneCollapsedState._anim && applySceneCollapsedState._anim.cancel) {
+                try { applySceneCollapsedState._anim.cancel(); } catch (e) {}
             }
-            applySceneCollapsedState._onTransitionEnd = null;
+            applySceneCollapsedState._anim = null;
             window.clearTimeout(applySceneCollapsedState._timer);
             applySceneCollapsedState._timer = null;
         }
 
-        function finishSceneCollapseTransition($shell, $stage) {
-            clearSceneCollapseTransition($shell, $stage);
+        function finishSceneCollapseTransition($shell) {
+            cancelSceneCollapseAnim();
             if ($shell && $shell.length) {
-                $shell.removeClass('scene-transitioning');
+                $shell.removeClass('scene-transitioning scene-collapse-waapi');
             }
+        }
+
+        function clearSceneClipVars(clipEl) {
+            if (!clipEl) return;
+            clipEl.style.removeProperty('--clip-bottom');
+            clipEl.style.removeProperty('--clip-opacity');
+            clipEl.style.removeProperty('clip-path');
+            clipEl.style.removeProperty('opacity');
+            clipEl.style.removeProperty('pointer-events');
+        }
+
+        function setSceneClipVars(clipEl, bottomPct, opacity) {
+            if (!clipEl) return;
+            clipEl.style.setProperty('--clip-bottom', bottomPct);
+            clipEl.style.setProperty('--clip-opacity', String(opacity));
+        }
+
+        function runSceneClipAnimation(clipEl, opening) {
+            var dur = getSceneCollapseDuration();
+            var easing = 'cubic-bezier(0.32, 0.72, 0, 1)';
+            if (opening) {
+                return clipEl.animate([
+                    { '--clip-bottom': '100%', '--clip-opacity': 0 },
+                    { '--clip-bottom': '0%', '--clip-opacity': 1 }
+                ], { duration: dur, easing: easing, fill: 'forwards' });
+            }
+            return clipEl.animate([
+                { '--clip-bottom': '0%', '--clip-opacity': 1 },
+                { '--clip-bottom': '100%', '--clip-opacity': 0 }
+            ], { duration: dur, easing: easing, fill: 'forwards' });
         }
 
         function applySceneCollapsedState(animate) {
             var $shell = $('#scene-shell');
-            var $stage = $('#scene-stage');
-            if (!$shell.length) return;
-            var animMs = getSceneCollapseAnimMs();
-            var stageEl = $stage.get(0);
+            var $clip = ensureSceneStageClip();
+            var clipEl = $clip.get(0);
+            if (!$shell.length || !clipEl) return;
+
+            var opening = !!sceneCardsOpen;
             var item = getCurrentSceneItem();
 
-            clearSceneCollapseTransition($shell, $stage);
-            $stage.removeClass('scene-stage-is-hidden');
+            cancelSceneCollapseAnim();
+            $('#scene-stage').removeClass('scene-stage-is-hidden');
 
-            if (!animate) {
-                $shell.toggleClass('scene-collapsed', !sceneCardsOpen);
-                $shell.removeClass('scene-transitioning');
+            if (!animate || !clipEl.animate || getSceneCollapseDuration() <= 1) {
+                $shell.toggleClass('scene-collapsed', !opening);
+                $shell.removeClass('scene-transitioning scene-collapse-waapi');
+                clearSceneClipVars(clipEl);
                 if (item) renderSceneCollapseBar(item);
                 return;
             }
 
-            $shell.addClass('scene-transitioning');
+            $shell.addClass('scene-transitioning scene-collapse-waapi');
             if (item) renderSceneCollapseBar(item);
 
-            function commitCollapsedState() {
-                $shell.toggleClass('scene-collapsed', !sceneCardsOpen);
-                if (!stageEl) {
-                    finishSceneCollapseTransition($shell, $stage);
-                    return;
-                }
-                void stageEl.offsetHeight;
-                applySceneCollapsedState._onTransitionEnd = function(e) {
-                    if (e.target !== stageEl || e.propertyName !== 'opacity') return;
-                    finishSceneCollapseTransition($shell, $stage);
-                };
-                stageEl.addEventListener('transitionend', applySceneCollapsedState._onTransitionEnd);
-                applySceneCollapsedState._timer = window.setTimeout(function() {
-                    finishSceneCollapseTransition($shell, $stage);
-                }, animMs + 40);
+            if (opening) {
+                $shell.removeClass('scene-collapsed');
+                setSceneClipVars(clipEl, '100%', 0);
+                void clipEl.offsetHeight;
+                requestAnimationFrame(function() {
+                    requestAnimationFrame(function() {
+                        var anim = runSceneClipAnimation(clipEl, true);
+                        applySceneCollapsedState._anim = anim;
+                        anim.onfinish = function() {
+                            clearSceneClipVars(clipEl);
+                            finishSceneCollapseTransition($shell);
+                        };
+                        anim.oncancel = function() {
+                            clearSceneClipVars(clipEl);
+                            finishSceneCollapseTransition($shell);
+                        };
+                        applySceneCollapsedState._timer = window.setTimeout(function() {
+                            clearSceneClipVars(clipEl);
+                            finishSceneCollapseTransition($shell);
+                        }, getSceneCollapseDuration() + 80);
+                    });
+                });
+                return;
             }
 
-            if (sceneCardsOpen) {
-                requestAnimationFrame(function() {
-                    commitCollapsedState();
-                });
-            } else {
-                commitCollapsedState();
-            }
+            $shell.addClass('scene-collapsed');
+            clearSceneClipVars(clipEl);
+            setSceneClipVars(clipEl, '0%', 1);
+            void clipEl.offsetHeight;
+            requestAnimationFrame(function() {
+                var collapseAnim = runSceneClipAnimation(clipEl, false);
+                applySceneCollapsedState._anim = collapseAnim;
+                collapseAnim.onfinish = function() {
+                    clearSceneClipVars(clipEl);
+                    finishSceneCollapseTransition($shell);
+                };
+                collapseAnim.oncancel = function() {
+                    clearSceneClipVars(clipEl);
+                    finishSceneCollapseTransition($shell);
+                };
+                applySceneCollapsedState._timer = window.setTimeout(function() {
+                    clearSceneClipVars(clipEl);
+                    finishSceneCollapseTransition($shell);
+                }, getSceneCollapseDuration() + 80);
+            });
         }
 
         function renderSceneStage() {
             var $stage = $('#scene-stage');
-            if (!$stage.length) return;
-            $stage.children(':not(#scene-toast-layer)').remove();
+            var $clip = ensureSceneStageClip();
+            if (!$stage.length || !$clip.length) return;
+            $clip.empty();
             var item = getCurrentSceneItem();
             if (!item) {
-                $('<div>').addClass('scene-empty').text('当前尚无登场人物，请继续剧情或切换开场。').appendTo($stage);
+                $('<div>').addClass('scene-empty').text('当前尚无登场人物，请继续剧情或切换开场。').appendTo($clip);
                 applySceneCollapsedState(false);
                 return;
             }
             renderSceneCollapseBar(item);
-            applySceneCollapsedState(false);
             var $card = item.type === 'core' ? renderCoreCard(item, 0) : renderSupportCard(item, 0);
-            $stage.append($card);
+            $clip.append($card);
+            applySceneCollapsedState(false);
             updateGalleryHint();
         }
 
