@@ -4129,13 +4129,14 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         .scene-collapse-favor,
         #scene-shell .scene-collapse-favor,
         #scene-shell:not(.scene-collapsed) .scene-collapse-favor,
-        #scene-shell.scene-collapsed .scene-collapse-favor,
-        #scene-shell.scene-transitioning .scene-collapse-favor{
+        #scene-shell.scene-collapsed .scene-collapse-favor{
             transition:opacity var(--lz-collapse-dur) var(--lz-collapse-ease),visibility 0s linear!important;
             transition-delay:0s!important;
             transform:none!important;
-            max-width:none!important;
             overflow:visible!important;
+        }
+        #scene-shell.scene-transitioning .scene-collapse-favor{
+            max-width:none!important;
         }
         #scene-shell:not(.scene-collapsed) .scene-collapse-favor{
             opacity:0!important;
