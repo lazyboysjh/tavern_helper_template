@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script><script src="https://code.jquery.com/jquery-3.7.1.min.js"></script><script>window.errorCatched=function(fn){return fn;};</script>
+<head><script src="https://code.jquery.com/jquery-3.7.1.min.js"></script><script>window.errorCatched=function(fn){return fn;};</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>群芳谱</title>
@@ -3626,7 +3626,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         }
         /* ===== /scene expand/collapse motion v8 ===== */
 
-        /* ===== collapse arrow + hide stage + compact favor v9 ===== */
+        /* ===== collapse arrow + hide stage + dual-end favor v10 ===== */
         #scene-shell.scene-collapsed .scene-collapse-toggle i,
         #scene-shell:not(.scene-collapsed) .scene-collapse-toggle i{
             transform:none!important;
@@ -3661,53 +3661,97 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             box-shadow:none!important;
             visibility:hidden!important;
         }
-        #scene-shell.scene-collapsed .scene-collapse-bar{
-            width:min(78vw,208px)!important;
-            max-width:calc(100% - 16px)!important;
-            padding:5px 8px!important;min-height:32px!important;
-            margin:2px auto 4px!important;
-            border-radius:999px!important;
-            background:linear-gradient(135deg,rgba(255,255,255,.11),rgba(255,255,255,.03)),rgba(18,14,22,.38)!important;
-            backdrop-filter:blur(16px) saturate(1.15)!important;
-            -webkit-backdrop-filter:blur(16px) saturate(1.15)!important;
-            box-shadow:0 6px 18px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.1)!important;
-        }
-        .scene-stage .av-favor-meter{
-            width:auto!important;max-width:96px!important;
-            left:8px!important;top:8px!important;right:auto!important;bottom:auto!important;
-            padding:4px 8px!important;border-radius:10px!important;
-            gap:3px!important;
-            border:1px solid rgba(255,255,255,.12)!important;
-            box-shadow:0 4px 14px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.08)!important;
-        }
-        .scene-stage .av-favor-meter .av-favor-cur{font-size:.64rem!important}
-        .scene-stage .av-favor-meter .av-favor-max{font-size:.54rem!important}
-        .scene-stage .av-favor-meter .av-favor-sep{font-size:.48rem!important}
-        .scene-stage .av-favor-meter .av-favor-track,
-        .scene-stage .av-favor-meter .av-favor-track--micro{height:2px!important}
-        .scene-stage .av-favor-meter .av-mood-chip{
-            padding:1px 6px!important;font-size:.48rem!important;letter-spacing:.1em!important;
-            margin-top:0!important;border-radius:999px!important;
-        }
-        .scene-stage .av-favor-meter .av-mood-chip::before{width:3px!important;height:3px!important}
-        .scene-stage .lz-char-portrait.show-thought .av-favor-meter,
-        .scene-stage .lz-char-portrait.thought-pinned .av-favor-meter,
-        .scene-stage .lz-char-portrait.thought-holding .av-favor-meter{
-            opacity:.38!important;transform:scale(.94)!important;
-            pointer-events:none!important;
-        }
-        .scene-stage .av-thought-bubble,
-        .scene-stage .lz-char-portrait .av-thought-bubble,
-        .scene-stage .lz-char-flip-container .av-thought-bubble,
-        .scene-stage .av-flip-wrap .av-thought-bubble{
-            top:10px!important;bottom:auto!important;right:10px!important;left:auto!important;
-            max-width:min(52%,200px)!important;
-            border-radius:12px 12px 4px 12px!important;
-            z-index:8!important;
-        }
-        @media(max-width:480px){
+        /* Desktop/tablet: collapsed bar = full card-width strip (relation + favor + arrow) */
+        @media (min-width:761px){
             #scene-shell.scene-collapsed .scene-collapse-bar{
-                width:min(76vw,196px)!important;min-height:30px!important;padding:4px 7px!important;
+                width:100%!important;
+                max-width:none!important;
+                min-height:40px!important;
+                height:auto!important;
+                padding:7px 12px!important;
+                margin:4px auto 6px!important;
+                border-radius:12px!important;
+                justify-content:stretch!important;
+                background:
+                    linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.03)),
+                    rgba(22,18,24,.34)!important;
+                backdrop-filter:blur(16px) saturate(1.15)!important;
+                -webkit-backdrop-filter:blur(16px) saturate(1.15)!important;
+                box-shadow:0 8px 22px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.1)!important;
+            }
+            #scene-shell.scene-collapsed .scene-collapse-favor{
+                display:flex!important;
+                opacity:1!important;
+                transform:none!important;
+                max-width:none!important;
+                padding-left:12px!important;padding-right:12px!important;
+            }
+        }
+        @media (min-width:861px){
+            #scene-shell.scene-collapsed .scene-collapse-bar{
+                max-width:560px!important;
+                margin-inline:auto!important;
+            }
+        }
+        /* Mobile: compact frosted pill, aligned with portrait column */
+        @media (max-width:760px){
+            #scene-shell.scene-collapsed .scene-collapse-bar{
+                width:min(82vw,224px)!important;
+                max-width:calc(100% - 16px)!important;
+                padding:5px 8px!important;min-height:32px!important;
+                margin:2px auto 4px!important;
+                border-radius:999px!important;
+                background:linear-gradient(135deg,rgba(255,255,255,.11),rgba(255,255,255,.03)),rgba(18,14,22,.38)!important;
+                backdrop-filter:blur(16px) saturate(1.15)!important;
+                -webkit-backdrop-filter:blur(16px) saturate(1.15)!important;
+                box-shadow:0 6px 18px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.1)!important;
+                border:1px solid rgba(255,255,255,.1)!important;
+            }
+            #scene-shell.scene-collapsed .scene-collapse-main{
+                display:flex!important;
+            }
+            .scene-stage .av-favor-meter{
+                width:auto!important;max-width:96px!important;
+                left:8px!important;top:8px!important;right:auto!important;bottom:auto!important;
+                padding:4px 8px!important;border-radius:10px!important;
+                gap:3px!important;
+                border:1px solid rgba(255,255,255,.12)!important;
+                box-shadow:0 4px 14px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.08)!important;
+            }
+            .scene-stage .av-favor-meter .av-favor-cur{font-size:.64rem!important}
+            .scene-stage .av-favor-meter .av-favor-max{font-size:.54rem!important}
+            .scene-stage .av-favor-meter .av-favor-sep{font-size:.48rem!important}
+            .scene-stage .av-favor-meter .av-favor-track,
+            .scene-stage .av-favor-meter .av-favor-track--micro{height:2px!important}
+            .scene-stage .av-favor-meter .av-mood-chip{
+                padding:1px 6px!important;font-size:.48rem!important;letter-spacing:.1em!important;
+                margin-top:0!important;border-radius:999px!important;
+            }
+            .scene-stage .av-favor-meter .av-mood-chip::before{width:3px!important;height:3px!important}
+            .scene-stage .lz-char-portrait.show-thought .av-favor-meter,
+            .scene-stage .lz-char-portrait.thought-pinned .av-favor-meter,
+            .scene-stage .lz-char-portrait.thought-holding .av-favor-meter{
+                opacity:.38!important;transform:scale(.94)!important;
+                pointer-events:none!important;
+            }
+            .scene-stage .av-thought-bubble,
+            .scene-stage .lz-char-portrait .av-thought-bubble,
+            .scene-stage .lz-char-flip-container .av-thought-bubble,
+            .scene-stage .av-flip-wrap .av-thought-bubble{
+                top:8px!important;bottom:auto!important;right:8px!important;left:auto!important;
+                max-width:min(48%,168px)!important;
+                border-radius:12px 12px 4px 12px!important;
+                font-size:.64rem!important;padding:7px 9px!important;
+                z-index:8!important;
+            }
+            .scene-stage .lz-char-portrait.show-thought .av-favor-meter,
+            .scene-stage .lz-char-portrait.thought-pinned .av-favor-meter{
+                opacity:.32!important;
+            }
+        }
+        @media (max-width:480px){
+            #scene-shell.scene-collapsed .scene-collapse-bar{
+                width:min(80vw,208px)!important;min-height:30px!important;padding:4px 7px!important;
             }
             .scene-stage .av-favor-meter{
                 max-width:84px!important;left:6px!important;top:6px!important;
@@ -3715,23 +3759,167 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             }
             .scene-stage .av-favor-meter .av-favor-cur{font-size:.6rem!important}
             .scene-stage .av-favor-meter .av-mood-chip{font-size:.46rem!important;padding:1px 5px!important}
-            .scene-stage .av-thought-bubble,
-            .scene-stage .lz-char-portrait .av-thought-bubble,
-            .scene-stage .lz-char-flip-container .av-thought-bubble,
-            .scene-stage .av-flip-wrap .av-thought-bubble{
-                top:8px!important;right:8px!important;left:auto!important;
-                max-width:min(48%,168px)!important;
-                font-size:.64rem!important;padding:7px 9px!important;
-            }
-            .scene-stage .lz-char-portrait.show-thought .av-favor-meter,
-            .scene-stage .lz-char-portrait.thought-pinned .av-favor-meter{
-                opacity:.32!important;
-            }
         }
-        /* ===== /collapse arrow + hide stage + compact favor v9 ===== */
+        /* ===== /collapse arrow + hide stage + dual-end favor v10 ===== */
 </style>
 
-    <script type="module">
+</head>
+<body>
+    <div class="w" id="ui">
+        <div class="mnx-archive-note" id="mnx-archive-note">历史楼层 · 状态栏已精简展示</div>
+
+        <div class="tb">
+            <div class="tb-btn-wrap">
+                <div class="menu-wrap" id="menu-wrap">
+                    <button type="button" class="tg" id="mt" aria-label="打开设置"><i class="fa-solid fa-sliders"></i></button>
+                    <div class="menu-panel" id="opt-m">
+                        <div class="pv-b" id="opt-box">
+                            <div class="opt-scroll">
+                                <div class="menu-sec opt-card">
+                                    <div class="opt-head">
+                                        <div class="menu-hd">视觉主题</div>
+                                    </div>
+                                    <div class="theme-select" id="theme-select">
+                                        <button type="button" class="theme-current-btn" id="theme-trigger" aria-expanded="false">
+                                            <span class="theme-current-main">
+                                                <span class="theme-swatch dark" id="theme-current-swatch"></span>
+                                                <span class="theme-current-copy">
+                                                    <span class="theme-current-name" id="theme-current-name">深色背景</span>
+                                                </span>
+                                            </span>
+                                            <span class="theme-caret"><i class="fa-solid fa-chevron-down"></i></span>
+                                        </button>
+                                        <div class="theme-list" id="theme-list">
+                                            <button type="button" class="theme-item on" data-theme-key="dark">
+                                                <span class="theme-swatch dark"></span>
+                                                <span class="theme-item-name">深色背景</span>
+                                            </button>
+                                            <button type="button" class="theme-item" data-theme-key="light">
+                                                <span class="theme-swatch light"></span>
+                                                <span class="theme-item-name">浅色背景</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="menu-sec opt-card">
+                                    <div class="menu-hd">人物卡片</div>
+                                    <label class="opt-toggle-row" for="scene-default-open">
+                                        <span class="opt-toggle-copy">
+                                            <span class="opt-toggle-title">默认展开人物卡片</span>
+                                            <span class="opt-toggle-note">关闭后，首次切到某人物时默认只显示标签栏；各人物收起/展开状态会分别记住。</span>
+                                        </span>
+                                        <span class="opt-switch"><input id="scene-default-open" type="checkbox" checked><span></span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tit-main">群芳谱</div>
+
+            <div class="tb-btn-wrap">
+                <button type="button" class="tg" id="lk" aria-label="立绘管理"><i class="fa-solid fa-images"></i></button>
+            </div>
+        </div>
+
+        <div class="scene-shell" id="scene-shell">
+            <div class="scene-tabs-wrap">
+                <button type="button" class="scene-tab-nav prev" id="scene-tab-prev" aria-label="上一位角色"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="scene-tabs-mask edge-start edge-end" id="scene-tabs-mask">
+                    <div class="scene-tabs" id="scene-tabs"></div>
+                </div>
+                <button type="button" class="scene-tab-nav next" id="scene-tab-next" aria-label="下一位角色"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            <div class="scene-collapse-bar" id="scene-collapse-bar">
+                <div class="scene-collapse-main"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span class="scene-collapse-name">—</span><span class="scene-collapse-sub"></span></div>
+                <span class="scene-collapse-favor" aria-label="好感度"><span class="scene-collapse-favor-text">0/100</span><span class="scene-collapse-favor-bar"><span class="scene-collapse-favor-fill"></span></span></span>
+                <button type="button" class="scene-collapse-toggle" aria-expanded="true" aria-controls="scene-stage" aria-label="收起人物卡片"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+            </div>
+            <div class="scene-stage" id="scene-stage">
+                <div class="scene-toast-layer" id="scene-toast-layer"></div>
+                <div class="scene-empty">当前尚无登场人物，请继续剧情或切换开场。</div>
+            </div>
+        </div>
+
+        <div class="pv" id="pv">
+            <div class="pv-b" id="pvb">
+                <div class="pv-i-c" id="pvic">
+                    <img class="pv-img" id="pvi" referrerpolicy="no-referrer" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pv" id="st-m">
+        <div class="pv-b" id="st-box">
+            <div class="st-top">
+                <div class="st-title-wrap">
+                    <div class="st-title">群芳立绘库</div>
+                    <div class="st-subtitle">收藏立绘 · 切换展示 · 好感解锁</div>
+                </div>
+                <div class="st-top-actions">
+                    <button type="button" class="st-btn-s" id="st-unlock-all"><i class="fa-solid fa-unlock-keyhole"></i></button>
+                    <button type="button" class="close-x" id="st-close"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div class="st-tabs-wrap-gallery" id="st-tabs-wrap-gallery">
+                <div class="st-tabs" id="st-tabs"></div>
+            </div>
+
+            <div class="st-favor-hero" id="st-favor-hero">
+                <div class="st-favor-hero-head">
+                    <span class="st-favor-hero-role" id="st-hero-role">—</span>
+                    <span class="st-favor-hero-badge" id="st-hero-badge">状态</span>
+                </div>
+                <div class="st-favor-hero-bar"><span class="st-favor-hero-fill" id="st-hero-fill"></span></div>
+                <div class="st-favor-hero-foot">
+                    <span class="st-favor-hero-num" id="st-hero-num">0 / 100</span>
+                    <span class="st-favor-hero-next" id="st-hero-next">—</span>
+                </div>
+            </div>
+
+            <div class="st-ctrl-bar">
+                <div class="st-stat">
+                    <span id="st-stat-text">当前：自动随机</span>
+                    <!-- 新增的调色盘配置区 -->
+                    <div class="color-config-wrap" title="配置该角色的专属颜色">
+                        <span class="color-config-label"><i class="fa-solid fa-palette"></i></span>
+                        <input type="color" id="st-color-picker" class="color-picker" value="#b89465">
+                        <button type="button" class="st-btn-icon" id="st-color-reset" title="恢复默认颜色">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="st-ctrl-actions">
+                    <button type="button" class="st-btn-s" id="st-reset"><i class="fa-solid fa-shuffle"></i><span>随机展示</span></button>
+                    <button type="button" class="st-btn-s" id="st-test-draw" title="仅测试抽卡动画，不改变解锁数据"><i class="fa-solid fa-wand-magic-sparkles"></i><span>测试抽卡</span></button>
+                </div>
+            </div>
+
+            <div class="st-scroll">
+                <div class="st-grid" id="st-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pv" id="pwd-m">
+        <div class="pv-b" id="pwd-box">
+            <div class="pwd-title">权限认证</div>
+            <input type="password" id="pi" class="pwd-input" placeholder="请输入密钥" autocomplete="off">
+            <div class="pwd-err" id="pwd-err"></div>
+            <div class="pwd-actions">
+                <button type="button" class="pwd-btn" id="pwd-cancel">返回</button>
+                <button type="button" class="pwd-btn primary" id="pwd-confirm">解锁</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script>
+
         var DEFAULT_ACCENT = '#b89465';
         var ACCESS_PASSWORD = '波高水人';
         var PREF_KEY = 'mnxPrefsV1';
@@ -5118,9 +5306,9 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             var $shell = $('#scene-shell');
             var $stage = $('#scene-stage');
             if (!$shell.length) return;
+            window.clearTimeout(applySceneCollapsedState._hideTimer);
             if (animate) {
                 window.clearTimeout(applySceneCollapsedState._timer);
-                window.clearTimeout(applySceneCollapsedState._hideTimer);
                 $shell.addClass('scene-transitioning');
                 if (sceneCardsOpen) {
                     $stage.removeClass('scene-stage-is-hidden');
@@ -5132,8 +5320,10 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             if (animate) {
                 if (!sceneCardsOpen) {
                     applySceneCollapsedState._hideTimer = window.setTimeout(function() {
-                        $stage.addClass('scene-stage-is-hidden');
+                        if (!sceneCardsOpen) $stage.addClass('scene-stage-is-hidden');
                     }, 560);
+                } else {
+                    $stage.removeClass('scene-stage-is-hidden');
                 }
                 applySceneCollapsedState._timer = window.setTimeout(function() {
                     $shell.removeClass('scene-transitioning');
@@ -5836,158 +6026,5 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
 
         $(errorCatched(init));
     </script>
-</head>
-<body>
-    <div class="w" id="ui">
-        <div class="mnx-archive-note" id="mnx-archive-note">历史楼层 · 状态栏已精简展示</div>
-
-        <div class="tb">
-            <div class="tb-btn-wrap">
-                <div class="menu-wrap" id="menu-wrap">
-                    <button type="button" class="tg" id="mt" aria-label="打开设置"><i class="fa-solid fa-sliders"></i></button>
-                    <div class="menu-panel" id="opt-m">
-                        <div class="pv-b" id="opt-box">
-                            <div class="opt-scroll">
-                                <div class="menu-sec opt-card">
-                                    <div class="opt-head">
-                                        <div class="menu-hd">视觉主题</div>
-                                    </div>
-                                    <div class="theme-select" id="theme-select">
-                                        <button type="button" class="theme-current-btn" id="theme-trigger" aria-expanded="false">
-                                            <span class="theme-current-main">
-                                                <span class="theme-swatch dark" id="theme-current-swatch"></span>
-                                                <span class="theme-current-copy">
-                                                    <span class="theme-current-name" id="theme-current-name">深色背景</span>
-                                                </span>
-                                            </span>
-                                            <span class="theme-caret"><i class="fa-solid fa-chevron-down"></i></span>
-                                        </button>
-                                        <div class="theme-list" id="theme-list">
-                                            <button type="button" class="theme-item on" data-theme-key="dark">
-                                                <span class="theme-swatch dark"></span>
-                                                <span class="theme-item-name">深色背景</span>
-                                            </button>
-                                            <button type="button" class="theme-item" data-theme-key="light">
-                                                <span class="theme-swatch light"></span>
-                                                <span class="theme-item-name">浅色背景</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="menu-sec opt-card">
-                                    <div class="menu-hd">人物卡片</div>
-                                    <label class="opt-toggle-row" for="scene-default-open">
-                                        <span class="opt-toggle-copy">
-                                            <span class="opt-toggle-title">默认展开人物卡片</span>
-                                            <span class="opt-toggle-note">关闭后，首次切到某人物时默认只显示标签栏；各人物收起/展开状态会分别记住。</span>
-                                        </span>
-                                        <span class="opt-switch"><input id="scene-default-open" type="checkbox" checked><span></span></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tit-main">群芳谱</div>
-
-            <div class="tb-btn-wrap">
-                <button type="button" class="tg" id="lk" aria-label="立绘管理"><i class="fa-solid fa-images"></i></button>
-            </div>
-        </div>
-
-        <div class="scene-shell" id="scene-shell">
-            <div class="scene-tabs-wrap">
-                <button type="button" class="scene-tab-nav prev" id="scene-tab-prev" aria-label="上一位角色"><i class="fa-solid fa-chevron-left"></i></button>
-                <div class="scene-tabs-mask edge-start edge-end" id="scene-tabs-mask">
-                    <div class="scene-tabs" id="scene-tabs"></div>
-                </div>
-                <button type="button" class="scene-tab-nav next" id="scene-tab-next" aria-label="下一位角色"><i class="fa-solid fa-chevron-right"></i></button>
-            </div>
-            <div class="scene-collapse-bar" id="scene-collapse-bar">
-                <div class="scene-collapse-main"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span class="scene-collapse-name">—</span><span class="scene-collapse-sub"></span></div>
-                <span class="scene-collapse-favor" aria-label="好感度"><span class="scene-collapse-favor-text">0/100</span><span class="scene-collapse-favor-bar"><span class="scene-collapse-favor-fill"></span></span></span>
-                <button type="button" class="scene-collapse-toggle" aria-expanded="true" aria-controls="scene-stage" aria-label="收起人物卡片"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
-            </div>
-            <div class="scene-stage" id="scene-stage">
-                <div class="scene-toast-layer" id="scene-toast-layer"></div>
-                <div class="scene-empty">当前尚无登场人物，请继续剧情或切换开场。</div>
-            </div>
-        </div>
-
-        <div class="pv" id="pv">
-            <div class="pv-b" id="pvb">
-                <div class="pv-i-c" id="pvic">
-                    <img class="pv-img" id="pvi" referrerpolicy="no-referrer" alt="">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="pv" id="st-m">
-        <div class="pv-b" id="st-box">
-            <div class="st-top">
-                <div class="st-title-wrap">
-                    <div class="st-title">群芳立绘库</div>
-                    <div class="st-subtitle">收藏立绘 · 切换展示 · 好感解锁</div>
-                </div>
-                <div class="st-top-actions">
-                    <button type="button" class="st-btn-s" id="st-unlock-all"><i class="fa-solid fa-unlock-keyhole"></i></button>
-                    <button type="button" class="close-x" id="st-close"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-            </div>
-            <div class="st-tabs-wrap-gallery" id="st-tabs-wrap-gallery">
-                <div class="st-tabs" id="st-tabs"></div>
-            </div>
-
-            <div class="st-favor-hero" id="st-favor-hero">
-                <div class="st-favor-hero-head">
-                    <span class="st-favor-hero-role" id="st-hero-role">—</span>
-                    <span class="st-favor-hero-badge" id="st-hero-badge">状态</span>
-                </div>
-                <div class="st-favor-hero-bar"><span class="st-favor-hero-fill" id="st-hero-fill"></span></div>
-                <div class="st-favor-hero-foot">
-                    <span class="st-favor-hero-num" id="st-hero-num">0 / 100</span>
-                    <span class="st-favor-hero-next" id="st-hero-next">—</span>
-                </div>
-            </div>
-
-            <div class="st-ctrl-bar">
-                <div class="st-stat">
-                    <span id="st-stat-text">当前：自动随机</span>
-                    <!-- 新增的调色盘配置区 -->
-                    <div class="color-config-wrap" title="配置该角色的专属颜色">
-                        <span class="color-config-label"><i class="fa-solid fa-palette"></i></span>
-                        <input type="color" id="st-color-picker" class="color-picker" value="#b89465">
-                        <button type="button" class="st-btn-icon" id="st-color-reset" title="恢复默认颜色">
-                            <i class="fa-solid fa-rotate-left"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="st-ctrl-actions">
-                    <button type="button" class="st-btn-s" id="st-reset"><i class="fa-solid fa-shuffle"></i><span>随机展示</span></button>
-                    <button type="button" class="st-btn-s" id="st-test-draw" title="仅测试抽卡动画，不改变解锁数据"><i class="fa-solid fa-wand-magic-sparkles"></i><span>测试抽卡</span></button>
-                </div>
-            </div>
-
-            <div class="st-scroll">
-                <div class="st-grid" id="st-grid"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="pv" id="pwd-m">
-        <div class="pv-b" id="pwd-box">
-            <div class="pwd-title">权限认证</div>
-            <input type="password" id="pi" class="pwd-input" placeholder="请输入密钥" autocomplete="off">
-            <div class="pwd-err" id="pwd-err"></div>
-            <div class="pwd-actions">
-                <button type="button" class="pwd-btn" id="pwd-cancel">返回</button>
-                <button type="button" class="pwd-btn primary" id="pwd-confirm">解锁</button>
-            </div>
-        </div>
-    </div>
-
 </body>
 </html>
