@@ -3761,6 +3761,150 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             .scene-stage .av-favor-meter .av-mood-chip{font-size:.46rem!important;padding:1px 5px!important}
         }
         /* ===== /collapse arrow + hide stage + dual-end favor v10 ===== */
+
+        /* ===== scene-collapse stable layout v11: fixed bar + tabs width, icon-only motion ===== */
+        #scene-shell,
+        #scene-shell.scene-collapsed,
+        #scene-shell.scene-transitioning{
+            display:grid!important;
+            width:100%!important;
+            max-width:100%!important;
+            align-items:stretch!important;
+            justify-items:stretch!important;
+        }
+        #scene-shell .scene-tabs-wrap,
+        #scene-shell.scene-collapsed .scene-tabs-wrap{
+            width:100%!important;
+            max-width:100%!important;
+            min-width:0!important;
+            box-sizing:border-box!important;
+        }
+        .scene-collapse-bar,
+        #scene-shell:not(.scene-collapsed) .scene-collapse-bar,
+        #scene-shell.scene-collapsed .scene-collapse-bar,
+        .scene-collapsed .scene-collapse-bar{
+            width:100%!important;
+            max-width:100%!important;
+            margin:0!important;
+            margin-inline:0!important;
+            min-height:40px!important;
+            height:auto!important;
+            padding:7px 10px!important;
+            border-radius:12px!important;
+            transform:none!important;
+            display:grid!important;
+            grid-template-columns:minmax(0,auto) minmax(0,1fr) auto!important;
+            align-items:center!important;
+            gap:10px!important;
+            box-sizing:border-box!important;
+            transition:background .32s ease,box-shadow .32s ease!important;
+        }
+        .scene-collapse-bar:hover,
+        #scene-shell.scene-collapsed .scene-collapse-bar:hover,
+        .scene-collapsed .scene-collapse-bar:hover{
+            transform:none!important;
+        }
+        #scene-shell.scene-transitioning .scene-collapse-bar{
+            animation:none!important;
+        }
+        .scene-collapse-main{grid-column:1!important;min-width:0!important;}
+        .scene-collapse-favor{
+            grid-column:2!important;
+            display:flex!important;
+            align-items:center!important;
+            justify-content:center!important;
+            gap:8px!important;
+            min-width:0!important;
+            width:100%!important;
+            max-width:none!important;
+            margin:0!important;
+            padding:5px 12px!important;
+            transition:opacity .32s cubic-bezier(.22,1,.36,1),visibility .32s step-end!important;
+        }
+        #scene-shell:not(.scene-collapsed) .scene-collapse-favor{
+            display:flex!important;
+            opacity:0!important;
+            visibility:hidden!important;
+            pointer-events:none!important;
+            max-width:none!important;
+            transform:none!important;
+            padding-left:12px!important;
+            padding-right:12px!important;
+            overflow:visible!important;
+        }
+        #scene-shell.scene-collapsed .scene-collapse-favor{
+            display:flex!important;
+            opacity:1!important;
+            visibility:visible!important;
+            pointer-events:auto!important;
+            transform:none!important;
+        }
+        .scene-collapse-toggle,
+        #scene-shell:not(.scene-collapsed) .scene-collapse-toggle,
+        #scene-shell.scene-collapsed .scene-collapse-toggle,
+        .scene-collapsed .scene-collapse-toggle{
+            grid-column:3!important;
+            all:unset!important;
+            box-sizing:border-box!important;
+            display:inline-flex!important;
+            align-items:center!important;
+            justify-content:center!important;
+            width:30px!important;
+            height:30px!important;
+            min-width:30px!important;
+            max-width:30px!important;
+            min-height:30px!important;
+            max-height:30px!important;
+            padding:0!important;
+            margin:0!important;
+            flex:0 0 30px!important;
+            border-radius:50%!important;
+            cursor:pointer!important;
+            background:rgba(255,255,255,.06)!important;
+            border:1px solid rgba(255,255,255,.14)!important;
+            box-shadow:0 2px 8px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.08)!important;
+            color:rgba(244,236,220,.92)!important;
+            transition:background .2s ease,border-color .2s ease,box-shadow .2s ease!important;
+        }
+        .scene-collapse-toggle::after,
+        .scene-collapse-toggle span{display:none!important;content:none!important;}
+        .scene-collapse-toggle i,
+        #scene-shell:not(.scene-collapsed) .scene-collapse-toggle i,
+        #scene-shell.scene-collapsed .scene-collapse-toggle i{
+            display:inline-flex!important;
+            align-items:center!important;
+            justify-content:center!important;
+            font-size:.62rem!important;
+            line-height:1!important;
+            color:inherit!important;
+            background:none!important;
+            border:none!important;
+            box-shadow:none!important;
+            filter:none!important;
+            transition:transform .42s cubic-bezier(.22,1,.36,1)!important;
+        }
+        #scene-shell:not(.scene-collapsed) .scene-collapse-toggle i{
+            transform:rotate(0deg)!important;
+        }
+        #scene-shell.scene-collapsed .scene-collapse-toggle i{
+            transform:rotate(180deg)!important;
+        }
+        @media(max-width:760px){
+            .scene-collapse-bar,
+            #scene-shell.scene-collapsed .scene-collapse-bar{
+                width:100%!important;
+                max-width:100%!important;
+                margin:0!important;
+                border-radius:12px!important;
+            }
+        }
+        @media(min-width:861px){
+            #scene-shell.scene-collapsed .scene-collapse-bar{
+                max-width:100%!important;
+                margin-inline:0!important;
+            }
+        }
+        /* ===== /scene-collapse stable layout v11 ===== */
 </style>
 
 </head>
@@ -5367,8 +5511,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 'aria-label': (sceneCardsOpen ? '收起' : '展开') + '人物卡片'
             });
             var $toggleIcon = $bar.find('.scene-collapse-toggle i');
-            $toggleIcon.removeClass('fa-chevron-down fa-chevron-right');
-            $toggleIcon.addClass(sceneCardsOpen ? 'fa-chevron-down' : 'fa-chevron-right');
+            $toggleIcon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
         }
 
         function ensureTopGalleryCeremonyStyle(doc) {
