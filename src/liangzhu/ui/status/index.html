@@ -4500,6 +4500,57 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             #scene-stage-clip > .det-r{padding:8px!important;gap:8px!important;border-radius:14px!important;}
         }
         /* ===== /scene-stage-clip portrait bridge v17 ===== */
+        /* ===== scene motion + portrait v18 (final authority) ===== */
+        #scene-shell #scene-stage{
+            display:grid!important;
+            grid-template-columns:1fr!important;
+            grid-template-rows:1fr!important;
+            overflow:hidden!important;
+            min-height:0!important;
+            height:auto!important;
+            max-height:none!important;
+            transition:grid-template-rows var(--lz-collapse-dur) var(--lz-collapse-ease)!important;
+        }
+        #scene-shell.scene-collapsed #scene-stage{
+            grid-template-rows:0fr!important;
+        }
+        #scene-shell.scene-collapse-waapi #scene-stage-clip{
+            transition:none!important;
+        }
+        #scene-shell:not(.scene-collapse-waapi) #scene-stage-clip{
+            transition:--clip-bottom var(--lz-collapse-dur) var(--lz-collapse-ease),--clip-opacity calc(var(--lz-collapse-dur) * .88) var(--lz-collapse-ease)!important;
+        }
+        @media (min-width:761px){
+            #scene-stage-clip .lz-char-portrait,
+            #scene-stage-clip .lz-char-portrait.is-portrait-loaded{
+                background-size:contain!important;
+                background-position:center center!important;
+                background-repeat:no-repeat!important;
+            }
+            #scene-stage-clip .support-figure img{
+                object-fit:contain!important;
+                object-position:center center!important;
+            }
+            #scene-stage-clip > .det-r.scene-panel{
+                width:min(100%,clamp(460px,46vw,680px))!important;
+                max-width:calc(100% - 16px)!important;
+                height:clamp(460px,calc(100dvh - 260px),78dvh)!important;
+                min-height:clamp(420px,calc(500px * var(--img-scale,1)),74dvh)!important;
+            }
+            #scene-stage-clip > .det-r.scene-panel > .lz-char-flip-container{
+                min-height:clamp(380px,calc(460px * var(--img-scale,1)),72dvh)!important;
+            }
+            #scene-stage-clip > .det-r.scene-panel > .lz-char-flip-container > .lz-char-flip-inner{
+                min-height:clamp(360px,calc(440px * var(--img-scale,1)),70dvh)!important;
+            }
+        }
+        @media (max-width:760px){
+            #scene-shell.scene-transitioning #scene-stage,
+            #scene-shell.scene-transitioning #scene-stage-clip{
+                will-change:grid-template-rows,clip-path,opacity;
+            }
+        }
+        /* ===== /scene motion + portrait v18 ===== */
         /* ===== /scene-collapse motion v16 ===== */
 </style>
 
@@ -6061,6 +6112,11 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             return window.matchMedia('(max-width:760px)').matches ? 300 : 340;
         }
 
+        function shouldUseWaapiCollapse() {
+            if (getSceneCollapseDuration() <= 1) return false;
+            return window.matchMedia('(min-width:761px)').matches;
+        }
+
         function cancelSceneCollapseAnim() {
             if (applySceneCollapsedState._anim && applySceneCollapsedState._anim.cancel) {
                 try { applySceneCollapsedState._anim.cancel(); } catch (e) {}
@@ -6119,11 +6175,22 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             cancelSceneCollapseAnim();
             $('#scene-stage').removeClass('scene-stage-is-hidden');
 
-            if (!animate || !clipEl.animate || getSceneCollapseDuration() <= 1) {
+            if (!animate || getSceneCollapseDuration() <= 1) {
                 $shell.toggleClass('scene-collapsed', !opening);
                 $shell.removeClass('scene-transitioning scene-collapse-waapi');
                 clearSceneClipVars(clipEl);
                 if (item) renderSceneCollapseBar(item);
+                return;
+            }
+
+            if (!shouldUseWaapiCollapse()) {
+                $shell.addClass('scene-transitioning');
+                if (item) renderSceneCollapseBar(item);
+                $shell.toggleClass('scene-collapsed', !opening);
+                clearSceneClipVars(clipEl);
+                applySceneCollapsedState._timer = window.setTimeout(function() {
+                    finishSceneCollapseTransition($shell);
+                }, getSceneCollapseDuration() + 60);
                 return;
             }
 
