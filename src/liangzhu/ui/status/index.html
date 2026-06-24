@@ -4414,6 +4414,21 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         #scene-shell.scene-collapse-waapi #scene-stage-clip{
             transition:none!important;
         }
+        #scene-shell.scene-collapsed:not(.scene-collapse-waapi) #scene-stage{
+            display:grid!important;
+            grid-template-rows:0fr!important;
+            overflow:hidden!important;
+            min-height:0!important;
+        }
+        #scene-shell.scene-collapsed:not(.scene-collapse-waapi) #scene-stage-clip{
+            min-height:0!important;
+            overflow:hidden!important;
+        }
+        #scene-shell.scene-collapsed .scene-toast-layer,
+        #scene-shell.scene-transitioning.scene-collapsed .scene-toast-layer{
+            opacity:1!important;
+            pointer-events:none!important;
+        }
         #scene-shell.scene-transitioning .scene-collapse-bar,
         #scene-shell.scene-transitioning #scene-stage,
         #scene-shell.scene-transitioning #scene-stage-clip,
@@ -4446,6 +4461,45 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         }
         #scene-shell:not(.scene-collapsed) .scene-collapse-toggle i{transform:rotate(0deg)!important;}
         #scene-shell.scene-collapsed .scene-collapse-toggle i{transform:rotate(-90deg)!important;}
+        /* ===== scene-stage-clip portrait bridge v17 (final authority) ===== */
+        #scene-stage-clip{width:100%!important;box-sizing:border-box!important;}
+        #scene-stage-clip > .det-r.scene-panel{flex:0 1 auto!important;width:clamp(420px,42vw,560px)!important;max-width:calc(100% - 24px)!important;height:clamp(440px,calc(100dvh - 300px),600px)!important;min-height:440px!important;margin-inline:auto!important;grid-template-columns:minmax(0,1fr)!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;}
+        #scene-stage-clip > .det-r.scene-panel > .av-flip-wrap,
+        #scene-stage-clip > .det-r.scene-panel > .lz-char-flip-container{flex:1 1 auto!important;width:100%!important;max-width:none!important;min-width:0!important;height:100%!important;min-height:0!important;}
+        #scene-stage-clip > .det-r.scene-panel > .av-flip-wrap > .av-flip,
+        #scene-stage-clip > .det-r.scene-panel > .lz-char-flip-container > .lz-char-flip-inner{width:100%!important;max-width:none!important;min-width:0!important;height:100%!important;min-height:0!important;}
+        @media (min-width:761px){
+            #scene-stage-clip > .det-r{max-width:min(980px,100%);margin:0 auto;display:flex!important;align-items:stretch!important;gap:16px!important;min-height:210px!important;}
+            #scene-stage-clip > .det-r:has(> .av-flip-wrap){display:grid!important;grid-template-columns:minmax(260px,36%) minmax(0,1fr)!important;gap:18px!important;min-height:430px!important;align-items:stretch!important;}
+            #scene-stage-clip > .det-r > .av-flip-wrap{width:100%!important;max-width:none!important;height:100%!important;align-self:stretch!important;}
+            #scene-stage-clip > .det-r > .av-flip-wrap > .av-flip{width:100%!important;height:100%!important;min-height:398px!important;aspect-ratio:auto!important;}
+            #scene-stage-clip > .det-r:has(> .av-flip-wrap){display:grid!important;grid-template-columns:minmax(320px,44%) minmax(0,1fr)!important;gap:20px!important;min-height:520px!important;align-items:stretch!important;padding:18px!important;}
+            #scene-stage-clip > .det-r > .av-flip-wrap{min-height:484px!important;}
+            #scene-stage-clip > .det-r > .av-flip-wrap > .av-flip{min-height:484px!important;}
+            #scene-stage-clip > .det-r:has(> .av-flip-wrap){min-height:calc(520px * var(--img-scale,1))!important;grid-template-columns:minmax(calc(280px * var(--img-scale,1)),44%) minmax(0,1fr)!important;}
+            #scene-stage-clip > .det-r > .av-flip-wrap,
+            #scene-stage-clip > .det-r > .av-flip-wrap > .av-flip{min-height:calc(484px * var(--img-scale,1))!important;}
+            #scene-stage-clip > .det-r:has(> .av-flip-wrap){--portrait-column-scale:var(--img-scale,1);grid-template-columns:minmax(220px,clamp(26%,calc(44% * var(--portrait-column-scale)),64%)) minmax(0,1fr)!important;min-height:clamp(360px,calc(484px * var(--img-scale,1)),72dvh)!important;}
+            #scene-stage-clip > .det-r > .av-flip-wrap,
+            #scene-stage-clip > .det-r > .av-flip-wrap > .av-flip{min-height:clamp(340px,calc(460px * var(--img-scale,1)),70dvh)!important;}
+        }
+        @media (min-width:861px){
+            #scene-stage-clip > .det-r:has(> .av-flip-wrap){--portrait-column-scale:var(--img-scale,1);grid-template-columns:minmax(220px,clamp(24%,calc(42% * var(--portrait-column-scale)),72%)) minmax(0,1fr)!important;min-height:clamp(360px,calc(470px * var(--img-scale,1)),76dvh)!important;}
+            #scene-stage-clip > .det-r > .av-flip-wrap,
+            #scene-stage-clip > .det-r > .av-flip-wrap > .av-flip{min-height:clamp(340px,calc(450px * var(--img-scale,1)),74dvh)!important;}
+        }
+        @media (max-width:760px){
+            #scene-stage-clip > .det-r{display:flex!important;flex-direction:column!important;gap:7px;min-height:0;padding:8px;border-radius:13px;align-items:stretch;}
+            #scene-stage-clip > .det-r.scene-panel{flex-basis:100%!important;width:calc(100% - 16px)!important;max-width:none!important;min-width:0!important;height:min(142vw,640px,calc(100dvh - 150px))!important;min-height:0!important;}
+            #scene-stage-clip > .det-r.scene-panel > .av-flip-wrap,
+            #scene-stage-clip > .det-r.scene-panel > .av-flip-wrap > .av-flip,
+            #scene-stage-clip > .det-r.scene-panel > .lz-char-flip-container,
+            #scene-stage-clip > .det-r.scene-panel > .lz-char-flip-container > .lz-char-flip-inner{width:100%!important;max-width:none!important;height:100%!important;min-height:0!important;}
+        }
+        @media (max-width:860px){
+            #scene-stage-clip > .det-r{padding:8px!important;gap:8px!important;border-radius:14px!important;}
+        }
+        /* ===== /scene-stage-clip portrait bridge v17 ===== */
         /* ===== /scene-collapse motion v16 ===== */
 </style>
 
@@ -6085,16 +6139,16 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                         var anim = runSceneClipAnimation(clipEl, true);
                         applySceneCollapsedState._anim = anim;
                         anim.onfinish = function() {
-                            clearSceneClipVars(clipEl);
                             finishSceneCollapseTransition($shell);
+                            clearSceneClipVars(clipEl);
                         };
                         anim.oncancel = function() {
-                            clearSceneClipVars(clipEl);
                             finishSceneCollapseTransition($shell);
+                            clearSceneClipVars(clipEl);
                         };
                         applySceneCollapsedState._timer = window.setTimeout(function() {
-                            clearSceneClipVars(clipEl);
                             finishSceneCollapseTransition($shell);
+                            clearSceneClipVars(clipEl);
                         }, getSceneCollapseDuration() + 80);
                     });
                 });
@@ -6106,20 +6160,22 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             setSceneClipVars(clipEl, '0%', 1);
             void clipEl.offsetHeight;
             requestAnimationFrame(function() {
-                var collapseAnim = runSceneClipAnimation(clipEl, false);
+                requestAnimationFrame(function() {
+                    var collapseAnim = runSceneClipAnimation(clipEl, false);
                 applySceneCollapsedState._anim = collapseAnim;
                 collapseAnim.onfinish = function() {
-                    clearSceneClipVars(clipEl);
                     finishSceneCollapseTransition($shell);
+                    clearSceneClipVars(clipEl);
                 };
                 collapseAnim.oncancel = function() {
-                    clearSceneClipVars(clipEl);
                     finishSceneCollapseTransition($shell);
+                    clearSceneClipVars(clipEl);
                 };
                 applySceneCollapsedState._timer = window.setTimeout(function() {
-                    clearSceneClipVars(clipEl);
                     finishSceneCollapseTransition($shell);
+                    clearSceneClipVars(clipEl);
                 }, getSceneCollapseDuration() + 80);
+                });
             });
         }
 
