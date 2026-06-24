@@ -4097,6 +4097,115 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             }
         }
         /* ===== /scene-collapse polish v13 ===== */
+
+        /* ===== scene-collapse motion v14: single-track clip, no squeeze (all breakpoints) ===== */
+        :root{
+            --lz-collapse-dur:.38s;
+            --lz-collapse-ease:cubic-bezier(.22,1,.36,1);
+        }
+        @media (max-width:760px){
+            :root{--lz-collapse-dur:.3s;}
+        }
+        #scene-shell.scene-transitioning .scene-collapse-bar,
+        #scene-shell.scene-transitioning #scene-stage,
+        #scene-shell.scene-transitioning .scene-collapse-favor,
+        #scene-shell.scene-transitioning .scene-collapse-toggle i,
+        #scene-shell.scene-transitioning #scene-stage > .det-r,
+        #scene-shell.scene-transitioning #scene-stage > .scene-empty{
+            will-change:auto!important;
+        }
+        .scene-collapse-bar,
+        #scene-shell .scene-collapse-bar,
+        #scene-shell:not(.scene-collapsed) .scene-collapse-bar,
+        #scene-shell.scene-collapsed .scene-collapse-bar{
+            transition:background var(--lz-collapse-dur) ease,box-shadow var(--lz-collapse-dur) ease!important;
+            animation:none!important;
+            transform:none!important;
+        }
+        #scene-shell.scene-transitioning.scene-collapsed .scene-collapse-bar,
+        #scene-shell.scene-transitioning:not(.scene-collapsed) .scene-collapse-bar{
+            animation:none!important;
+        }
+        .scene-collapse-favor,
+        #scene-shell .scene-collapse-favor,
+        #scene-shell:not(.scene-collapsed) .scene-collapse-favor,
+        #scene-shell.scene-collapsed .scene-collapse-favor,
+        #scene-shell.scene-transitioning .scene-collapse-favor{
+            transition:opacity var(--lz-collapse-dur) var(--lz-collapse-ease),visibility 0s linear!important;
+            transition-delay:0s!important;
+            transform:none!important;
+            max-width:none!important;
+            overflow:visible!important;
+        }
+        #scene-shell:not(.scene-collapsed) .scene-collapse-favor{
+            opacity:0!important;
+            visibility:hidden!important;
+        }
+        #scene-shell.scene-collapsed .scene-collapse-favor{
+            opacity:1!important;
+            visibility:visible!important;
+        }
+        #scene-shell:not(.scene-collapsed) #scene-stage,
+        #scene-shell.scene-collapsed #scene-stage,
+        #scene-stage{
+            margin-top:0!important;
+        }
+        #scene-stage{
+            display:grid!important;
+            grid-template-rows:1fr!important;
+            transition:grid-template-rows var(--lz-collapse-dur) var(--lz-collapse-ease),opacity calc(var(--lz-collapse-dur) * .78) var(--lz-collapse-ease)!important;
+            overflow:hidden!important;
+            min-height:0!important;
+        }
+        #scene-shell:not(.scene-collapsed) #scene-stage{
+            opacity:1!important;
+            pointer-events:auto!important;
+        }
+        #scene-shell.scene-collapsed #scene-stage{
+            grid-template-rows:0fr!important;
+            opacity:0!important;
+            height:auto!important;
+            max-height:none!important;
+            min-height:0!important;
+            padding:0!important;
+            pointer-events:none!important;
+            overflow:hidden!important;
+        }
+        #scene-stage > .det-r,
+        #scene-stage > .scene-empty{
+            min-height:0!important;
+            overflow:hidden!important;
+            transition:none!important;
+            transform:none!important;
+            filter:none!important;
+            opacity:1!important;
+        }
+        #scene-shell.scene-collapsed #scene-stage:not(.scene-stage-is-hidden) > .det-r,
+        #scene-shell.scene-collapsed #scene-stage:not(.scene-stage-is-hidden) > .det-r.scene-panel,
+        #scene-shell.scene-collapsed #scene-stage:not(.scene-stage-is-hidden) > .det-r > .av-flip-wrap,
+        #scene-shell.scene-collapsed #scene-stage:not(.scene-stage-is-hidden) > .det-r > .av-flip-wrap > .av-flip,
+        #scene-shell.scene-collapsed #scene-stage:not(.scene-stage-is-hidden) .lz-char-flip-container,
+        #scene-shell.scene-collapsed #scene-stage:not(.scene-stage-is-hidden) .lz-char-flip-inner,
+        #scene-shell.scene-collapsed #scene-stage:not(.scene-stage-is-hidden) .lz-char-portrait,
+        #scene-shell.scene-collapsed #scene-stage:not(.scene-stage-is-hidden) .av-flip-wrap,
+        #scene-shell.scene-collapsed #scene-stage:not(.scene-stage-is-hidden) .av-flip,
+        #scene-shell.scene-collapsed #scene-stage:not(.scene-stage-is-hidden) .support-figure,
+        #scene-shell.scene-collapsed #scene-stage:not(.scene-stage-is-hidden) .support-placeholder,
+        #scene-shell.scene-transitioning #scene-stage > .det-r,
+        #scene-shell.scene-transitioning #scene-stage > .scene-empty{
+            height:auto!important;
+            max-height:none!important;
+            min-height:0!important;
+            visibility:visible!important;
+            transform:none!important;
+            filter:none!important;
+            opacity:1!important;
+        }
+        .scene-collapse-toggle i,
+        #scene-shell .scene-collapse-toggle i{
+            transition:transform var(--lz-collapse-dur) var(--lz-collapse-ease)!important;
+        }
+        /* ===== /scene-collapse motion v14 ===== */
 </style>
 
 </head>
@@ -5639,7 +5748,20 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         }
 
         function getSceneCollapseAnimMs() {
-            return window.matchMedia('(max-width:760px)').matches ? 260 : 580;
+            return window.matchMedia('(max-width:760px)').matches ? 320 : 400;
+        }
+
+        function finishSceneCollapseTransition($shell, $stage) {
+            window.clearTimeout(applySceneCollapsedState._hideTimer);
+            window.clearTimeout(applySceneCollapsedState._timer);
+            applySceneCollapsedState._hideTimer = null;
+            applySceneCollapsedState._timer = null;
+            if ($stage && $stage.length && !sceneCardsOpen) {
+                $stage.addClass('scene-stage-is-hidden');
+            }
+            if ($shell && $shell.length) {
+                $shell.removeClass('scene-transitioning');
+            }
         }
 
         function applySceneCollapsedState(animate) {
@@ -5647,28 +5769,41 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             var $stage = $('#scene-stage');
             if (!$shell.length) return;
             var animMs = getSceneCollapseAnimMs();
+            var stageEl = $stage.get(0);
+
+            if (applySceneCollapsedState._onTransitionEnd && stageEl) {
+                stageEl.removeEventListener('transitionend', applySceneCollapsedState._onTransitionEnd);
+                applySceneCollapsedState._onTransitionEnd = null;
+            }
             window.clearTimeout(applySceneCollapsedState._hideTimer);
+            window.clearTimeout(applySceneCollapsedState._timer);
+
             if (animate) {
-                window.clearTimeout(applySceneCollapsedState._timer);
                 $shell.addClass('scene-transitioning');
                 if (sceneCardsOpen) {
                     $stage.removeClass('scene-stage-is-hidden');
                 }
             }
+
             $shell.toggleClass('scene-collapsed', !sceneCardsOpen);
             var item = getCurrentSceneItem();
             if (item) renderSceneCollapseBar(item);
-            if (animate) {
-                if (!sceneCardsOpen) {
-                    applySceneCollapsedState._hideTimer = window.setTimeout(function() {
-                        if (!sceneCardsOpen) $stage.addClass('scene-stage-is-hidden');
-                    }, animMs);
-                } else {
-                    $stage.removeClass('scene-stage-is-hidden');
-                }
+
+            if (animate && stageEl) {
+                applySceneCollapsedState._onTransitionEnd = function(e) {
+                    if (e.target !== stageEl || e.propertyName !== 'grid-template-rows') return;
+                    stageEl.removeEventListener('transitionend', applySceneCollapsedState._onTransitionEnd);
+                    applySceneCollapsedState._onTransitionEnd = null;
+                    finishSceneCollapseTransition($shell, $stage);
+                };
+                stageEl.addEventListener('transitionend', applySceneCollapsedState._onTransitionEnd);
                 applySceneCollapsedState._timer = window.setTimeout(function() {
-                    $shell.removeClass('scene-transitioning');
-                }, animMs + 20);
+                    if (applySceneCollapsedState._onTransitionEnd && stageEl) {
+                        stageEl.removeEventListener('transitionend', applySceneCollapsedState._onTransitionEnd);
+                        applySceneCollapsedState._onTransitionEnd = null;
+                    }
+                    finishSceneCollapseTransition($shell, $stage);
+                }, animMs + 60);
             } else {
                 $stage.toggleClass('scene-stage-is-hidden', !sceneCardsOpen);
             }
