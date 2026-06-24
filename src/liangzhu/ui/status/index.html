@@ -4024,6 +4024,11 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 max-width:min(46%,320px)!important;
                 margin-inline:auto!important;
             }
+            #scene-shell.scene-collapsed .scene-collapse-favor.favor-is-zero{
+                width:auto!important;
+                min-width:72px!important;
+                max-width:min(34%,168px)!important;
+            }
         }
         @media (max-width:760px){
             :root{--lz-collapse-dur:.24s;}
@@ -4033,6 +4038,11 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 width:min(100%,168px)!important;
                 max-width:min(62vw,168px)!important;
                 margin-inline:auto!important;
+            }
+            #scene-shell.scene-collapsed .scene-collapse-favor.favor-is-zero{
+                width:auto!important;
+                min-width:58px!important;
+                max-width:min(52vw,118px)!important;
             }
             #scene-shell.scene-transitioning .scene-collapse-bar,
             #scene-shell.scene-transitioning #scene-stage,
@@ -4064,7 +4074,6 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             #scene-shell.scene-transitioning .scene-collapse-favor{
                 transition:opacity .2s ease,visibility .2s step-end!important;
                 transform:none!important;
-                max-width:none!important;
             }
             #scene-shell.scene-collapsed #scene-stage > .det-r,
             #scene-shell.scene-collapsed #scene-stage > .det-r.scene-panel,
