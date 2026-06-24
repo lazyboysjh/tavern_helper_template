@@ -3408,6 +3408,9 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         .scene-collapsed .scene-shell{
             display:flex!important;flex-direction:column!important;align-items:center!important;
         }
+        #scene-shell.scene-collapsed{
+            display:flex!important;flex-direction:column!important;align-items:center!important;
+        }
         .scene-collapsed .scene-collapse-bar{
             width:min(82vw,224px)!important;max-width:calc(100% - 12px)!important;
             margin:4px auto 6px!important;padding:6px 9px!important;
@@ -3490,6 +3493,146 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             .scene-collapse-toggle{min-width:28px!important;min-height:28px!important;width:28px!important;height:28px!important;}
         }
         /* ===== /scene-collapse + favor meter polish v7 ===== */
+
+        /* ===== scene expand/collapse motion v8 ===== */
+        :root{
+            --lz-ease-out-expo:cubic-bezier(0.22,1,0.36,1);
+            --lz-ease-spring:cubic-bezier(0.34,1.15,0.64,1);
+            --lz-collapse-dur:.52s;
+        }
+        #scene-shell.scene-transitioning .scene-collapse-bar,
+        #scene-shell.scene-transitioning #scene-stage,
+        #scene-shell.scene-transitioning .scene-collapse-favor,
+        #scene-shell.scene-transitioning .scene-collapse-toggle i,
+        #scene-shell.scene-transitioning #scene-stage > .det-r,
+        #scene-shell.scene-transitioning #scene-stage > .scene-empty{
+            will-change:transform,opacity,grid-template-rows,max-height,filter;
+        }
+        #scene-shell.scene-collapsed{
+            display:flex!important;flex-direction:column!important;align-items:center!important;
+        }
+        .scene-collapse-bar{
+            transition:
+                width var(--lz-collapse-dur) var(--lz-ease-out-expo),
+                max-width var(--lz-collapse-dur) var(--lz-ease-out-expo),
+                padding var(--lz-collapse-dur) var(--lz-ease-out-expo),
+                margin var(--lz-collapse-dur) var(--lz-ease-out-expo),
+                border-radius calc(var(--lz-collapse-dur) * .85) var(--lz-ease-out-expo),
+                box-shadow calc(var(--lz-collapse-dur) * .75) ease,
+                background .38s ease,
+                transform calc(var(--lz-collapse-dur) * .9) var(--lz-ease-spring)!important;
+        }
+        #scene-shell:not(.scene-collapsed) .scene-collapse-bar{
+            transform:translateY(0)!important;
+        }
+        #scene-shell.scene-collapsed .scene-collapse-bar{
+            transform:translateY(0) scale(1)!important;
+        }
+        #scene-shell.scene-transitioning.scene-collapsed .scene-collapse-bar{
+            animation:lz-collapse-bar-in .56s var(--lz-ease-spring) both;
+        }
+        @keyframes lz-collapse-bar-in{
+            0%{opacity:.72;transform:translateY(6px) scale(.985);}
+            100%{opacity:1;transform:translateY(0) scale(1);}
+        }
+        .scene-collapse-favor{
+            transition:
+                opacity .36s var(--lz-ease-out-expo),
+                transform .44s var(--lz-ease-spring),
+                max-width .44s var(--lz-ease-out-expo)!important;
+        }
+        #scene-shell:not(.scene-collapsed) .scene-collapse-favor{
+            opacity:0!important;
+            transform:translateX(8px) scale(.94)!important;
+            pointer-events:none!important;
+            max-width:0!important;
+            padding-left:0!important;padding-right:0!important;
+            overflow:hidden!important;
+        }
+        #scene-shell.scene-collapsed .scene-collapse-favor{
+            opacity:1!important;
+            transform:translateX(0) scale(1)!important;
+            transition-delay:.1s!important;
+        }
+        #scene-shell.scene-transitioning:not(.scene-collapsed) .scene-collapse-favor{
+            transition-delay:0s!important;
+        }
+        .scene-collapse-toggle i{
+            transition:transform var(--lz-collapse-dur) var(--lz-ease-spring)!important;
+        }
+        #scene-shell:not(.scene-collapsed) .scene-collapse-toggle i{
+            transform:rotate(0deg)!important;
+        }
+        #scene-shell.scene-collapsed .scene-collapse-toggle i{
+            transform:rotate(180deg)!important;
+        }
+        #scene-stage{
+            display:grid!important;
+            grid-template-rows:1fr!important;
+            transition:
+                grid-template-rows var(--lz-collapse-dur) var(--lz-ease-out-expo),
+                opacity calc(var(--lz-collapse-dur) * .72) ease,
+                margin-top calc(var(--lz-collapse-dur) * .72) var(--lz-ease-out-expo)!important;
+            overflow:hidden!important;
+            min-height:0!important;
+        }
+        #scene-shell:not(.scene-collapsed) #scene-stage{
+            opacity:1!important;
+            margin-top:-6px!important;
+            pointer-events:auto!important;
+        }
+        #scene-shell.scene-collapsed #scene-stage{
+            grid-template-rows:0fr!important;
+            opacity:0!important;
+            margin-top:0!important;
+            pointer-events:none!important;
+            min-height:0!important;
+            max-height:none!important;
+            overflow:hidden!important;
+        }
+        #scene-stage > .det-r,
+        #scene-stage > .scene-empty{
+            min-height:0!important;
+            overflow:hidden!important;
+            transition:
+                transform var(--lz-collapse-dur) var(--lz-ease-out-expo),
+                opacity calc(var(--lz-collapse-dur) * .65) ease,
+                filter calc(var(--lz-collapse-dur) * .75) ease!important;
+            transform-origin:top center!important;
+        }
+        #scene-shell:not(.scene-collapsed) #scene-stage > .det-r,
+        #scene-shell:not(.scene-collapsed) #scene-stage > .scene-empty{
+            transform:translateY(0) scale(1)!important;
+            opacity:1!important;
+            filter:blur(0)!important;
+        }
+        #scene-shell.scene-collapsed #scene-stage > .det-r,
+        #scene-shell.scene-collapsed #scene-stage > .scene-empty{
+            transform:translateY(-10px) scale(.988)!important;
+            opacity:0!important;
+            filter:blur(3px)!important;
+        }
+        #scene-shell.scene-transitioning:not(.scene-collapsed) #scene-stage > .det-r,
+        #scene-shell.scene-transitioning:not(.scene-collapsed) #scene-stage > .scene-empty{
+            transition-delay:.04s!important;
+        }
+        #scene-shell.scene-collapsed .scene-toast-layer{
+            opacity:0!important;
+            pointer-events:none!important;
+            transition:opacity .28s ease!important;
+        }
+        @media(prefers-reduced-motion:reduce){
+            #scene-shell.scene-transitioning .scene-collapse-bar,
+            #scene-shell.scene-transitioning #scene-stage,
+            #scene-shell.scene-transitioning #scene-stage > .det-r,
+            .scene-collapse-favor,.scene-collapse-toggle i{
+                transition:none!important;animation:none!important;
+            }
+            #scene-shell.scene-collapsed #scene-stage > .det-r{
+                transform:none!important;filter:none!important;
+            }
+        }
+        /* ===== /scene expand/collapse motion v8 ===== */
 </style>
 
     <script type="module">
@@ -4875,6 +5018,23 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             updateSceneTabNavState();
         }
 
+        function applySceneCollapsedState(animate) {
+            var $shell = $('#scene-shell');
+            if (!$shell.length) return;
+            if (animate) {
+                window.clearTimeout(applySceneCollapsedState._timer);
+                $shell.addClass('scene-transitioning');
+            }
+            $shell.toggleClass('scene-collapsed', !sceneCardsOpen);
+            var item = getCurrentSceneItem();
+            if (item) renderSceneCollapseBar(item);
+            if (animate) {
+                applySceneCollapsedState._timer = window.setTimeout(function() {
+                    $shell.removeClass('scene-transitioning');
+                }, 580);
+            }
+        }
+
         function renderSceneStage() {
             var $stage = $('#scene-stage');
             if (!$stage.length) return;
@@ -4882,10 +5042,11 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             var item = getCurrentSceneItem();
             if (!item) {
                 $('<div>').addClass('scene-empty').text('当前尚无登场人物，请继续剧情或切换开场。').appendTo($stage);
+                applySceneCollapsedState(false);
                 return;
             }
             renderSceneCollapseBar(item);
-            $('#scene-shell').toggleClass('scene-collapsed', !sceneCardsOpen);
+            applySceneCollapsedState(false);
             var $card = item.type === 'core' ? renderCoreCard(item, 0) : renderSupportCard(item, 0);
             $stage.append($card);
             updateGalleryHint();
@@ -5407,10 +5568,12 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 }
             });
 
-            $('#scene-collapse-bar').on('click', '.scene-collapse-toggle', function() {
+            $('#scene-collapse-bar').on('click', '.scene-collapse-toggle', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
                 sceneCardsOpen = !sceneCardsOpen;
                 if (activeSceneTab) sceneExpandMemory[activeSceneTab] = sceneCardsOpen;
-                renderSceneStage();
+                applySceneCollapsedState(true);
             });
 
             (function initThoughtTouch() {
