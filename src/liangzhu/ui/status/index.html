@@ -179,7 +179,8 @@
         .av-thought-body{display:block;font-size:.72rem;line-height:1.52;color:rgba(255,248,238,.94);letter-spacing:.02em}
         .av-thought-body::before{content:"「";opacity:.55;margin-right:1px}
         .av-thought-body::after{content:"」";opacity:.55;margin-left:1px}
-        .av-portrait-shell.show-thought .av-thought-bubble,.lz-char-portrait.show-thought .av-thought-bubble,.lz-char-portrait.thought-pinned .av-thought-bubble,.lz-char-portrait:focus-within .av-thought-bubble,.av-portrait-shell:focus-within .av-thought-bubble{opacity:1;transform:scale(1) translateY(0);animation:avThoughtIn .34s cubic-bezier(.22,1,.36,1) both}
+        .av-portrait-shell.show-thought .av-thought-bubble,.lz-char-portrait.show-thought .av-thought-bubble,.lz-char-portrait.thought-pinned .av-thought-bubble{opacity:1;transform:scale(1) translateY(0);animation:avThoughtIn .34s cubic-bezier(.22,1,.36,1) both}
+        @media (hover:hover) and (pointer:fine){.lz-char-portrait:focus-within .av-thought-bubble,.av-portrait-shell:focus-within .av-thought-bubble{opacity:1;transform:scale(1) translateY(0)}}
         .lz-char-portrait.thought-holding .av-thought-bubble{box-shadow:0 16px 40px rgba(0,0,0,.4),0 0 28px color-mix(in srgb,var(--card-accent,var(--c)) 22%,transparent),inset 0 1px 0 rgba(255,255,255,.14)}
         @keyframes avThoughtIn{from{opacity:0;transform:scale(.9) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
         .av-flip-wrap:hover .av-thought-bubble,.lz-char-flip-container:hover .av-thought-bubble{opacity:1;transform:scale(1) translateY(0)}
@@ -1899,7 +1900,8 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         .av-thought-body{display:block;font-size:.72rem;line-height:1.52;color:rgba(255,248,238,.94);letter-spacing:.02em}
         .av-thought-body::before{content:"「";opacity:.55;margin-right:1px}
         .av-thought-body::after{content:"」";opacity:.55;margin-left:1px}
-        .av-portrait-shell.show-thought .av-thought-bubble,.lz-char-portrait.show-thought .av-thought-bubble,.lz-char-portrait.thought-pinned .av-thought-bubble,.lz-char-portrait:focus-within .av-thought-bubble,.av-portrait-shell:focus-within .av-thought-bubble{opacity:1;transform:scale(1) translateY(0);animation:avThoughtIn .34s cubic-bezier(.22,1,.36,1) both}
+        .av-portrait-shell.show-thought .av-thought-bubble,.lz-char-portrait.show-thought .av-thought-bubble,.lz-char-portrait.thought-pinned .av-thought-bubble{opacity:1;transform:scale(1) translateY(0);animation:avThoughtIn .34s cubic-bezier(.22,1,.36,1) both}
+        @media (hover:hover) and (pointer:fine){.lz-char-portrait:focus-within .av-thought-bubble,.av-portrait-shell:focus-within .av-thought-bubble{opacity:1;transform:scale(1) translateY(0)}}
         .lz-char-portrait.thought-holding .av-thought-bubble{box-shadow:0 16px 40px rgba(0,0,0,.4),0 0 28px color-mix(in srgb,var(--card-accent,var(--c)) 22%,transparent),inset 0 1px 0 rgba(255,255,255,.14)}
         @keyframes avThoughtIn{from{opacity:0;transform:scale(.9) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
         .av-flip-wrap:hover .av-thought-bubble,.lz-char-flip-container:hover .av-thought-bubble{opacity:1;transform:scale(1) translateY(0)}
@@ -2403,12 +2405,17 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         }
         .scene-stage .lz-char-portrait.show-thought .av-thought-bubble,
         .scene-stage .lz-char-portrait.thought-pinned .av-thought-bubble,
-        .scene-stage .lz-char-portrait:focus-within .av-thought-bubble,
-        .scene-stage .av-portrait-shell.show-thought .av-thought-bubble,
-        .scene-stage .av-portrait-shell:focus-within .av-thought-bubble{
+        .scene-stage .av-portrait-shell.show-thought .av-thought-bubble{
             opacity:1!important;
             transform:scale(1) translateY(0)!important;
             animation:avThoughtIn .34s cubic-bezier(.22,1,.36,1) both!important;
+        }
+        @media (hover:hover) and (pointer:fine){
+            .scene-stage .lz-char-portrait:focus-within .av-thought-bubble,
+            .scene-stage .av-portrait-shell:focus-within .av-thought-bubble{
+                opacity:1!important;
+                transform:scale(1) translateY(0)!important;
+            }
         }
         @media (hover:hover) and (pointer:fine){
             .scene-stage .lz-char-flip-container:hover .av-thought-bubble,
@@ -5955,7 +5962,13 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             $flip.append($front).append($back);
             $flipWrap.append($flip);
             $flipWrap.on('click', function() {
-                if ($(this).data('lp-active') || $(this).data('suppress-click') || $(this).data('thought-pinned')) { return; }
+                var $wrap = $(this);
+                var $portrait = $wrap.find('.lz-char-portrait, .av-portrait-shell').first();
+                if ($wrap.data('thought-pinned') || $portrait.hasClass('show-thought')) {
+                    if (typeof window.__mnxClearThoughtPin === 'function') window.__mnxClearThoughtPin($wrap);
+                    return;
+                }
+                if ($wrap.data('lp-active') || $wrap.data('suppress-click')) { return; }
                 this.classList.toggle('flipped');
                 lzStatusLog('flip', { name: item.name, back: this.classList.contains('flipped') });
             });
@@ -6786,6 +6799,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             $('#scene-collapse-bar').on('click', '.scene-collapse-toggle', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
+                if (typeof window.__mnxClearAllThoughtPins === 'function') window.__mnxClearAllThoughtPins();
                 sceneCardsOpen = !sceneCardsOpen;
                 if (activeSceneTab) sceneExpandMemory[activeSceneTab] = sceneCardsOpen;
                 applySceneCollapsedState(true);
@@ -6793,25 +6807,42 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
 
             (function initThoughtTouch() {
                 var SUPPRESS_MS = 520;
+                var AUTO_HIDE_MS = 4500;
                 var hold = { timer: null, startX: 0, startY: 0, moved: false, fired: false, $wrap: null };
                 var HOLD_MS = 460;
                 var MOVE_CANCEL_PX = 14;
 
+                function isCoarseTouch() {
+                    return window.matchMedia && window.matchMedia('(hover:none), (pointer:coarse)').matches;
+                }
                 function thoughtPortrait($wrap) {
                     return $wrap.find('.lz-char-portrait, .av-portrait-shell').first();
                 }
                 function hasThought($wrap) {
                     return thoughtPortrait($wrap).find('.av-thought-bubble').length > 0;
                 }
-                function clearPinned($wrap) {
-                    if (!$wrap || !$wrap.length) return;
-                    thoughtPortrait($wrap).removeClass('show-thought thought-pinned thought-holding');
-                    $wrap.removeData('lp-active thought-pinned suppress-click tap-dismiss');
+                function isThoughtVisible($wrap) {
+                    var $portrait = thoughtPortrait($wrap);
+                    return $portrait.hasClass('show-thought') || $portrait.hasClass('thought-pinned');
                 }
-                function clearAllPinned() {
+                function clearThought($wrap) {
+                    if (!$wrap || !$wrap.length) return;
+                    var $portrait = thoughtPortrait($wrap);
+                    $portrait.removeClass('show-thought thought-pinned thought-holding');
+                    var node = $portrait.get(0);
+                    if (node && typeof node.blur === 'function') node.blur();
+                    var autoHide = $wrap.data('thought-auto-hide');
+                    if (autoHide) clearTimeout(autoHide);
+                    $wrap.removeData('lp-active thought-pinned suppress-click tap-dismiss thought-auto-hide');
+                }
+                function clearAllThoughts() {
                     $('#scene-stage .lz-char-flip-container, #scene-stage .av-flip-wrap').each(function() {
-                        if ($(this).data('thought-pinned')) clearPinned($(this));
+                        var $w = $(this);
+                        if ($w.data('thought-pinned') || $w.data('thought-auto-hide') || isThoughtVisible($w)) {
+                            clearThought($w);
+                        }
                     });
+                    resetHold();
                 }
                 function resetHold() {
                     clearTimeout(hold.timer);
@@ -6831,13 +6862,28 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 }
                 function pinThought($wrap) {
                     var $portrait = thoughtPortrait($wrap);
-                    $portrait.removeClass('thought-holding').addClass('show-thought thought-pinned');
+                    $portrait.removeClass('thought-holding').addClass('show-thought');
+                    $wrap.removeData('lp-active');
+
+                    if (isCoarseTouch()) {
+                        var prev = $wrap.data('thought-auto-hide');
+                        if (prev) clearTimeout(prev);
+                        $wrap.data('thought-auto-hide', setTimeout(function() {
+                            clearThought($wrap);
+                        }, AUTO_HIDE_MS));
+                        return;
+                    }
+
+                    $portrait.addClass('thought-pinned');
                     $wrap.data('thought-pinned', true);
                     $wrap.data('suppress-click', true);
                     setTimeout(function() {
-                        $wrap.removeData('lp-active suppress-click');
+                        $wrap.removeData('suppress-click');
                     }, SUPPRESS_MS);
                 }
+
+                window.__mnxClearThoughtPin = clearThought;
+                window.__mnxClearAllThoughtPins = clearAllThoughts;
 
                 $('#scene-stage')
                     .on('touchstart.mnxThought', '.lz-char-flip-container, .av-flip-wrap', function(e) {
@@ -6846,13 +6892,12 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                         var $wrap = $(this);
                         if (!hasThought($wrap)) return;
 
-                        if ($wrap.data('thought-pinned')) {
+                        if (isThoughtVisible($wrap) && !hold.timer) {
                             $wrap.data('tap-dismiss', true);
-                            if (e.originalEvent && e.originalEvent.cancelable) e.preventDefault();
                             return;
                         }
 
-                        clearAllPinned();
+                        clearAllThoughts();
                         resetHold();
                         hold.$wrap = $wrap;
                         hold.startX = touch.clientX;
@@ -6871,8 +6916,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                             clearTimeout(hold.timer);
                             hold.timer = null;
                             if (hold.fired && hold.$wrap) {
-                                thoughtPortrait(hold.$wrap).removeClass('show-thought thought-holding');
-                                hold.$wrap.removeData('lp-active');
+                                clearThought(hold.$wrap);
                                 hold.fired = false;
                             }
                         }
@@ -6884,7 +6928,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
 
                         if ($wrap.data('tap-dismiss')) {
                             $wrap.removeData('tap-dismiss');
-                            clearPinned($wrap);
+                            clearThought($wrap);
                             $wrap.data('suppress-click', true);
                             setTimeout(function() { $wrap.removeData('suppress-click'); }, SUPPRESS_MS);
                             resetHold();
@@ -6898,23 +6942,22 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                         }
 
                         if (hold.$wrap === $wrap) {
-                            thoughtPortrait($wrap).removeClass('thought-holding show-thought');
-                            $wrap.removeData('lp-active');
+                            clearThought($wrap);
                         }
                         resetHold();
                     });
 
                 $(document).on('touchstart.mnxThoughtOutside', function(e) {
                     if ($(e.target).closest('.lz-char-flip-container, .av-flip-wrap').length) return;
-                    clearAllPinned();
-                    resetHold();
+                    clearAllThoughts();
                 });
 
                 __mnxThoughtTeardown = function() {
                     $('#scene-stage').off('.mnxThought');
                     $(document).off('.mnxThoughtOutside');
-                    clearAllPinned();
-                    resetHold();
+                    clearAllThoughts();
+                    delete window.__mnxClearThoughtPin;
+                    delete window.__mnxClearAllThoughtPins;
                 };
             })();
 
