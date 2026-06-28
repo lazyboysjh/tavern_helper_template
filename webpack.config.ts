@@ -51,7 +51,11 @@ function common_path(lhs: string, rhs: string) {
 function glob_script_files() {
   const results: string[] = [];
 
+<<<<<<< HEAD
   fs.globSync(`src/**/index.{ts,tsx,js,jsx}`)
+=======
+  fs.globSync(`{示例,src}/**/index.{ts,tsx,js,jsx}`)
+>>>>>>> c5efcd76bf56ff7466cc36a0a02eea9e070a25de
     .filter(
       file => process.env.CI !== 'true' || !fs.readFileSync(path.join(import.meta.dirname, file)).includes('@no-ci'),
     )
@@ -187,9 +191,12 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
     .readFileSync(path.join(import.meta.dirname, entry.script), 'utf-8')
     .includes('@obfuscate');
   const script_filepath = path.parse(entry.script);
+<<<<<<< HEAD
   const html_path = entry.html ? path.join(import.meta.dirname, entry.html) : '';
   const is_legacy_document =
     html_path !== '' && /<!doctype html/i.test(fs.readFileSync(html_path, 'utf-8'));
+=======
+>>>>>>> c5efcd76bf56ff7466cc36a0a02eea9e070a25de
 
   return (_env, argv) => ({
     experiments: {
@@ -425,6 +432,7 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
       ? [new MiniCssExtractPlugin()]
       : [
           new HtmlWebpackPlugin({
+<<<<<<< HEAD
             template: html_path,
             filename: path.parse(entry.html!).base,
             scriptLoading: 'module',
@@ -435,13 +443,25 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
             ? []
             : [
                 new HtmlInlineScriptWebpackPlugin(),
+=======
+            template: path.join(import.meta.dirname, entry.html),
+            filename: path.parse(entry.html).base,
+            scriptLoading: 'module',
+            cache: false,
+          }),
+          new HtmlInlineScriptWebpackPlugin(),
+          new MiniCssExtractPlugin(),
+>>>>>>> c5efcd76bf56ff7466cc36a0a02eea9e070a25de
                 new HTMLInlineCSSWebpackPlugin({
                   styleTagFactory({ style }: { style: string }) {
                     return `<style>${style}</style>`;
                   },
                 }),
+<<<<<<< HEAD
               ]),
           new MiniCssExtractPlugin(),
+=======
+>>>>>>> c5efcd76bf56ff7466cc36a0a02eea9e070a25de
         ]
     )
       .concat(

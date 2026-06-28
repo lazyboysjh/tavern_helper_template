@@ -1,8 +1,13 @@
 {
   "scripts": {
+<<<<<<< HEAD
     "build:dev": "webpack --mode development && node scripts/copy_liangzhu_static.mjs",
     "build": "webpack --mode production",
     "postbuild": "node scripts/copy_liangzhu_static.mjs",
+=======
+    "build:dev": "webpack --mode development",
+    "build": "webpack --mode production",
+>>>>>>> c5efcd76bf56ff7466cc36a0a02eea9e070a25de
     "watch": "webpack --mode development --watch --progress",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css,scss,html,vue}\" --no-error-on-unmatched-pattern",
     "lint": "eslint",
