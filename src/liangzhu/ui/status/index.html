@@ -5784,15 +5784,22 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         }
 
         function getPresentCharNames(stat) {
-            var names = normalizeRoleList(_.get(stat, '世界与剧情.当前场景角色', []));
+            var names = [];
+            var sceneNames = normalizeRoleList(_.get(stat, '世界与剧情.当前场景角色', []));
             var current = getCurrentInteractionRole(stat);
-            if (current) {
-                var existing = names.indexOf(current);
-                if (existing > 0) names.splice(existing, 1);
-                if (existing !== 0) names.unshift(current);
+
+            function add(name) {
+                if (!name || names.indexOf(name) >= 0) return;
+                if (!(stat && stat[name])) return;
+                names.push(name);
             }
-            if (names.length) return names;
-            return getPresenceFallbackNames(stat);
+
+            add(current);
+            for (var i = 0; i < sceneNames.length; i++) add(sceneNames[i]);
+
+            var fallback = getPresenceFallbackNames(stat);
+            for (var j = 0; j < fallback.length; j++) add(fallback[j]);
+            return names;
         }
 
         function getCharActivitySig(stat, name) {
