@@ -5074,6 +5074,8 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             try {
                 return JSON.stringify({
                     loc: _.get(stat, '世界与剧情.当前地点', ''),
+                    currentRole: _.get(stat, '世界与剧情.当前互动角色', ''),
+                    sceneRoles: _.get(stat, '世界与剧情.当前场景角色', []),
                     core: CHAR_ORDER.map(function(n){
                         var c = stat[n] || {};
                         return [n, c['是否登场'], c['好感度'], c['好感度上限'], c['当前位置'], c['服饰'], c['外貌'], c['当前状态'], c['心里想法'], c['心情'], c['与user关系']];
@@ -5747,7 +5749,31 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             return v === true || v === 'true' || v === 1 || v === '1';
         }
 
-        function getPresentCharNames(stat) {
+        function normalizeRoleName(name) {
+            name = String(name || '').trim();
+            return CHAR_ORDER.indexOf(name) >= 0 ? name : '';
+        }
+
+        function normalizeRoleList(raw) {
+            var list = [];
+            if (Array.isArray(raw)) {
+                list = raw;
+            } else if (typeof raw === 'string') {
+                list = raw.split(/[、,，\s]+/);
+            }
+            var result = [];
+            for (var i = 0; i < list.length; i++) {
+                var name = normalizeRoleName(list[i]);
+                if (name && result.indexOf(name) < 0) result.push(name);
+            }
+            return result;
+        }
+
+        function getCurrentInteractionRole(stat) {
+            return normalizeRoleName(_.get(stat, '世界与剧情.当前互动角色', ''));
+        }
+
+        function getPresenceFallbackNames(stat) {
             var names = [];
             for (var i = 0; i < CHAR_ORDER.length; i++) {
                 var name = CHAR_ORDER[i];
@@ -5755,6 +5781,18 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                 if (cData && isPresent(cData['是否登场'])) names.push(name);
             }
             return names;
+        }
+
+        function getPresentCharNames(stat) {
+            var names = normalizeRoleList(_.get(stat, '世界与剧情.当前场景角色', []));
+            var current = getCurrentInteractionRole(stat);
+            if (current) {
+                var existing = names.indexOf(current);
+                if (existing > 0) names.splice(existing, 1);
+                if (existing !== 0) names.unshift(current);
+            }
+            if (names.length) return names;
+            return getPresenceFallbackNames(stat);
         }
 
         function getCharActivitySig(stat, name) {
@@ -5783,6 +5821,8 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
 
             var tabNames = tabs.map(function(item){ return item.name; });
             var activeValid = activeSceneTab && tabNames.indexOf(activeSceneTab) >= 0;
+            var currentRole = getCurrentInteractionRole(stat);
+            if (currentRole && tabNames.indexOf(currentRole) >= 0) return currentRole;
 
             if (__mnxSceneTabInitialized && added.length) {
                 for (var j = CHAR_ORDER.length - 1; j >= 0; j--) {
@@ -5834,27 +5874,26 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         function getMvuSceneData() {
             var stat = getStatData();
             var result = [];
-            for (var i = 0; i < CHAR_ORDER.length; i++) {
-                var name = CHAR_ORDER[i];
+            var names = getPresentCharNames(stat);
+            for (var i = 0; i < names.length; i++) {
+                var name = names[i];
                 var cData = stat[name];
                 if (!cData) continue;
-                if (isPresent(cData['是否登场'])) {
-                    result.push({
-                        type: 'core',
-                        name: name,
-                        title: CHAR_IDENTITY[name] || name,
-                        clothes: cData['服饰'] || '',
-                        appearance: cData['外貌'] || '',
-                        state: cData['当前状态'] || '平静',
-                        pos: cData['当前位置'] || '未知',
-                        favor: cData['好感度'] || 0,
-                        favorMax: cData['好感度上限'] || 0,
-                        thought: cData['心里想法'] || '',
-                        mood: cData['心情'] || '平静',
-                        userRelation: cData['与user关系'] || '陌路',
-                        color: getCharColor(name)
-                    });
-                }
+                result.push({
+                    type: 'core',
+                    name: name,
+                    title: CHAR_IDENTITY[name] || name,
+                    clothes: cData['服饰'] || '',
+                    appearance: cData['外貌'] || '',
+                    state: cData['当前状态'] || '平静',
+                    pos: cData['当前位置'] || '未知',
+                    favor: cData['好感度'] || 0,
+                    favorMax: cData['好感度上限'] || 0,
+                    thought: cData['心里想法'] || '',
+                    mood: cData['心情'] || '平静',
+                    userRelation: cData['与user关系'] || '陌路',
+                    color: getCharColor(name)
+                });
             }
             return result;
         }
