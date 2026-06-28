@@ -22,7 +22,7 @@
             --favor-track-border:rgba(255,182,193,.14);
             --c:#b89465;
             --txt:#f0f0f0; --txt2:#d4d4d4; --dim:#a0a0a0;
-            --bg-img: url('https://raw.githubusercontent.com/lazyboysjh/image/main/20260605013906916.png');
+            --bg-img: url('https://testingcf.jsdelivr.net/gh/lazyboysjh/image@main/20260605013906916.png');
             --shell-bg: linear-gradient(145deg, rgba(15,15,18,0.75), rgba(5,5,8,0.85)), var(--bg-img) center/cover no-repeat fixed;
             --shell-border:rgba(255,255,255,0.06);
             --shell-shadow:0 24px 54px rgba(0,0,0,0.8),inset 0 1px 1px rgba(255,255,255,0.05);
@@ -1250,7 +1250,7 @@
 
 /* ===== Codex mobile responsive polish v5 ===== */
 @media (max-width: 760px) {
-  .w{width:calc(100vw - 6px);margin:3px auto;padding:8px 6px 10px;border-radius:15px;}
+  .w{width:100%;max-width:100%;margin:0 auto;padding:8px 6px 10px;border-radius:15px;box-sizing:border-box;}
   .tb{display:grid;grid-template-columns:34px minmax(0,1fr) 34px;gap:6px;margin-bottom:7px;}
   .tit-main{font-size:.86rem;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .tg{width:32px;height:32px;border-radius:10px;}
@@ -1336,7 +1336,7 @@
   .gallery-sub{max-width:92vw;font-size:.72rem;text-align:center;}
 }
 @media (max-width:390px){
-  .w{width:calc(100vw - 4px);padding:7px 5px 9px;}
+  .w{width:100%;max-width:100%;padding:7px 5px 9px;box-sizing:border-box;}
   .av-flip-wrap{width:min(82vw,224px);}
   .support-figure{width:min(78vw,204px)!important;}
   .nm-d{font-size:.9rem;}
@@ -4758,7 +4758,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             light: '浅色背景'
         };
 
-        var IMG_BASE = 'https://raw.githubusercontent.com/lazyboysjh/image/main/';
+        var IMG_BASE = 'https://testingcf.jsdelivr.net/gh/lazyboysjh/image@main/';
         var GALLERY_STORE_PREFIX = 'mnx_gallery:v1:';
         var GALLERY_ROLE_ORDER = ['祝英台', '银心', '祝夫人', '苏记', '静慈', '柳弦', '沈书瑶', '顾青禾'];
         var CORE_GALLERY_ROLES = { '祝英台': true, '银心': true, '祝夫人': true, '苏记': true, '静慈': true, '柳弦': true, '沈书瑶': true, '顾青禾': true };
@@ -4889,6 +4889,9 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         var galleryReady = false;
         var __mnxRefreshTimer = null;
         var __mnxLastStatSig = '';
+        var __mnxLastPresentSet = '';
+        var __mnxLastCharActivity = {};
+        var __mnxSceneTabInitialized = false;
         var __mnxIsLiveBar = true;
         var __mnxPollTimer = null;
         var __mnxThoughtTeardown = null;
@@ -5686,20 +5689,21 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             $hint.toggleClass('has-new', hasNew).html(hasNew ? '<span class="gallery-hint-icon"><i class="fa-solid fa-sparkles"></i></span><span class="gallery-hint-text">新立绘已解锁</span><span class="gallery-hint-action">前往立绘库</span>' : '<span class="gallery-hint-icon"><i class="fa-solid fa-heart"></i></span><span class="gallery-hint-text">提升好感度可解锁更多立绘</span>');
         }
 
-        function getStatData() {
-            let stat_data = {};
+        function readStatFromMessage(messageId) {
+            if (messageId == null || messageId === '') return null;
             try {
-                var mvuMessageId = getHostingMessageId();
-                if (mvuMessageId == null && typeof getCurrentMessageId === 'function') {
-                    mvuMessageId = getCurrentMessageId();
-                }
-                const message_variables = Mvu.getMvuData({type:'message', message_id: mvuMessageId}) || {};
+                const message_variables = Mvu.getMvuData({ type: 'message', message_id: Number(messageId) }) || {};
                 const message_stat_data = _.get(message_variables, 'stat_data', {});
                 if (message_stat_data && typeof message_stat_data === 'object'
                     && (message_stat_data['祝英台'] || message_stat_data['世界与剧情'])) {
                     return message_stat_data;
                 }
             } catch (e) {}
+            return null;
+        }
+
+        function getStatData() {
+            let stat_data = {};
             try {
                 const _getAllVars = typeof getAllVariables === 'function'
                     ? getAllVariables
@@ -5719,11 +5723,112 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                     }
                 }
             } catch (e) {}
+            try {
+                var candidateIds = [];
+                if (isLatestAssistantMessage()) {
+                    var latestId = getLatestAssistantMessageId();
+                    if (latestId != null) candidateIds.push(Number(latestId));
+                }
+                var hostId = getHostingMessageId();
+                if (hostId != null && candidateIds.indexOf(Number(hostId)) < 0) candidateIds.push(Number(hostId));
+                if (!candidateIds.length && typeof getCurrentMessageId === 'function') {
+                    var currentId = getCurrentMessageId();
+                    if (currentId != null && currentId !== '') candidateIds.push(Number(currentId));
+                }
+                for (var ci = 0; ci < candidateIds.length; ci++) {
+                    var fromMessage = readStatFromMessage(candidateIds[ci]);
+                    if (fromMessage) return fromMessage;
+                }
+            } catch (e) {}
             return stat_data;
         }
 
         function isPresent(v) {
             return v === true || v === 'true' || v === 1 || v === '1';
+        }
+
+        function getPresentCharNames(stat) {
+            var names = [];
+            for (var i = 0; i < CHAR_ORDER.length; i++) {
+                var name = CHAR_ORDER[i];
+                var cData = stat && stat[name];
+                if (cData && isPresent(cData['是否登场'])) names.push(name);
+            }
+            return names;
+        }
+
+        function getCharActivitySig(stat, name) {
+            var cData = (stat && stat[name]) || {};
+            return [
+                Number(cData['好感度']) || 0,
+                String(cData['心里想法'] || ''),
+                String(cData['当前状态'] || ''),
+                String(cData['心情'] || ''),
+                String(cData['与user关系'] || '')
+            ].join('\x1f');
+        }
+
+        function pickAutoSceneTab(stat, tabs) {
+            if (!tabs || !tabs.length) return '';
+            var present = getPresentCharNames(stat);
+            var presentKey = present.join('\x1e');
+            var prevPresent = __mnxLastPresentSet ? __mnxLastPresentSet.split('\x1e') : [];
+            var added = [];
+            if (__mnxLastPresentSet) {
+                for (var i = 0; i < present.length; i++) {
+                    if (prevPresent.indexOf(present[i]) < 0) added.push(present[i]);
+                }
+            }
+            __mnxLastPresentSet = presentKey;
+
+            var tabNames = tabs.map(function(item){ return item.name; });
+            var activeValid = activeSceneTab && tabNames.indexOf(activeSceneTab) >= 0;
+
+            if (__mnxSceneTabInitialized && added.length) {
+                for (var j = CHAR_ORDER.length - 1; j >= 0; j--) {
+                    if (added.indexOf(CHAR_ORDER[j]) >= 0) return CHAR_ORDER[j];
+                }
+            }
+
+            if (activeSceneTab && present.indexOf(activeSceneTab) < 0) {
+                return tabs[0].name;
+            }
+
+            var changedNames = [];
+            for (var k = 0; k < present.length; k++) {
+                var pn = present[k];
+                var sig = getCharActivitySig(stat, pn);
+                if (__mnxSceneTabInitialized && __mnxLastCharActivity[pn] !== undefined && __mnxLastCharActivity[pn] !== sig) {
+                    changedNames.push(pn);
+                }
+                __mnxLastCharActivity[pn] = sig;
+            }
+
+            if (__mnxSceneTabInitialized && changedNames.length && activeValid) {
+                var activeChanged = changedNames.indexOf(activeSceneTab) >= 0;
+                if (!activeChanged) {
+                    for (var m = CHAR_ORDER.length - 1; m >= 0; m--) {
+                        if (changedNames.indexOf(CHAR_ORDER[m]) >= 0) return CHAR_ORDER[m];
+                    }
+                }
+            }
+
+            if (!activeValid) return tabs[0].name;
+            return activeSceneTab;
+        }
+
+        function resolvePortraitImage(name) {
+            var list = getUnlockedImgList(name);
+            if (!list.length) {
+                var all = getImgList(name);
+                var fallbackCover = all.find(function(item){ return item.kind === 'sfw_cover' || item.need === 0; });
+                return fallbackCover ? fallbackCover.u : '';
+            }
+            var selectedPortrait = getSelectedPortrait(name);
+            if (isRandomPortraitMode(name)) return getRandomDisplayPortrait(name, list);
+            if (selectedPortrait && list.some(function(x){ return x.u === selectedPortrait; })) return selectedPortrait;
+            var cover = list.find(function(x){ return x.kind === 'sfw_cover' || x.need === 0; });
+            return (cover || list[0]).u || '';
         }
 
         function getMvuSceneData() {
@@ -5773,17 +5878,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             var result = [];
             for (var i = 0; i < parsed.length; i++) {
                 var name = parsed[i].name;
-                var list = getUnlockedImgList(name);
-                var image = '';
-                var selectedPortrait = getSelectedPortrait(name);
-                if (isRandomPortraitMode(name)) {
-                    image = getRandomDisplayPortrait(name, list);
-                } else if (selectedPortrait && list.some(function(x){ return x.u === selectedPortrait; })) {
-                    image = selectedPortrait;
-                } else if (list.length > 0) {
-                    var cover = list.find(function(x){ return x.need === 0; });
-                    image = (cover || list[0]).u || '';
-                }
+                var image = resolvePortraitImage(name);
                 result.push({
                     type: 'core',
                     name: name,
@@ -5899,6 +5994,12 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                         .addClass('is-portrait-loaded');
                 };
                 portraitPreload.onerror = function() {
+                    var fallbackList = getImgList(item.name);
+                    var fallbackCover = fallbackList.find(function(x){ return x.kind === 'sfw_cover' || x.need === 0; });
+                    var fallbackUrl = fallbackCover ? fallbackCover.u : '';
+                    if (fallbackUrl && fallbackUrl !== portraitUrl) {
+                        $portrait.css('background-image', 'url("' + fallbackUrl.replace(/"/g, '%22') + '")');
+                    }
                     $portrait.removeClass('is-portrait-loading').addClass('is-portrait-loaded');
                 };
                 portraitPreload.src = portraitUrl;
@@ -6280,8 +6381,9 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
         function renderSceneCollapseBar(item) {
             var $bar = $('#scene-collapse-bar');
             if (!$bar.length) return;
-            var favorMax = item.type === 'core' ? 100 : 40;
-            var favor = clamp(item.favor || 0, 0, favorMax);
+            var favorInfo = getFavorInfo(item.name);
+            var favorMax = favorInfo.favorMax || (item.type === 'core' ? 100 : 40);
+            var favor = clamp(favorInfo.favor != null ? favorInfo.favor : (item.favor || 0), 0, favorMax);
             var pct = favorMax ? Math.round((favor / favorMax) * 100) : 0;
             var relationText = String(item.userRelation || '陌路').trim() || '陌路';
             $bar.find('.scene-collapse-name').text(relationText);
@@ -6436,9 +6538,9 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
             if (!force && sig === __mnxLastStatSig) return;
             __mnxLastStatSig = sig;
             sceneTabs = buildSceneTabs();
-            if (!sceneTabs.some(function(item){ return item.name === activeSceneTab; })) {
-                activeSceneTab = sceneTabs.length ? sceneTabs[0].name : '';
-            }
+            var nextTab = pickAutoSceneTab(stat, sceneTabs);
+            if (nextTab) activeSceneTab = nextTab;
+            __mnxSceneTabInitialized = true;
             renderSceneTabs();
             renderSceneStage();
             scanUnlockProgress();
@@ -6582,7 +6684,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
 
             var mvuUpdateStop = eventOn(Mvu.events.VARIABLE_UPDATE_ENDED, function() {
                 invalidateEnsureLiveStatusBarCache();
-                scheduleRefreshScene(false);
+                scheduleRefreshScene(true);
             });
             if (mvuUpdateStop) __mnxEventStops.push(mvuUpdateStop);
             var _eventOn = typeof eventOn === 'function' ? eventOn : (window.parent && typeof window.parent.eventOn === 'function' ? window.parent.eventOn.bind(window.parent) : null);
@@ -6592,7 +6694,7 @@ html.mnx-archive #gallery-hint-wrap{display:none!important;}
                     try {
                         var eventStop = _eventOn(_events[key], function(){
                             invalidateEnsureLiveStatusBarCache();
-                            if (ensureLiveStatusBar()) scheduleRefreshScene(false);
+                            if (ensureLiveStatusBar()) scheduleRefreshScene(key === 'MESSAGE_RECEIVED' || key === 'MESSAGE_UPDATED');
                         });
                         if (eventStop) __mnxEventStops.push(eventStop);
                     } catch(e) {}
