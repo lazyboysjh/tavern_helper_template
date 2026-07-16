@@ -51,7 +51,11 @@ function common_path(lhs: string, rhs: string) {
 function glob_script_files() {
   const results: string[] = [];
 
+<<<<<<< HEAD
   fs.globSync(`src/**/index.{ts,tsx,js,jsx}`)
+=======
+  fs.globSync(`{示例,src}/**/index.{ts,tsx,js,jsx}`)
+>>>>>>> b6c722413d8cfdaf014bbb3f87518fd8c19754be
     .filter(
       file => process.env.CI !== 'true' || !fs.readFileSync(path.join(import.meta.dirname, file)).includes('@no-ci'),
     )
@@ -187,9 +191,12 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
     .readFileSync(path.join(import.meta.dirname, entry.script), 'utf-8')
     .includes('@obfuscate');
   const script_filepath = path.parse(entry.script);
+<<<<<<< HEAD
   const html_path = entry.html ? path.join(import.meta.dirname, entry.html) : '';
   const is_legacy_document =
     html_path !== '' && /<!doctype html/i.test(fs.readFileSync(html_path, 'utf-8'));
+=======
+>>>>>>> b6c722413d8cfdaf014bbb3f87518fd8c19754be
 
   return (_env, argv) => ({
     experiments: {
@@ -425,6 +432,7 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
       ? [new MiniCssExtractPlugin()]
       : [
           new HtmlWebpackPlugin({
+<<<<<<< HEAD
             template: html_path,
             filename: path.parse(entry.html!).base,
             scriptLoading: 'module',
@@ -435,13 +443,25 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
             ? []
             : [
                 new HtmlInlineScriptWebpackPlugin(),
+=======
+            template: path.join(import.meta.dirname, entry.html),
+            filename: path.parse(entry.html).base,
+            scriptLoading: 'module',
+            cache: false,
+          }),
+          new HtmlInlineScriptWebpackPlugin(),
+          new MiniCssExtractPlugin(),
+>>>>>>> b6c722413d8cfdaf014bbb3f87518fd8c19754be
                 new HTMLInlineCSSWebpackPlugin({
                   styleTagFactory({ style }: { style: string }) {
                     return `<style>${style}</style>`;
                   },
                 }),
+<<<<<<< HEAD
               ]),
           new MiniCssExtractPlugin(),
+=======
+>>>>>>> b6c722413d8cfdaf014bbb3f87518fd8c19754be
         ]
     )
       .concat(
@@ -569,9 +589,23 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
       const cdn = {
         sass: 'https://jspm.dev/sass',
       };
+<<<<<<< HEAD
       return callback(
         null,
         'module-import ' + (cdn[request as keyof typeof cdn] ?? `https://testingcf.jsdelivr.net/npm/${request}/+esm`),
+=======
+      const package_json = JSON.parse(fs.readFileSync(path.join(import.meta.dirname, 'package.json'), 'utf-8')) as {
+        dependencies?: Record<string, string>;
+        devDependencies?: Record<string, string>;
+      };
+      const package_versions = { ...package_json.devDependencies, ...package_json.dependencies };
+      const version = package_versions[request]?.replace(/^[~^]/, '');
+      const versioned_request = /^[.\d]+$/.test(version) ? `${request}@${version}` : request;
+      return callback(
+        null,
+        'module-import ' +
+          (cdn[request as keyof typeof cdn] ?? `https://testingcf.jsdelivr.net/npm/${versioned_request}/+esm`),
+>>>>>>> b6c722413d8cfdaf014bbb3f87518fd8c19754be
       );
     },
   });
